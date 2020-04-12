@@ -32,7 +32,7 @@
 					</a>
 				</li>
 
-				<!-- Users -->
+				{{-- Users --}}
 				@can('user-list')
 				<li class="nav-item">
 					<a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
@@ -44,7 +44,7 @@
 				</li>
 				@endcan
 
-				<!-- Roles -->
+				{{-- Roles --}}
 				@can('role-list')
 				<li class="nav-item">
 					<a href="{{ route('roles.index') }}" class="nav-link {{ request()->is('roles') ? 'active' : '' }}">
@@ -55,7 +55,46 @@
 					</a>
 				</li>
 				@endcan
-				
+
+				{{-- Academic --}}
+				<li class="nav-item has-treeview {{ request()->is('subjects') || request()->is('grades') || request()->is('courses') ? 'menu-open' : '' }}">
+					<a href="#" class="nav-link {{ request()->is('subjects') || request()->is('grades') || request()->is('courses') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-book"></i>
+						<p>
+							Academic
+							<i class="right fas fa-angle-left"></i>
+						</p>
+					</a>
+					<ul class="nav nav-treeview">
+						@can('subject-list')
+							<li class="nav-item">
+								<a href="{{ route('subjects.index') }}" class="nav-link {{ request()->is('subjects') ? 'active' : '' }}">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Subjects</p>
+								</a>
+							</li>
+						@endcan
+
+						@can('grade-list')
+							<li class="nav-item">
+								<a href="{{ route('grades.index') }}" class="nav-link {{ request()->is('grades') ? 'active' : '' }}">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Grade</p>
+								</a>
+							</li>
+						@endcan
+
+						@can('course-list')
+							<li class="nav-item">
+								<a href="{{ route('courses.index') }}" class="nav-link {{ request()->is('courses') ? 'active' : '' }}">
+									<i class="far fa-circle nav-icon"></i>
+									<p>Courses</p>
+								</a>
+							</li>
+						@endcan
+					</ul>
+				</li>
+
 			</ul>
 		</nav>
 		<!-- /.sidebar-menu -->

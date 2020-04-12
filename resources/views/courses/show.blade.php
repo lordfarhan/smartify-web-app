@@ -1,0 +1,262 @@
+@extends('layouts.app')
+
+@section('title')
+    Grade Detail
+@endsection
+
+@section('content')
+  <div class="row">
+    <div class="col-3">
+      <div class="card card-primary card-outline">
+        <div class="card-header">
+            <a href="{{ route('courses.index') }}" class="btn btn-outline-info">Back</a>
+        </div>
+        <div class="card-body box-profile">
+          @if (!empty($course->image))
+            <div class="text-center">
+              <img class="profile-user-img img-fluid img-circle"
+                  src="{{ asset("storage/". $course->image) }}"
+                  alt="course profile picture">
+            </div>                        
+          @endif
+      
+          <h3 class="profile-coursename text-center">{{ $course->subject->subject . ' - ' . $course->grade->grade }}</h3>
+      
+          <p class="text-muted text-center">
+            @if ($course->status == '0')
+              <label class="badge badge-warning">DRAFT</label>
+            @else
+              <label class="badge badge-success">PUBLISHED</label>
+            @endif
+          </p>
+      
+          <ul class="list-group list-group-unbordered mb-3">
+            <li class="list-group-item">
+              <b>Author</b> <a class="float-right">{{ $course->author->name }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>Vendor</b> <a class="float-right">{{ $course->vendor }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>Created at</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->created_at)->format("M, d Y H:i:s") }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>Last Update</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->updated_at)->format("M, d Y H:i:s") }}</a>
+            </li>
+          </ul>
+      
+          <a href="#" class="btn btn-primary btn-block"><b>Open</b></a>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+
+    {{-- Course contents --}}
+    <div class="col-9">
+      <div class="card card">
+        <div class="card-header">
+          <ul class="nav nav-pills">
+            <li class="nav-item"><a class="nav-link active" href="#chapters" data-toggle="tab">Chapters</a></li>
+            <li class="nav-item"><a class="nav-link" href="#posts" data-toggle="tab">Discuss</a></li>
+          </ul>
+        </div><!-- /.card-header -->
+        <div class="card-body">
+          <div class="tab-content">
+
+            <div class="active tab-pane" id="chapters">
+
+              {{-- Populating chapters and sub chapters --}}
+              <div class="row">
+                @foreach ($course->chapters as $chapter)
+                  <div class="col-md-6">
+                    <div class="card card-success">
+                      <div class="card-header">
+                        <h3 class="card-title">{{ $chapter->chapter . ' - ' . $chapter->title }}</h3>
+                        <div class="card-tools">
+                          {{-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> --}}
+                          <a href="{{ route('chapters.edit', $chapter->id) }}" type="button" class="btn btn-tool"><i class="fas fa-pen-alt"></i></a>
+                          <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                          {!! Form::open(['method' => 'DELETE','route' => ['chapters.destroy', $chapter->id],'style'=>'display:inline']) !!}
+                            <button class="btn btn-tool" type="submit"><i class="fa fa-trash-alt"></i></button>
+                          {!! Form::close() !!}
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        {{-- Populating sub chapters --}}
+                        @foreach ($chapter->sub_chapters as $sub_chapter)
+                          <ul class="nav">
+                            <li class="nav-item">
+                              <a href="{{ route('sub-chapters.index') }}" class="nav-link">
+                                {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
+                                <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                              </a>
+                            </li>
+                          </ul>
+                        @endforeach
+                        {{-- Populating sub chapters --}}
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+              
+              {{-- @foreach ($course->chapters as $chapter)
+                <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                  <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                      <i class="nav-icon fas fa-book"></i>
+                      <p style="font-size:20px;">
+                        {{ $chapter->chapter . ' ' . $chapter->title }}
+                        <i class="right fas fa-angle-left"></i>
+                      </p>
+                    </a>
+                    <div class="row">
+                      <a href="{{ route('chapters.edit', $chapter->id) }}">
+                        <p style="font-size:12px;">Edit </p>
+                      </a>
+                      <span> </span>
+                      <a href="{{ route('chapters.destroy', $chapter->id) }}">
+                        <p style="font-size:12px;">Delete</p>
+                      </a>
+                    </div>
+                    @foreach ($chapter->sub_chapters as $sub_chapter)
+                      <ul class="nav nav-treeview ml-4">
+                        <li class="nav-item">
+                          <a href="#" class="nav-link">
+                            <i class="fas fa-angle-double-right nav-icon"></i>
+                            <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                          </a>
+                        </li>
+                      </ul>
+                    @endforeach
+                  </li>
+                </ul>
+              @endforeach --}}
+              {{-- End populating chapters and sub chapters --}}
+
+              <button class="btn btn-primary col-12 mt-3">Add Chapter</button>
+
+            </div>
+
+            <div class="tab-pane" id="posts">
+              
+              <!-- Post -->
+              <div class="post">
+                <div class="user-block">
+                  <img class="img-circle img-bordered-sm" src="{{ asset("lte/dist/img/user1-128x128.jpg") }}" alt="user image">
+                  <span class="username">
+                    <a href="#">Jonathan Burke Jr.</a>
+                    <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
+                  </span>
+                  <span class="description">Shared publicly - 7:30 PM today</span>
+                </div>
+                <!-- /.user-block -->
+                <p>
+                  Lorem ipsum represents a long-held tradition for designers,
+                  typographers and the like. Some people hate it and argue for
+                  its demise, but others ignore the hate as they create awesome
+                  tools to help create filler text for everyone from bacon lovers
+                  to Charlie Sheen fans.
+                </p>
+
+                <p>
+                  <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                  <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
+                  <span class="float-right">
+                    <a href="#" class="link-black text-sm">
+                      <i class="far fa-comments mr-1"></i> Comments (5)
+                    </a>
+                  </span>
+                </p>
+
+                <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
+              </div>
+              <!-- /.post -->
+
+              <!-- Post -->
+              <div class="post clearfix">
+                <div class="user-block">
+                  <img class="img-circle img-bordered-sm" src="{{ asset("lte/dist/img/user7-128x128.jpg") }}" alt="User Image">
+                  <span class="username">
+                    <a href="#">Sarah Ross</a>
+                    <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
+                  </span>
+                  <span class="description">Sent you a message - 3 days ago</span>
+                </div>
+                <!-- /.user-block -->
+                <p>
+                  Lorem ipsum represents a long-held tradition for designers,
+                  typographers and the like. Some people hate it and argue for
+                  its demise, but others ignore the hate as they create awesome
+                  tools to help create filler text for everyone from bacon lovers
+                  to Charlie Sheen fans.
+                </p>
+
+                <form class="form-horizontal">
+                  <div class="input-group input-group-sm mb-0">
+                    <input class="form-control form-control-sm" placeholder="Response">
+                    <div class="input-group-append">
+                      <button type="submit" class="btn btn-danger">Send</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <!-- /.post -->
+
+              <!-- Post -->
+              <div class="post">
+                <div class="user-block">
+                  <img class="img-circle img-bordered-sm" src="{{ asset("lte/dist/img/user6-128x128.jpg") }}" alt="User Image">
+                  <span class="username">
+                    <a href="#">Adam Jones</a>
+                    <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
+                  </span>
+                  <span class="description">Posted 5 photos - 5 days ago</span>
+                </div>
+                <!-- /.user-block -->
+                <div class="row mb-3">
+                  <div class="col-sm-6">
+                    <img class="img-fluid" src="{{ asset("lte/dist/img/photo1.png") }}" alt="Photo">
+                  </div>
+                  <!-- /.col -->
+                  <div class="col-sm-6">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <img class="img-fluid mb-3" src="{{ asset("lte/dist/img/photo2.png") }}" alt="Photo">
+                        <img class="img-fluid" src="{{ asset("lte/dist/img/photo3.png") }}" alt="Photo">
+                      </div>
+                      <!-- /.col -->
+                      <div class="col-sm-6">
+                        <img class="img-fluid mb-3" src="{{ asset("lte/dist/img/photo4.png") }}" alt="Photo">
+                        <img class="img-fluid" src="{{ asset("lte/dist/img/photo1.png") }}" alt="Photo">
+                      </div>
+                      <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                  </div>
+                  <!-- /.col -->
+                </div>
+                <!-- /.row -->
+
+                <p>
+                  <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
+                  <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
+                  <span class="float-right">
+                    <a href="#" class="link-black text-sm">
+                      <i class="far fa-comments mr-1"></i> Comments (5)
+                    </a>
+                  </span>
+                </p>
+
+                <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
+              </div>
+              <!-- /.post -->
+
+            </div>
+          </div>
+        </div><!-- /.card-body -->
+      </div>
+    </div>
+  </div>
+@endsection

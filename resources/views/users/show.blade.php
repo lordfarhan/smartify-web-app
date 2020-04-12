@@ -5,10 +5,14 @@
 @endsection
 
 @section('content')
+<div class="row">
 	<div class="col-md-12">
 
     <!-- Profile Image -->
     <div class="card card-primary card-outline">
+      <div class="card-header">
+        <a href="{{ route('users.index') }}" class="btn btn-outline-info">Back</a>
+      </div>
       <div class="card-body box-profile">
         <div class="text-center">
           <img class="profile-user-img img-fluid img-circle"
@@ -66,55 +70,20 @@
         </p>
         <hr>
 
-        <strong><i class="far fa-venus-mars mr-1"></i> Gender</strong>
+        <strong><i class="fas fa-venus-mars mr-1"></i> Gender</strong>
 				<p class="text-muted">
-					<?php if($user->gender == 0) {
+					<?php if($user->gender == "0") {
 							echo 'Male';
-					 	} else {
+					 	} else if ($user->gender == 1) {
 							echo 'Female';
-						} ?>
+						} else {
+              echo 'Undefined';
+            } ?>
 				</p>
       </div>
       <!-- /.card-body -->
     </div>
     <!-- /.card -->
   </div>
+</div>
 @endsection
-{{-- 
-@section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2> Show User</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            {{ $user->name }}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Email:</strong>
-            {{ $user->email }}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Roles:</strong>
-            @if(!empty($user->getRoleNames()))
-                @foreach($user->getRoleNames() as $v)
-                    <label class="badge badge-success">{{ $v }}</label>
-                @endforeach
-            @endif
-        </div>
-    </div>
-</div>
-@endsection --}}

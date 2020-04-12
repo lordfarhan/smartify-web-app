@@ -9,7 +9,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">{{$role->name}}</h3>
+                    <a href="{{ route('roles.index') }}" class="btn btn-outline-info">Back</a>
                 </div>
                 <div class="card-body">
                     <div class="row">

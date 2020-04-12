@@ -25,4 +25,9 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
+    Route::resource('subjects', 'SubjectController');
+    Route::resource('grades', 'GradeController');
+    Route::resource('courses', 'CourseController');
+    Route::resource('chapters', 'ChapterController');
+    // Route::resource('sub-chapters', 'SubChapterController');
 });

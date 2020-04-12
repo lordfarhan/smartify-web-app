@@ -52,7 +52,7 @@
 							<div class="col-md-6">
 								<div class="form-group">
 									{{ Form::label('gender', 'Gender') }}
-									{{ Form::select('gender', [0 => 'Male', 1 => 'Female'], $user->gender, ['class' => 'form-control']) }}
+									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], $user->gender, ['class' => 'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-6">
