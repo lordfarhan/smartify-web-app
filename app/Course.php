@@ -12,7 +12,16 @@ class Course extends Model
      * @var array
      */
     protected $fillable = [
-        'author_id', 'subject_id', 'grade_id', 'status', 'vendor', 'image',
+        'author_id', 'subject_id', 'grade_id', 'type', 'enrollment_key', 'status', 'status', 'vendor', 'image',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'enrollment_key',
     ];
 
     public function author() {
@@ -28,6 +37,6 @@ class Course extends Model
     }
 
     public function chapters() {
-        return $this->hasMany('App\Chapter');
+        return $this->hasMany('App\Chapter')->orderBy('chapter');
     }
 }

@@ -62,80 +62,109 @@
         </div><!-- /.card-header -->
         <div class="card-body">
           <div class="tab-content">
-
             <div class="active tab-pane" id="chapters">
 
               {{-- Populating chapters and sub chapters --}}
               <div class="row">
-                @foreach ($course->chapters as $chapter)
-                  <div class="col-md-6">
-                    <div class="card card-success">
-                      <div class="card-header">
-                        <h3 class="card-title">{{ $chapter->chapter . ' - ' . $chapter->title }}</h3>
-                        <div class="card-tools">
-                          {{-- <button type="button" class="btn btn-tool" data-card-widget="card-refresh" data-source="widgets.html" data-source-selector="#card-refresh-content" data-load-on-init="false"><i class="fas fa-sync-alt"></i></button> --}}
-                          <a href="{{ route('chapters.edit', $chapter->id) }}" type="button" class="btn btn-tool"><i class="fas fa-pen-alt"></i></a>
-                          <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
-                          <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                          {!! Form::open(['method' => 'DELETE','route' => ['chapters.destroy', $chapter->id],'style'=>'display:inline']) !!}
-                            <button class="btn btn-tool" type="submit"><i class="fa fa-trash-alt"></i></button>
-                          {!! Form::close() !!}
+                @if(!empty($errors->all()))
+                <div class="col-md-12">
+                  <div class="card alert alert-danger">
+                    {{ Html::ul($errors->all())}}
+                  </div>
+                </div>
+                @endif
+                @can('chapter-list')
+                  @foreach ($course->chapters as $chapter)
+                    <div class="col-md-6">
+                      <div class="card card-success">
+                        <div class="card-header">
+                          <h3 class="card-title">{{ $chapter->chapter . ' - ' . $chapter->title }}</h3>
+                          <div class="card-tools">
+                            @can('chapter-edit')
+                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" class="edit-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
+                            @endcan
+                            @can('chapter-delete')
+                              <button type="button" data-id="{{ $chapter->id }}" class="delete-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
+                            @endcan
+                            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          {{-- Populating sub chapters --}}
+                          @foreach ($chapter->sub_chapters as $sub_chapter)
+                            <ul class="nav">
+                              <li class="nav-item">
+                                <a href="{{ route('sub-chapters.index') }}" class="nav-link">
+                                  {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
+                                  <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                                </a>
+                              </li>
+                            </ul>
+                          @endforeach
+                          {{-- Populating sub chapters --}}
                         </div>
                       </div>
-                      <div class="card-body">
-                        {{-- Populating sub chapters --}}
-                        @foreach ($chapter->sub_chapters as $sub_chapter)
-                          <ul class="nav">
-                            <li class="nav-item">
-                              <a href="{{ route('sub-chapters.index') }}" class="nav-link">
-                                {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
-                                <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
-                              </a>
-                            </li>
-                          </ul>
-                        @endforeach
-                        {{-- Populating sub chapters --}}
-                      </div>
                     </div>
-                  </div>
-                @endforeach
-              </div>
-              
-              {{-- @foreach ($course->chapters as $chapter)
-                <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                  <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
-                      <i class="nav-icon fas fa-book"></i>
-                      <p style="font-size:20px;">
-                        {{ $chapter->chapter . ' ' . $chapter->title }}
-                        <i class="right fas fa-angle-left"></i>
-                      </p>
-                    </a>
-                    <div class="row">
-                      <a href="{{ route('chapters.edit', $chapter->id) }}">
-                        <p style="font-size:12px;">Edit </p>
-                      </a>
-                      <span> </span>
-                      <a href="{{ route('chapters.destroy', $chapter->id) }}">
-                        <p style="font-size:12px;">Delete</p>
-                      </a>
-                    </div>
-                    @foreach ($chapter->sub_chapters as $sub_chapter)
-                      <ul class="nav nav-treeview ml-4">
-                        <li class="nav-item">
+                  @endforeach      
+                  {{-- @foreach ($course->chapters as $chapter)
+                      <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item has-treeview">
                           <a href="#" class="nav-link">
-                            <i class="fas fa-angle-double-right nav-icon"></i>
-                            <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                            <i class="nav-icon fas fa-book"></i>
+                            <p style="font-size:20px;">
+                              {{ $chapter->chapter . ' ' . $chapter->title }}
+                              <i class="right fas fa-angle-left"></i>
+                            </p>
                           </a>
+                          <div class="row">
+                            <a href="{{ route('chapters.edit', $chapter->id) }}">
+                              <p style="font-size:12px;">Edit </p>
+                            </a>
+                            <span> </span>
+                            <a href="{{ route('chapters.destroy', $chapter->id) }}">
+                              <p style="font-size:12px;">Delete</p>
+                            </a>
+                          </div>
+                          @foreach ($chapter->sub_chapters as $sub_chapter)
+                            <ul class="nav nav-treeview ml-4">
+                              <li class="nav-item">
+                                <a href="#" class="nav-link">
+                                  <i class="fas fa-angle-double-right nav-icon"></i>
+                                  <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                                </a>
+                              </li>
+                            </ul>
+                          @endforeach
                         </li>
                       </ul>
-                    @endforeach
-                  </li>
-                </ul>
-              @endforeach --}}
-              {{-- End populating chapters and sub chapters --}}
+                    @endforeach --}}
+                @endcan
 
-              <button class="btn btn-primary col-12 mt-3">Add Chapter</button>
+              </div>
+
+              {{-- Add Chapter Form --}}
+              @can('chapter-create')
+                {{ Form::open(array('route' => 'chapters.store', 'method'=>'POST', 'files' => true)) }}
+                {{ Form::hidden('course_id', $course->id) }}
+                <div class="row">
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      {{ Form::text('chapter', null, array('placeholder' => 'XI','class' => 'form-control')) }}
+                    </div>
+                  </div>
+                  <div class="col-md-5">
+                    <div class="form-group">
+                      {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
+                  </div>
+                </div>
+                {{ Form::close() }}
+              @endcan
+              {{-- Add Chapter Form --}}
 
             </div>
 
@@ -259,4 +288,96 @@
       </div>
     </div>
   </div>
+@endsection
+
+@section('modals')
+  <div id="chapter-edit-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="chapter-modal-form" action="/chapter-edit" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Edit Chapter</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <input value="" id="course-id-edit-chapter" name="course_id" type="hidden">
+              </div>
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <input value="" type="hidden" name="id" id="id-edit-chapter">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="chapter">Chapter:</label>
+                <div class="col-sm-12">
+                  <input value="" type="text" name="chapter" class="form-control" id="chapter-edit-chapter">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="title">Title:</label>
+                <div class="col-sm-12">
+                  <input value="" type="text" name="title" class="form-control" id="title-edit-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-warning btn-edit-chapter">Process</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="chapter-delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="chapter-modal-form" action="/chapter-delete" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Be careful!</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Are you sure want to delete it?
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="id" id="id-delete-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+@endsection
+
+@section('scripts')
+  <script type="text/javascript">
+    // Edit Data (Modal and function edit data)
+    $(document).on('click', '.edit-modal', function() {
+      $('#course-id-edit-chapter').val($(this).data('course_id'));
+      $('#id-edit-chapter').val($(this).data('id'));
+      $('#chapter-edit-chapter').val($(this).data('chapter'));
+      $('#title-edit-chapter').val($(this).data('title'));
+      $('#chapter-edit-modal').modal('show');
+    });
+
+    // Delete modal
+    $(document).on('click', '.delete-modal', function() {
+      $('#id-delete-chapter').val($(this).data('id'));
+      $('#chapter-delete-modal').modal('show');
+    });
+
+  </script>
 @endsection

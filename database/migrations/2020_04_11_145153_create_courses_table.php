@@ -18,6 +18,8 @@ class CreateCoursesTable extends Migration
             $table->foreignId('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->foreignId('grade_id')->references('id')->on('grades')->onDelete('cascade');
+            $table->enum('type', ['0', '1'])->default('0');
+            $table->string('enrollment_key', 12)->nullable();
             $table->enum('status', ['0', '1'])->default('0');
             $table->string('vendor', 60)->nullable();
             $table->text('image')->nullable();

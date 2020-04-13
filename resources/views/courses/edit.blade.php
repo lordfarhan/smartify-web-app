@@ -39,6 +39,18 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
+                                {{ Form::label('type', 'Type') }}
+                                {{ Form::select('type', ['0' => 'Public', '1' => 'Private'], $course->type, array('class' => 'form-control')) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ Form::label('enrollment_key', 'Enrollment Key') }}
+                                {{ Form::text('enrollment_key', $course->enrollment_key, array('placeholder' => 'Leave empty if your course is public', 'class' => 'form-control')) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
                                 {{ Form::label('status', 'Status') }}
                                 {{ Form::select('status', ['0' => 'Draft', '1' => 'Published'], $course->status, array('class' => 'form-control')) }}
                             </div>

@@ -44,12 +44,24 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'author_id' => 'required',
-            'subject_id' => 'required',
-            'grade_id' => 'required',
-            'status' => 'required',
-        ]);
+        if($request->type == '1') {
+            $this->validate($request, [
+                'author_id' => 'required',
+                'subject_id' => 'required',
+                'grade_id' => 'required',
+                'type' => 'required',
+                'enrollment_key' => 'required|max:12',
+                'status' => 'required',
+            ]);
+        } else {
+            $this->validate($request, [
+                'author_id' => 'required',
+                'subject_id' => 'required',
+                'grade_id' => 'required',
+                'type' => 'required',
+                'status' => 'required',
+            ]);
+        }
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
@@ -101,12 +113,24 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        $this->validate($request, [
-            'author_id' => 'required',
-            'subject_id' => 'required',
-            'grade_id' => 'required',
-            'status' => 'required',
-        ]);
+        if($request->type == '1') {
+            $this->validate($request, [
+                'author_id' => 'required',
+                'subject_id' => 'required',
+                'grade_id' => 'required',
+                'type' => 'required',
+                'enrollment_key' => 'required|max:12',
+                'status' => 'required',
+            ]);
+        } else {
+            $this->validate($request, [
+                'author_id' => 'required',
+                'subject_id' => 'required',
+                'grade_id' => 'required',
+                'type' => 'required',
+                'status' => 'required',
+            ]);
+        }
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');

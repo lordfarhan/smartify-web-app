@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Chapter;
+use App\Course;
 use Illuminate\Http\Request;
 
 class ChapterController extends Controller
@@ -12,19 +13,11 @@ class ChapterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $courses = Course::orderBy('id', 'desc')->paginate(5);
+        return view('courses.index', compact('courses'))
+            ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -35,52 +28,52 @@ class ChapterController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
+        $this->validate($request, [
+            'course_id' => 'required',
+            'chapter' => 'required',
+            'title' => 'required'
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Chapter $chapter)
-    {
-        //
-    }
+        Chapter::create($request->all());
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Chapter  $chapter
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Chapter $chapter)
-    {
-        //
+        return back()->with('success', 'Chapter added successfully');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Chapter  $chapter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Chapter $chapter)
+    public function update(Request $request)
     {
-        //
+        $chapter = Chapter::find($request->id);
+
+        $this->validate($request, [
+            'course_id' => 'required',
+            'chapter' => 'required',
+            'title' => 'required'
+        ]);
+
+        $chapter->course_id = $request->course_id;
+        $chapter->chapter = $request->chapter;
+        $chapter->title = $request->title;
+
+        $chapter->save();
+
+        return back()->with('success', 'Chapter updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Chapter  $chapter
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Chapter $chapter)
+    public function destroy(Request $request)
     {
+        $chapter = Chapter::find($request->id);
         $chapter->delete();
-        return redirect()->back()->refresh()->with('success', 'Chapter deleted successfully');
+        return back()->with('success', 'Chapter deleted successfully');
     }
 }

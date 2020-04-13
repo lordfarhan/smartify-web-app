@@ -27,9 +27,10 @@
 			<thead>
 				<tr>
 					<th width="20px">No</th>
-					<th>Author</th>
 					<th>Subject</th>
 					<th>Grade</th>
+					<th>Author</th>
+					<th>Type</th>
 					<th>Status</th>
 					<th>Vendor</th>
 					<th>Image</th>
@@ -40,14 +41,21 @@
 				@foreach ($courses as $key => $course)
 				<tr>
 					<td>{{ ++$i }}</td>
-					<td>{{ $course->author->name }}</td>
 					<td>{{ $course->subject->subject }}</td>
 					<td>{{ $course->grade->grade }}</td>
+					<td>{{ $course->author->name }}</td>
+					<td>
+						@if ($course->type == '0')
+							<label class="badge badge-success"><i class="fas fa-globe"></i> PUBLIC</label>
+						@else
+							<label class="badge badge-success"><i class="fas fa-lock"></i> PRIVATE</label>
+						@endif
+					</td>
 					<td>
 						@if ($course->status == '0')
-							<label class="badge badge-warning">DRAFT</label>
+							<label class="badge badge-warning"><i class="fas fa-folder"></i> DRAFT</label>
 						@else
-							<label class="badge badge-success">PUBLISHED</label>
+							<label class="badge badge-success"><i class="fas fa-upload"></i> PUBLISHED</label>
 						@endif
 					</td>
 					<td>{{ $course->vendor }}</td>
