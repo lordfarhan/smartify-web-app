@@ -23,6 +23,8 @@ class CreateCoursesTable extends Migration
             $table->enum('status', ['0', '1'])->default('0');
             $table->string('vendor', 60)->nullable();
             $table->text('image')->nullable();
+            $table->string('attachment_title', 60)->nullable();
+            $table->text('attachment')->nullable();
             $table->timestamps();
         });
     }

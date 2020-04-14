@@ -7,6 +7,8 @@ use App\Grade;
 use App\Subject;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CourseController extends Controller
@@ -44,34 +46,49 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->type == '1') {
-            $this->validate($request, [
-                'author_id' => 'required',
-                'subject_id' => 'required',
-                'grade_id' => 'required',
-                'type' => 'required',
-                'enrollment_key' => 'required|max:12',
-                'status' => 'required',
-            ]);
-        } else {
-            $this->validate($request, [
-                'author_id' => 'required',
-                'subject_id' => 'required',
-                'grade_id' => 'required',
-                'type' => 'required',
-                'status' => 'required',
-            ]);
+        $validation = array(
+            'author_id' => 'required',
+            'subject_id' => 'required',
+            'grade_id' => 'required',
+            'type' => 'required',
+            'enrollment_key' => 'required|max:12',
+            'status' => 'required',
+            'image'=>'mimes:jpg,png,jpeg,JPG',
+            'attachment_title' => 'required',
+            'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+        );
+        if($request->type == '0') {
+            unset($validation['enrollment_key']);
         }
+        if (empty($request->file('attachment'))) {
+            unset($validation['attachment_title']);
+        }
+        $this->validate($request, $validation);
+    
+        $input = $request->all();
+
+        $author = User::where('id', request('author_id'))->value('name');
+        $subject = Subject::where('id', request('subject_id'))->value('subject');
+        $grade = Grade::where('id', request('grade_id'))->value('grade');
+
+        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
-            $courseName = request('author_id') . '-' . request('subject_id') . '-' . request('grade_id');
-            $imageName = $courseName . '.' . $image->getClientOriginalExtension();
-            Image::make($image->getRealPath())->fit(1200, 600)->save(public_path('storage/courses/') . $imageName);
-            $input = $request->all();
-            $input['image'] = 'courses/' . $imageName;
+            $imageName = $courseName . '.' . 'png';
+            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(public_path('storage/courses/images/') . $imageName);
+            $input['image'] = 'courses/images/' . $imageName;
         } else {
-            $input = $request->all();
+            $input = array_except($input, array('image'));
+        }
+
+        if (!empty($request->file('attachment'))) {
+            $attachment = $request->file('attachment');
+            $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
+            $attachment->move(public_path('storage/courses/attachments/'), $attachmentName);
+            $input['attachment'] = 'courses/attachments/' . $attachmentName;
+        } else {
+            $input = array_except($input, array('attachment'));
         }
 
         Course::create($input);
@@ -113,34 +130,60 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        if($request->type == '1') {
-            $this->validate($request, [
-                'author_id' => 'required',
-                'subject_id' => 'required',
-                'grade_id' => 'required',
-                'type' => 'required',
-                'enrollment_key' => 'required|max:12',
-                'status' => 'required',
-            ]);
-        } else {
-            $this->validate($request, [
-                'author_id' => 'required',
-                'subject_id' => 'required',
-                'grade_id' => 'required',
-                'type' => 'required',
-                'status' => 'required',
-            ]);
+
+        $validation = array(
+            'author_id' => 'required',
+            'subject_id' => 'required',
+            'grade_id' => 'required',
+            'type' => 'required',
+            'enrollment_key' => 'required|max:12',
+            'status' => 'required',
+            'image'=>'mimes:jpg,png,jpeg,JPG',
+            'attachment_title' => 'required',
+            'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+        );
+        if($request->type == '0') {
+            unset($validation['enrollment_key']);
         }
+        if (empty($request->file('attachment'))) {
+            unset($validation['attachment_title']);
+        }
+        $this->validate($request, $validation);
+
+        $input = $request->all();
+        
+        $author = User::where('id', request('author_id'))->value('name');
+        $subject = Subject::where('id', request('subject_id'))->value('subject');
+        $grade = Grade::where('id', request('grade_id'))->value('grade');
+
+        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('image'))) {
+
+            // Deleting existing image
+            if (File::exists(public_path('storage/' . $course->image))) {
+                File::delete(public_path('storage/' . $course->image));
+            }
+            $course->image = null;
+
             $image = $request->file('image');
-            $courseName = request('author_id') . '-' . request('subject_id') . '-' . request('grade_id');
-            $imageName = $courseName . '.' . $image->getClientOriginalExtension();
-            Image::make($image->getRealPath())->fit(1200, 600)->save(public_path('storage/courses/') . $imageName);
-            $input = $request->all();
-            $input['image'] = 'courses/' . $imageName;
-        } else {
-            $input = $request->all();
+            $imageName = $courseName . '.' . 'png';
+            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(public_path('storage/courses/images/') . $imageName);
+            $input['image'] = 'courses/images/' . $imageName;
+        }
+
+        if (!empty($request->file('attachment'))) {
+
+            // Deleting existing attachment
+            if (File::exists(public_path('storage/' . $course->attachment))) {
+                File::delete(public_path('storage/' . $course->attachment));
+            }
+            $course->attachment = null;
+
+            $attachment = $request->file('attachment');
+            $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
+            $attachment->move(public_path('storage/courses/attachments/'), $attachmentName);
+            $input['attachment'] = 'courses/attachments/' . $attachmentName;
         }
 
         $course->update($input);
@@ -156,8 +199,35 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
+        if (File::exists(public_path('storage/' . $course->image))) {
+            File::delete(public_path('storage/' . $course->image));
+        }
+
+        if (File::exists(public_path('storage/' . $course->attachment))) {
+            File::delete(public_path('storage/' . $course->attachment));
+        }
+
         $course->delete();
-        
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully');
+    }
+
+    public function deleteFile($id, $type) {
+        $course = Course::find($id);
+        
+        if($type == 'image') {
+            if (File::exists(public_path('storage/' . $course->image))) {
+                File::delete(public_path('storage/' . $course->image));
+            }
+            $course->image = null;
+        } else if ($type == 'attachment') {
+            if (File::exists(public_path('storage/' . $course->attachment))) {
+                File::delete(public_path('storage/' . $course->attachment));
+            }
+            $course->attachment = null;
+            $course->attachment_title = null;
+        }
+        $course->update();
+
+        return back()->with('success', 'Deleted file successfully');
     }
 }

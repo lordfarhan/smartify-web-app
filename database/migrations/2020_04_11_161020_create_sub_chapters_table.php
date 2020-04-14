@@ -18,7 +18,8 @@ class CreateSubChaptersTable extends Migration
             $table->foreignId('chapter_id')->references('id')->on('chapters')->onDelete('cascade');
             $table->string('sub_chapter', 6);
             $table->string('title', 60);
-            $table->text('material');
+            $table->string('attachment_title', 60)->nullable();
+            $table->text('attachment')->nullable();
             $table->timestamps();
         });
     }

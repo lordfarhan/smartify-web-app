@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\SubChapter;
 use Illuminate\Http\Request;
 
@@ -12,9 +13,11 @@ class SubChapterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $courses = Course::orderBy('id', 'desc')->paginate(5);
+        return view('courses.index', compact('courses'))
+            ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -35,7 +38,15 @@ class SubChapterController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'chapter_id' => 'required',
+            'sub_chapter' => 'required',
+            'title' => 'required'
+        ]);
+
+        SubChapter::create($request->all());
+
+        return back()->with('success', 'Sub chapter added successfully');
     }
 
     /**

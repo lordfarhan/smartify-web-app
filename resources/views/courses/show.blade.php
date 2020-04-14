@@ -103,6 +103,26 @@
                             </ul>
                           @endforeach
                           {{-- Populating sub chapters --}}
+                          {{-- Add sub chapter --}}
+                          {{ Form::open(array('route' => 'sub-chapters.store', 'method'=>'POST', 'files' => true)) }}
+                          {{ Form::hidden('chapter_id', $chapter->id) }}
+                          <div class="row">
+                            <div class="col-md-5">
+                              <div class="form-group">
+                                {{ Form::text('sub_chapter', null, array('placeholder' => 'A','class' => 'form-control')) }}
+                              </div>
+                            </div>
+                            <div class="col-md-5">
+                              <div class="form-group">
+                                {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
+                              </div>
+                            </div>
+                            <div class="col-md-2">
+                              <button class="btn btn-primary col-12" type="submit"><i class="fas fa-plus"></i></button>
+                            </div>
+                          </div>
+                          {{ Form::close() }}
+                          {{-- Add sub chapter --}}
                         </div>
                       </div>
                     </div>

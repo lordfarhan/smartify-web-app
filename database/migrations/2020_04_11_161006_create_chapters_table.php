@@ -18,6 +18,8 @@ class CreateChaptersTable extends Migration
             $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade');
             $table->string('chapter', 6);
             $table->string('title', 60);
+            $table->string('attachment_title', 60)->nullable();
+            $table->text('attachment')->nullable();
             $table->timestamps();
         });
     }

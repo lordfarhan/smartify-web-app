@@ -12,7 +12,7 @@ class Chapter extends Model
      * @var array
      */
     protected $fillable = [
-        'course_id', 'chapter', 'title',
+        'course_id', 'chapter', 'title', 'attachment_title', 'attachment'
     ];
 
     public function sub_chapters() {

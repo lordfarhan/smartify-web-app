@@ -28,9 +28,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('subjects', 'SubjectController');
     Route::resource('grades', 'GradeController');
     Route::resource('courses', 'CourseController');
+    Route::get('course-delete-file/{id}/{type}', 'CourseController@deleteFile');
 
     Route::resource('chapters', 'ChapterController');
     Route::post('chapter-edit', 'ChapterController@update');
     Route::post('chapter-delete', 'ChapterController@destroy');
-    // Route::resource('sub-chapters', 'SubChapterController');
+    
+    Route::resource('sub-chapters', 'SubChapterController');
 });

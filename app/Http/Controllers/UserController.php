@@ -53,8 +53,8 @@ class UserController extends Controller
         ]);
 
         $image = $request->file('image');
-        $imageName = preg_replace('/\s+/', '', request('name')) . '.' . $image->getClientOriginalExtension();
-        Image::make($image->getRealPath())->fit(600, 600)->save(public_path('storage/users/') . $imageName);
+        $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+        Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
         $input = $request->all();
         $input['image'] = 'users/' . $imageName;
         $input['password'] = Hash::make($input['password']);
@@ -126,15 +126,15 @@ class UserController extends Controller
             ]);
         }
 
+        $input = $request->all();
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
-            $imageName = preg_replace('/\s+/', '', request('name')) . '.' . $image->getClientOriginalExtension();
-            Image::make($image->getRealPath())->fit(600, 600)->save(public_path('storage/users/') . $imageName);
-            $input = $request->all();
+            $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
             $input['image'] = 'users/' . $imageName;
         } else {
-            $input = $request->all();
+            $input = array_except($input, array('image'));
         }
 
         if(!empty($input['password'])){ 
