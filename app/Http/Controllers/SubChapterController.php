@@ -15,9 +15,7 @@ class SubChapterController extends Controller
      */
     public function index(Request $request)
     {
-        $courses = Course::orderBy('id', 'desc')->paginate(5);
-        return view('courses.index', compact('courses'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return redirect()->route('courses.index');
     }
 
     /**

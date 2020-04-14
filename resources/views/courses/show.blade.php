@@ -75,13 +75,13 @@
                 @endif
                 @can('chapter-list')
                   @foreach ($course->chapters as $chapter)
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                       <div class="card card-success">
                         <div class="card-header">
                           <h3 class="card-title">{{ $chapter->chapter . ' - ' . $chapter->title }}</h3>
                           <div class="card-tools">
                             @can('chapter-edit')
-                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" class="edit-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
+                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" data-attachment="{{ $chapter->attachment }}" data-attachment_title="{{ $chapter->attachment_title }}" class="edit-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
                             @endcan
                             @can('chapter-delete')
                               <button type="button" data-id="{{ $chapter->id }}" class="delete-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
@@ -93,14 +93,10 @@
                         <div class="card-body">
                           {{-- Populating sub chapters --}}
                           @foreach ($chapter->sub_chapters as $sub_chapter)
-                            <ul class="nav">
-                              <li class="nav-item">
-                                <a href="{{ route('sub-chapters.index') }}" class="nav-link">
-                                  {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
-                                  <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
-                                </a>
-                              </li>
-                            </ul>
+                            <a href="{{ route('sub-chapters.index') }}">
+                              {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
+                              <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
+                            </a>
                           @endforeach
                           {{-- Populating sub chapters --}}
                           {{-- Add sub chapter --}}
@@ -126,63 +122,55 @@
                         </div>
                       </div>
                     </div>
-                  @endforeach      
-                  {{-- @foreach ($course->chapters as $chapter)
-                      <ul class="nav nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item has-treeview">
-                          <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-book"></i>
-                            <p style="font-size:20px;">
-                              {{ $chapter->chapter . ' ' . $chapter->title }}
-                              <i class="right fas fa-angle-left"></i>
-                            </p>
-                          </a>
-                          <div class="row">
-                            <a href="{{ route('chapters.edit', $chapter->id) }}">
-                              <p style="font-size:12px;">Edit </p>
-                            </a>
-                            <span> </span>
-                            <a href="{{ route('chapters.destroy', $chapter->id) }}">
-                              <p style="font-size:12px;">Delete</p>
-                            </a>
-                          </div>
-                          @foreach ($chapter->sub_chapters as $sub_chapter)
-                            <ul class="nav nav-treeview ml-4">
-                              <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                  <i class="fas fa-angle-double-right nav-icon"></i>
-                                  <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
-                                </a>
-                              </li>
-                            </ul>
-                          @endforeach
-                        </li>
-                      </ul>
-                    @endforeach --}}
+                  @endforeach
                 @endcan
 
               </div>
-
               {{-- Add Chapter Form --}}
               @can('chapter-create')
-                {{ Form::open(array('route' => 'chapters.store', 'method'=>'POST', 'files' => true)) }}
-                {{ Form::hidden('course_id', $course->id) }}
-                <div class="row">
-                  <div class="col-md-5">
-                    <div class="form-group">
-                      {{ Form::text('chapter', null, array('placeholder' => 'XI','class' => 'form-control')) }}
-                    </div>
+              <div id="accordion">
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h4 class="card-title text-center">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="text-center">
+                        Add Chapter
+                      </a>
+                    </h4>
                   </div>
-                  <div class="col-md-5">
-                    <div class="form-group">
-                      {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
+                  <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="card-body">
+                      {{ Form::open(array('route' => 'chapters.store', 'method'=>'POST', 'files' => true)) }}
+                      {{ Form::hidden('course_id', $course->id) }}
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            {{ Form::text('chapter', null, array('placeholder' => 'XI','class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div id="attachment-title-div" class="col-md-5">
+                          <div class="form-group">
+                            {{ Form::text('attachment_title', null, array('placeholder' => 'Leave empty if you dont attach a file', 'class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div id="attachment-div" class="col-md-5">
+                          <div class="form-group">
+                            {{ Form::file('attachment', ['id' => 'attachment', 'class' => 'form-control']) }}
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
+                        </div>
+                      </div>
+                      {{ Form::close() }}
                     </div>
-                  </div>
-                  <div class="col-md-2">
-                    <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
                   </div>
                 </div>
-                {{ Form::close() }}
+              </div>
               @endcan
               {{-- Add Chapter Form --}}
 
@@ -313,7 +301,7 @@
 @section('modals')
   <div id="chapter-edit-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="chapter-modal-form" action="/chapter-edit" method="POST">
+      <form id="chapter-modal-form" action="/chapter-edit" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-content">
           <div class="modal-header">
@@ -331,15 +319,33 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-sm-2" for="chapter">Chapter:</label>
-                <div class="col-sm-12">
+                <label class="control-label col-md-2" for="chapter">Chapter:</label>
+                <div class="col-md-12">
                   <input value="" type="text" name="chapter" class="form-control" id="chapter-edit-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-sm-2" for="title">Title:</label>
-                <div class="col-sm-12">
+                <label class="control-label col-md-2" for="title">Title:</label>
+                <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-chapter">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-2" for="attachment">Attachment:</label>
+                <div class="col-md-12">
+                  <input value="" type="file" name="attachment" class="form-control" id="attachment-edit-chapter">
+                </div>
+              </div>
+              <div id="existing-attachment-edit-chapter-div" class="form-group">
+                <label class="control-label col-md-2" for="ex_attachment">Existing Attachment:</label><a id="delete-button-edit-chapter" class="float-right" href="url">Delete</a>
+                <div class="col-md-12">
+                  <input value="" type="text" name="ex_attachment" class="form-control" id="existing-attachment-edit-chapter" disabled>
+                </div>
+              </div>
+              <div id="attachment-title-edit-chapter-div" class="form-group">
+                <label class="control-label col-md-2" for="attachment_title">Attachment Title:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="attachment_title" class="form-control" id="attachment-title-edit-chapter">
                 </div>
               </div>
             </form>
@@ -385,13 +391,29 @@
 @section('scripts')
   <script type="text/javascript">
     // Edit Data (Modal and function edit data)
+    var ex_attachment = document.getElementById('existing-attachment-edit-chapter-div');
+    var attachment_title = document.getElementById('attachment-title-edit-chapter-div')
     $(document).on('click', '.edit-modal', function() {
+      $("#delete-button-edit-chapter").attr("href", "/chapter-delete-file/" + $(this).data('id'));
       $('#course-id-edit-chapter').val($(this).data('course_id'));
       $('#id-edit-chapter').val($(this).data('id'));
       $('#chapter-edit-chapter').val($(this).data('chapter'));
       $('#title-edit-chapter').val($(this).data('title'));
+      $('#attachment-title-edit-chapter').val($(this).data('attachment_title'));
+      $('#existing-attachment-edit-chapter').val($(this).data('attachment'));
+      if ($(this).data('attachment') === "") {
+        ex_attachment.style.display = "none";
+      }
       $('#chapter-edit-modal').modal('show');
     });
+
+    function checkAttachmentEdit() {
+      if (document.getElementById("attachment-edit-chapter").files.length == 0 ){
+        attachment_title.style.display = "none";
+      } else {
+        attachment_title.style.display = "block";
+      }
+    }
 
     // Delete modal
     $(document).on('click', '.delete-modal', function() {
@@ -399,5 +421,31 @@
       $('#chapter-delete-modal').modal('show');
     });
 
+  </script>
+
+  <script type="text/javascript">
+    window.onload = function() {
+      checkAttachment();
+    };
+
+    $(document).ready(function(){
+      $("#attachment").change(function(){
+        checkAttachment();
+      });
+    });
+    
+    function checkAttachment() {
+      var x = document.getElementById("attachment-title-div");
+      var y = document.getElementById("attachment-div");
+      if (document.getElementById("attachment").files.length == 0 ){
+        x.style.display = "none";
+        y.classList.remove('col-md-5');
+        y.classList.add('col-md-10');
+      } else {
+        x.style.display = "block";
+        y.classList.remove('col-md-10');
+        y.classList.add('col-md-5');
+      }
+    };
   </script>
 @endsection

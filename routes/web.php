@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('chapters', 'ChapterController');
     Route::post('chapter-edit', 'ChapterController@update');
     Route::post('chapter-delete', 'ChapterController@destroy');
+    Route::get('chapter-delete-file/{id}', 'ChapterController@deleteFile');
     
     Route::resource('sub-chapters', 'SubChapterController');
 });
