@@ -12,6 +12,16 @@ class Grade extends Model
      * @var array
      */
     protected $fillable = [
-        'grade',
+        'grade', 'educational_stage', 'information'
     ];
+
+    public function getEducationalStage() {
+        if ($this->educational_stage == '0') {
+            return 'SD/MI';
+        } else if ($this->educational_stage == '1') {
+            return 'SMP/MTs';
+        } else {
+            return 'SMA/SMK/MA';
+        }
+    }
 }

@@ -24,6 +24,10 @@
 									{{ Form::label('subject', 'Subject') }}
 									{{ Form::text('subject', null, array('placeholder' => 'Pendidikan Informatika','class' => 'form-control')) }}
 								</div>
+								<div class="form-group">
+									{{ Form::label('information', 'Information') }}
+									{{ Form::text('information', null, array('placeholder' => 'Optional information about subject','class' => 'form-control')) }}
+								</div>
 							</div>
 						</div>
 					</div>

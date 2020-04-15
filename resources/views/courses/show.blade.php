@@ -14,7 +14,7 @@
         <div class="card-body box-profile">
           @if (!empty($course->image))
             <div class="text-center">
-              <img class="profile-user-img img-fluid img-circle"
+              <img class="img-fluid"
                   src="{{ asset("storage/". $course->image) }}"
                   alt="course profile picture">
             </div>                        
@@ -57,11 +57,14 @@
         <div class="card-header">
           <ul class="nav nav-pills">
             <li class="nav-item"><a class="nav-link active" href="#chapters" data-toggle="tab">Chapters</a></li>
+            <li class="nav-item"><a class="nav-link" href="#exams" data-toggle="tab">Exam</a></li>
+            <li class="nav-item"><a class="nav-link" href="#exams" data-toggle="tab">Members</a></li>
             <li class="nav-item"><a class="nav-link" href="#posts" data-toggle="tab">Discuss</a></li>
           </ul>
         </div><!-- /.card-header -->
         <div class="card-body">
           <div class="tab-content">
+
             <div class="active tab-pane" id="chapters">
 
               {{-- Populating chapters and sub chapters --}}
@@ -78,47 +81,113 @@
                     <div class="col-md-12">
                       <div class="card card-success">
                         <div class="card-header">
-                          <h3 class="card-title">{{ $chapter->chapter . ' - ' . $chapter->title }}</h3>
+                          <h3 class="card-title text-bold">{{ 'Chapter ' . $chapter->chapter . ' - ' . $chapter->title }}</h3>
                           <div class="card-tools">
                             @can('chapter-edit')
-                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" data-attachment="{{ $chapter->attachment }}" data-attachment_title="{{ $chapter->attachment_title }}" class="edit-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
+                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" data-attachment="{{ $chapter->attachment }}" data-attachment_title="{{ $chapter->attachment_title }}" class="edit-chapter-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
                             @endcan
                             @can('chapter-delete')
-                              <button type="button" data-id="{{ $chapter->id }}" class="delete-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
+                              <button type="button" data-id="{{ $chapter->id }}" class="delete-chapter-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
                             @endcan
                             <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
                             <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                           </div>
                         </div>
                         <div class="card-body">
-                          {{-- Populating sub chapters --}}
-                          @foreach ($chapter->sub_chapters as $sub_chapter)
-                            <a href="{{ route('sub-chapters.index') }}">
-                              {{-- <i class="fas fa-angle-double-right nav-icon"></i> --}}
-                              <p>{{ $sub_chapter->sub_chapter . '. ' . $sub_chapter->title }}</p>
-                            </a>
-                          @endforeach
-                          {{-- Populating sub chapters --}}
-                          {{-- Add sub chapter --}}
-                          {{ Form::open(array('route' => 'sub-chapters.store', 'method'=>'POST', 'files' => true)) }}
-                          {{ Form::hidden('chapter_id', $chapter->id) }}
-                          <div class="row">
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                {{ Form::text('sub_chapter', null, array('placeholder' => 'A','class' => 'form-control')) }}
+                          <div class="timeline">
+                            <div class="time-label">
+                              <span class="bg-green">Sub Chapters</span>
+                            </div>
+                            @can('sub-chapter-list')
+                              {{-- Populating sub chapters --}}
+                              @foreach ($chapter->sub_chapters as $sub_chapter)
+                                <div>
+                                  <i class="fas bg-blue">{{ $sub_chapter->sub_chapter }}</i>
+                                  <div class="timeline-item">
+                                    {{-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> --}}
+                                    <h3 class="timeline-header"><a href="#">{{ $sub_chapter->title }}</a></h3>
+                  
+                                    <div class="timeline-body">
+                                      @if (!empty($sub_chapter->materials))
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                          <iframe class="embed-responsive-item" src="{{$sub_chapter->materials}}" frameborder="0" allowfullscreen=""></iframe>
+                                        </div>
+                                      @endif
+                                    </div>
+                                    <div class="timeline-footer">
+                                      <a class="btn btn-primary btn-sm">Open</a>
+                                      <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}" data-materials="{{$sub_chapter->materials}}">Edit</a>
+                                      <a class="delete-sub-chapter-modal btn btn-danger btn-sm" data-id="{{$sub_chapter->id}}">Delete</a>
+                                    </div>
+                                  </div>
+                                </div>
+                              @endforeach
+                            @endcan
+                            @can('sub-chapter-create')
+                              <div>
+                                <i class="fas fa-plus bg-maroon"></i>
+                                <div class="timeline-item">
+                                  <h3 class="timeline-header"><a href="#">Add Sub Chapter</a></h3>
+                
+                                  <div class="timeline-body">
+                                    {{-- Add sub chapter --}}
+                                    {{ Form::open(array('route' => 'sub-chapters.store', 'method'=>'POST', 'files' => true)) }}
+                                    {{ Form::hidden('chapter_id', $chapter->id) }}
+                                    <div class="row">
+                                      <div class="col-md-2">
+                                        <div class="form-group">
+                                          {{ Form::text('sub_chapter', null, array('placeholder' => 'A','class' => 'form-control')) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-md-10">
+                                        <div class="form-group">
+                                          {{ Form::text('title', null, array('placeholder' => 'Su Chapter Title', 'class' => 'form-control')) }}
+                                        </div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <div class="form-group">
+                                          {{ Form::text('materials', null, array('placeholder' => 'Put your video link or something feeling good here', 'class' => 'form-control')) }}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    {{-- Add sub chapter --}}
+                                  </div>
+                                  <div class="timeline-footer">
+                                    <button class="btn btn-sm btn-primary col-12" type="submit"></i>Process</button>
+                                  </div>
+                                  {{ Form::close() }}
+                                </div>
                               </div>
+                            @endcan
+                            @can('chapter-list')
+                              @if (!empty($chapter->attachment))
+                                <div class="time-label">
+                                  <span class="bg-green">Attachment</span>
+                                </div>
+                                <div>
+                                  <i class="fas fa-paperclip bg-purple"></i>
+                                  <div class="timeline-item">
+                                    {{-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> --}}
+                                    <h3 class="timeline-header"><a href="#">{{ $chapter->attachment_title }}</a></h3>
+                  
+                                    <div class="timeline-body">
+                                      {{ $chapter->attachment }}
+                                    </div>
+                                    <div class="timeline-footer">
+                                      <a class="btn btn-primary btn-sm">Open</a>
+                                      <a data-id="{{ $chapter->id }}" class="delete-chapter-file-modal btn btn-danger btn-sm">Delete File</a>
+                                    </div>
+                                  </div>
+                                </div>
+                              @endif
+                            @endcan
+                            @if (!$chapter->sub_chapters->isEmpty() || !empty($chapter->attachment))
+                            <div>
+                              <i class="fas fa-check bg-green"></i>
                             </div>
-                            <div class="col-md-5">
-                              <div class="form-group">
-                                {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
-                              </div>
-                            </div>
-                            <div class="col-md-2">
-                              <button class="btn btn-primary col-12" type="submit"><i class="fas fa-plus"></i></button>
-                            </div>
+                            @endif
                           </div>
-                          {{ Form::close() }}
-                          {{-- Add sub chapter --}}
+                          {{-- Populating sub chapters --}}
                         </div>
                       </div>
                     </div>
@@ -142,19 +211,19 @@
                       {{ Form::open(array('route' => 'chapters.store', 'method'=>'POST', 'files' => true)) }}
                       {{ Form::hidden('course_id', $course->id) }}
                       <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-2">
                           <div class="form-group">
                             {{ Form::text('chapter', null, array('placeholder' => 'XI','class' => 'form-control')) }}
                           </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-10">
                           <div class="form-group">
-                            {{ Form::text('title', null, array('placeholder' => 'Title', 'class' => 'form-control')) }}
+                            {{ Form::text('title', null, array('placeholder' => 'Chapter Title', 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div id="attachment-title-div" class="col-md-5">
                           <div class="form-group">
-                            {{ Form::text('attachment_title', null, array('placeholder' => 'Leave empty if you dont attach a file', 'class' => 'form-control')) }}
+                            {{ Form::text('attachment_title', null, array('placeholder' => 'Attachment Title', 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div id="attachment-div" class="col-md-5">
@@ -175,6 +244,10 @@
               {{-- Add Chapter Form --}}
 
             </div>
+
+            <div class="tab-pane" id="exams"></div>
+
+            <div class="tab-pane" id="members"></div>
 
             <div class="tab-pane" id="posts">
               
@@ -319,31 +392,31 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-2" for="chapter">Chapter:</label>
+                <label class="control-label col-md-12" for="chapter">Chapter:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="chapter" class="form-control" id="chapter-edit-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-2" for="title">Title:</label>
+                <label class="control-label col-md-12" for="title">Title:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-2" for="attachment">Attachment:</label>
+                <label class="control-label col-md-12" for="attachment">Attachment:</label>
                 <div class="col-md-12">
                   <input value="" type="file" name="attachment" class="form-control" id="attachment-edit-chapter">
                 </div>
               </div>
               <div id="existing-attachment-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-2" for="ex_attachment">Existing Attachment:</label><a id="delete-button-edit-chapter" class="float-right" href="url">Delete</a>
+                <label class="control-label col-md-6" for="ex_attachment">Existing Attachment:</label><a id="delete-button-edit-chapter" class="float-right" href="url">Delete</a>
                 <div class="col-md-12">
                   <input value="" type="text" name="ex_attachment" class="form-control" id="existing-attachment-edit-chapter" disabled>
                 </div>
               </div>
               <div id="attachment-title-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-2" for="attachment_title">Attachment Title:</label>
+                <label class="control-label col-md-12" for="attachment_title">Attachment Title:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="attachment_title" class="form-control" id="attachment-title-edit-chapter">
                 </div>
@@ -369,11 +442,115 @@
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Are you sure want to delete it?
+            Are you sure want to delete this chapter?
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-10">
                   <input value="" type="hidden" name="id" id="id-delete-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="chapter-file-delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="chapter-modal-form" action="/chapter-delete-file" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Be careful!</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Are you sure want to delete this chapter file attachment?
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="id" id="id-delete-file-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="sub-chapter-edit-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="sub-chapter-modal-form" action="/sub-chapter-edit" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Edit Sub Chapter</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <input value="" id="chapter-id-edit-sub-chapter" name="chapter_id" type="hidden">
+              </div>
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <input value="" type="hidden" name="id" id="id-edit-sub-chapter">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="sub_chapter">Sub Chapter:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="sub_chapter" class="form-control" id="chapter-edit-sub-chapter">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Title:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="title" class="form-control" id="title-edit-sub-chapter">
+                </div>
+              </div>
+              <div id="attachment-title-edit-chapter-div" class="form-group">
+                <label class="control-label col-md-2" for="materials">Materials:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="materials" class="form-control" id="materials-edit-sub-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-warning btn-edit-sub-chapter">Process</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="sub-chapter-delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="sub-chapter-modal-form" action="/sub-chapter-delete" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Be careful!</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Are you sure want to delete this sub chapter?
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="id" id="id-delete-sub-chapter">
                 </div>
               </div>
             </form>
@@ -393,7 +570,7 @@
     // Edit Data (Modal and function edit data)
     var ex_attachment = document.getElementById('existing-attachment-edit-chapter-div');
     var attachment_title = document.getElementById('attachment-title-edit-chapter-div')
-    $(document).on('click', '.edit-modal', function() {
+    $(document).on('click', '.edit-chapter-modal', function() {
       $("#delete-button-edit-chapter").attr("href", "/chapter-delete-file/" + $(this).data('id'));
       $('#course-id-edit-chapter').val($(this).data('course_id'));
       $('#id-edit-chapter').val($(this).data('id'));
@@ -415,12 +592,33 @@
       }
     }
 
-    // Delete modal
-    $(document).on('click', '.delete-modal', function() {
+    // Delete chapter modal
+    $(document).on('click', '.delete-chapter-modal', function() {
       $('#id-delete-chapter').val($(this).data('id'));
       $('#chapter-delete-modal').modal('show');
     });
 
+    // Delete chapter attachment
+    $(document).on('click', '.delete-chapter-file-modal', function() {
+      $('#id-delete-file-chapter').val($(this).data('id'));
+      $('#chapter-file-delete-modal').modal('show');
+    });
+
+    // Edit sub chapter modal
+    $(document).on('click', '.edit-sub-chapter-modal', function() {
+      $('#chapter-id-edit-sub-chapter').val($(this).data('chapter_id'));
+      $('#id-edit-sub-chapter').val($(this).data('id'));
+      $('#chapter-edit-sub-chapter').val($(this).data('sub_chapter'));
+      $('#title-edit-sub-chapter').val($(this).data('title'));
+      $('#materials-edit-sub-chapter').val($(this).data('materials'));
+      $('#sub-chapter-edit-modal').modal('show');
+    });
+
+    // Delete sub chapter modal
+    $(document).on('click', '.delete-sub-chapter-modal', function() {
+      $('#id-delete-sub-chapter').val($(this).data('id'));
+      $('#sub-chapter-delete-modal').modal('show');
+    });
   </script>
 
   <script type="text/javascript">

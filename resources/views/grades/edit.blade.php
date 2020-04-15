@@ -24,6 +24,14 @@
                                 {{ Form::label('grade', 'Grade') }}
                                 {{ Form::text('grade', $grade->grade, array('placeholder' => 'Grade', 'class' => 'form-control')) }}
                             </div>
+                            <div class="form-group">
+                                {{ Form::label('educational_stage', 'Educational Stage') }}
+                                {{ Form::select('educational_stage', ['0' => 'SD/MI', '1' => 'SMP/MTs', '2' => 'SMA/SMK/MA'], $grade->educational_stage, ['class' => 'form-control']) }}
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('information', 'Information') }}
+                                {{ Form::text('information', $grade->information, array('placeholder' => 'Optional information about subject', 'class' => 'form-control')) }}
+                            </div>
                         </div>
                     </div>
                 </div>

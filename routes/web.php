@@ -17,6 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/home', function () {
+    return view('welcome');
+});
 
 Auth::routes();
 
@@ -33,7 +36,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('chapters', 'ChapterController');
     Route::post('chapter-edit', 'ChapterController@update');
     Route::post('chapter-delete', 'ChapterController@destroy');
-    Route::get('chapter-delete-file/{id}', 'ChapterController@deleteFile');
+    Route::post('chapter-delete-file', 'ChapterController@deleteFile');
     
     Route::resource('sub-chapters', 'SubChapterController');
+    Route::post('sub-chapter-edit', 'SubChapterController@update');
+    Route::post('sub-chapter-delete', 'SubChapterController@destroy');
 });

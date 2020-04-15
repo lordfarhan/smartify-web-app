@@ -16,6 +16,7 @@ class CreateGradesTable extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->string('grade', 12);
+            $table->enum('educational_stage', ['0', '1', '2']);
             $table->text('information')->nullable();
             $table->timestamps();
         });

@@ -39,7 +39,8 @@ class GradeController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'grade' => 'required|unique:grades,grade'
+            'grade' => 'required|unique:grades,grade',
+            'educational_stage' => 'required'
         ]);
 
         Grade::create($request->all());
@@ -78,9 +79,17 @@ class GradeController extends Controller
      */
     public function update(Request $request, Grade $grade)
     {
-        $this->validate($request, [
-            'grade' => 'required|unique:grades,grade'
-        ]);
+        if ($request->grade == $grade->grade) {
+            $this->validate($request, [
+                'grade' => 'required',
+                'educational_stage' => 'required'
+            ]);
+        } else {
+            $this->validate($request, [
+                'grade' => 'required|unique:grades,grade',
+                'educational_stage' => 'required'
+            ]);
+        }
 
         $grade->update($request->all());
 

@@ -132,8 +132,8 @@ class ChapterController extends Controller
         return back()->with('success', 'Chapter deleted successfully');
     }
 
-    public function deleteFile($id) {
-        $chapter = Chapter::find($id);
+    public function deleteFile(Request $request) {
+        $chapter = Chapter::find($request->id);
 
         if (File::exists(public_path('storage/' . $chapter->attachment))) {
             File::delete(public_path('storage/' . $chapter->attachment));

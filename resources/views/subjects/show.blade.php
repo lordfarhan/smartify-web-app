@@ -18,6 +18,10 @@
                                 <label for="name">Subject</label>
                                 <input id="name" type="text" value="{{ $subject['subject'] }}" class="form-control" disabled />
                             </div>
+                            <div class="form-group">
+                                <label for="name">Information</label>
+                                <input id="name" type="text" value="{{ $subject['information'] }}" class="form-control" disabled />
+                            </div>
                         </div>
                     </div>
                 </div>

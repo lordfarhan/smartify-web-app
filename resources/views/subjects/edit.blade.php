@@ -24,6 +24,10 @@
                                 {{ Form::label('subject', 'Subject') }}
                                 {{ Form::text('subject', $subject->subject, array('placeholder' => 'subject', 'class' => 'form-control')) }}
                             </div>
+                            <div class="form-group">
+                                {{ Form::label('information', 'Information') }}
+                                {{ Form::text('information', $subject->information, array('placeholder' => 'Optional information about subject', 'class' => 'form-control')) }}
+                            </div>
                         </div>
                     </div>
                 </div>

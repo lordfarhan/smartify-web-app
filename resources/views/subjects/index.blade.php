@@ -28,6 +28,7 @@
 				<tr>
 					<th width="20px">No</th>
 					<th>Name</th>
+					<th>Information</th>
 					<th width="117px">Action</th>
 				</tr>
 			</thead>
@@ -36,6 +37,7 @@
 				<tr>
 					<td>{{ ++$i }}</td>
 					<td>{{ $subject->subject }}</td>
+					<td>{{ $subject->information }}</td>
 					<td>
 						<a class="btn btn-primary" href="{{ route('subjects.show', $subject->id) }}"><i class="fa fa-eye"></i></a>
 						@can('subject-edit')

@@ -12,6 +12,6 @@ class SubChapter extends Model
      * @var array
      */
     protected $fillable = [
-        'chapter_id', 'sub_chapter', 'title'
+        'chapter_id', 'sub_chapter', 'title', 'materials'
     ];
 }

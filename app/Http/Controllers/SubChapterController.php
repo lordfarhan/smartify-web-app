@@ -76,9 +76,18 @@ class SubChapterController extends Controller
      * @param  \App\SubChapter  $subChapter
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SubChapter $subChapter)
+    public function update(Request $request)
     {
-        //
+        $this->validate($request, [
+            'chapter_id' => 'required',
+            'sub_chapter' => 'required',
+            'title' => 'required'
+        ]);
+
+        $sub_chapter = SubChapter::find($request->id);
+        $sub_chapter->update($request->all());
+
+        return back()->with('success', 'Sub chapter updated successfully');
     }
 
     /**
@@ -87,8 +96,10 @@ class SubChapterController extends Controller
      * @param  \App\SubChapter  $subChapter
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SubChapter $subChapter)
+    public function destroy(Request $request)
     {
-        //
+        $sub_chapter = SubChapter::find($request->id);
+        $sub_chapter->delete();
+        return back()->with('success', 'Sub chapter deleted successfully');
     }
 }

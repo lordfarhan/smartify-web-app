@@ -59,7 +59,7 @@
 						@endif
 					</td>
 					<td>{{ $course->vendor }}</td>
-					<td><img src="{{ asset("storage/". $course->image) }}" class="img-square elevation-2" alt="Course Image" height="80" width="80"></td>
+					<td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td>
 					<td>
 						<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
 						@can('course-edit')

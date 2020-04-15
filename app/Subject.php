@@ -12,6 +12,6 @@ class Subject extends Model
      * @var array
      */
     protected $fillable = [
-        'subject',
+        'subject', 'information'
     ];
 }

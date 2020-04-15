@@ -28,6 +28,8 @@
 				<tr>
 					<th width="20px">No</th>
 					<th>Name</th>
+					<th>Educational Stage</th>
+					<th>Information</th>
 					<th width="117px">Action</th>
 				</tr>
 			</thead>
@@ -36,6 +38,8 @@
 				<tr>
 					<td>{{ ++$i }}</td>
 					<td>{{ $grade->grade }}</td>
+					<td>{{ $grade->getEducationalStage() }}</td>
+					<td>{{ $grade->information }}</td>
 					<td>
 						<a class="btn btn-primary" href="{{ route('grades.show', $grade->id) }}"><i class="fa fa-eye"></i></a>
 						@can('grade-edit')

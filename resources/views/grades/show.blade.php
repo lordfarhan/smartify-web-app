@@ -18,6 +18,14 @@
                                 <label for="name">Grade</label>
                                 <input id="name" type="text" value="{{ $grade['grade'] }}" class="form-control" disabled />
                             </div>
+                            <div class="form-group">
+                                <label for="name">Educational Stage</label>
+                                <input id="name" type="text" value="{{ $grade->getEducationalStage() }}" class="form-control" disabled />
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Information</label>
+                                <input id="name" type="text" value="{{ $grade['information'] }}" class="form-control" disabled />
+                            </div>
                         </div>
                     </div>
                 </div>
