@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('head')
+	<!-- daterange picker -->
+	<link rel="stylesheet" href="{{ asset('lte/plugins/daterangepicker/daterangepicker.css') }}">
+	<!-- Tempusdominus Bbootstrap 4 -->
+	<link rel="stylesheet" href="{{ asset('lte/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+@endsection
+
 @section('title')
     Create Course
 @endsection
@@ -81,6 +88,41 @@
 							</div>
 						</div>
 					</div>
+				</div>
+				<div class="card">
+					<div class="card-header">
+						Schedule
+					</div>
+					<div class="card-body">
+						<div class="row" id="schedule-row">
+							<div class="col-md-6">
+								<div class="form-group">
+									{{ Form::select('day[]', $days, null, array('class' => 'form-control schedule-list', 'placeholder' => 'Select day')) }}
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="input-group date" id="timepicker-start" data-target-input="nearest">
+									<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start"/>
+									<div class="input-group-append" data-target="#timepicker-start" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="far fa-clock"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="input-group date" id="timepicker-end" data-target-input="nearest">
+									<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end"/>
+									<div class="input-group-append" data-target="#timepicker-end" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="far fa-clock"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add</i></button>
+							</div>
+						</div>
+						<div id="new-schedule-row"></div>
+						<div id="new-schedule-script"></div>
+					</div>
 					<div class="card-footer text-right">
 						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
 					</div>
@@ -91,9 +133,20 @@
 @endsection
 
 @section('scripts')
+	<!-- InputMask -->
+	<script src="{{asset('lte/plugins/moment/moment.min.js')}}"></script>
+	<script src="{{asset('lte/plugins/inputmask/min/jquery.inputmask.bundle.min.js')}}"></script>
+	<!-- date-range-picker -->
+	<script src="{{asset('lte/plugins/daterangepicker/daterangepicker.js')}}"></script>
+	<!-- Tempusdominus Bootstrap 4 -->
+	<script src="{{asset('lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+
 	<script type="text/javascript">
 		window.onload = function() {
 			checkAttachment();
+			$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+				format: "HH:mm"
+			});
 		};
 
 		$(document).ready(function(){
@@ -110,5 +163,50 @@
 				x.style.visibility = "visible";
 			}
 		};
+	</script>
+
+	{{-- Schedules --}}
+	<script type="text/javascript">
+		// add row
+		var i = 1
+    $("#add-schedule-row").click(function () {
+        var html = '';
+        html += '<div class="row" id="schedule-row">';
+        html += '<div class="col-md-6">';
+        html += '<div class="form-group">';
+        html += '{{ Form::select("day[]", $days, null, array("class" => "form-control schedule-list")) }}';
+        html += '</div>';
+        html += '</div>';
+				html += '<div class="col-md-2">';
+				html += '<div class="input-group date" id="timepicker-start'+i+'" data-target-input="nearest">';
+				html += '<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start' + i + '"/>';
+				html += '<div class="input-group-append" data-target="#timepicker-start'+i+'" data-toggle="datetimepicker">';
+				html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
+				html += '</div>';
+				html += '</div>';
+				html += '</div>';
+				html += '<div class="col-md-2">';
+				html += '<div class="input-group date" id="timepicker-end'+i+'" data-target-input="nearest">';
+				html += '<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end' + i + '"/>';
+				html += '<div class="input-group-append" data-target="#timepicker-end'+i+'" data-toggle="datetimepicker">';
+				html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
+				html += '</div>';
+				html += '</div>';
+				html += '</div>';
+				html += '<div class="col-md-2">';
+				html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>';
+				html += '</div>';
+				html += '</div>';
+
+				$('#new-schedule-row').append(html);
+				i++;
+    });
+
+    // remove row
+    $(document).on('click', '#remove-schedule-row', function () {
+        $(this).closest('#schedule-row').remove();
+		});
+
+		// $(function () { $("#timepicker").datetimepicker({ format: "HH:mm" }) })
 	</script>
 @endsection

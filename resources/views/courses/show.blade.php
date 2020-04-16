@@ -37,6 +37,13 @@
             <li class="list-group-item">
               <b>Vendor</b> <a class="float-right">{{ $course->vendor }}</a>
             </li>
+            @foreach ($course->schedules as $index => $schedule)
+              <li class="list-group-item">
+                <b>@if ($index == 0)
+                    Schedule
+                @endif</b> <a class="float-right">{{ $schedule->getDay() . ', ' .\Carbon\Carbon::parse($schedule->start_time)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end_time)->format('H:i')}}</a>
+              </li>
+            @endforeach
             <li class="list-group-item">
               <b>Created at</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->created_at)->format("M, d Y H:i:s") }}</a>
             </li>

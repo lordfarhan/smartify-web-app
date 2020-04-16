@@ -25,18 +25,22 @@ class Course extends Model
     ];
 
     public function author() {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function subject() {
-        return $this->belongsTo('App\Subject');
+        return $this->belongsTo(Subject::class);
     }
 
     public function grade() {
-        return $this->belongsTo('App\Grade');
+        return $this->belongsTo(Grade::class);
     }
 
     public function chapters() {
-        return $this->hasMany('App\Chapter')->orderBy('chapter');
+        return $this->hasMany(Chapter::class)->orderBy('chapter');
+    }
+
+    public function schedules() {
+        return $this->hasMany(Schedule::class)->orderBy('day');
     }
 }

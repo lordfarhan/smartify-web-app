@@ -31,6 +31,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('subjects', 'SubjectController');
     Route::resource('grades', 'GradeController');
     Route::resource('courses', 'CourseController');
+    Route::get('courses/{id}/schedule', 'CourseController@editSchedule');
+    Route::post('courses/schedule', 'CourseController@updateSchedule')->name('courses.updateSchedule');
     Route::get('course-delete-file/{id}/{type}', 'CourseController@deleteFile');
 
     Route::resource('chapters', 'ChapterController');

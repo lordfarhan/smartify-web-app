@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Grade;
+use App\Schedule;
 use App\Subject;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -35,7 +37,8 @@ class CourseController extends Controller
         $authors = User::pluck('name', 'id')->all();
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
-        return view('courses.create', ['authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
+        $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
+        return view('courses.create', ['authors' => $authors, 'subjects' => $subjects, 'grades' => $grades, 'days' => $days]);
     }
 
     /**
@@ -57,14 +60,28 @@ class CourseController extends Controller
             'attachment_title' => 'required',
             'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
         );
+
+        // Schedule insertion
+        $days = $request->input('day');
+        $start_times = $request->input('start_time');
+        $end_times = $request->input('end_time');
+
+        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($days as $index => $day) {
+                $validation["day.{$index}"] = 'required';
+                $validation["start_time.{$index}"] = 'required';
+                $validation["end_time.{$index}"] = 'required';
+            }
+        }
+        
         if($request->type == '0') {
             unset($validation['enrollment_key']);
         }
-        if (empty($request->file('attachment'))) {
+        if(empty($request->file('attachment'))) {
             unset($validation['attachment_title']);
         }
         $this->validate($request, $validation);
-    
+
         $input = $request->all();
 
         $author = User::where('id', request('author_id'))->value('name');
@@ -91,7 +108,18 @@ class CourseController extends Controller
             $input = array_except($input, array('attachment'));
         }
 
-        Course::create($input);
+        $course = Course::create($input);
+
+        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($days as $index => $day) {
+                $schedule = new Schedule();
+                $schedule->course_id = $course->id;
+                $schedule->day = $day;
+                $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+                $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+                $schedule->save();
+            }
+        }
         
         return redirect()->route('courses.index')->with('success', 'Course created successfully');
     }
@@ -130,7 +158,6 @@ class CourseController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-
         $validation = array(
             'author_id' => 'required',
             'subject_id' => 'required',
@@ -142,6 +169,7 @@ class CourseController extends Controller
             'attachment_title' => 'required',
             'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
         );
+
         if($request->type == '0') {
             unset($validation['enrollment_key']);
         }
@@ -229,5 +257,44 @@ class CourseController extends Controller
         $course->update();
 
         return back()->with('success', 'Deleted file successfully');
+    }
+
+    public function editSchedule($id) {
+        $course = Course::find($id);
+        $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
+        return view('courses.edit-schedule', ['course' => $course, 'course_id' => $id, 'days' => $days]);
+    }
+
+    public function updateSchedule(Request $request) {
+        $validation = array();
+        // Schedule insertion
+        $days = $request->input('day');
+        $start_times = $request->input('start_time');
+        $end_times = $request->input('end_time');
+
+        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($days as $index => $day) {
+                $validation["day.{$index}"] = 'required';
+                $validation["start_time.{$index}"] = 'required';
+                $validation["end_time.{$index}"] = 'required';
+            }
+        }
+
+        $this->validate($request, $validation);
+
+        Schedule::where('course_id', $request->id)->delete();
+
+        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($days as $index => $day) {
+                $schedule = new Schedule();
+                $schedule->course_id = $request->id;
+                $schedule->day = $day;
+                $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+                $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+                $schedule->save();
+            }
+        }
+
+        return redirect()->route('courses.index')->with('success', 'Course schedule updated successfully');
     }
 }
