@@ -95,6 +95,7 @@
 				</li>
 
 				{{-- Schedules & Calendar --}}
+				@can('schedule-list')					
 				<li class="nav-item">
 					<a href="{{ route('schedules.index') }}" class="nav-link {{ request()->is('schedules') ? 'active' : '' }}">
 						<i class="nav-icon far fa-calendar-alt"></i>
@@ -103,6 +104,7 @@
 						</p>
 					</a>
 				</li>
+				@endcan
 
 			</ul>
 		</nav>

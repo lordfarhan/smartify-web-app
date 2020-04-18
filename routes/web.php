@@ -45,4 +45,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('sub-chapter-delete', 'SubChapterController@destroy');
 
     Route::resource('schedules', 'ScheduleController');
+    Route::get('schedules.all', 'ScheduleController@getScheduleData');
 });

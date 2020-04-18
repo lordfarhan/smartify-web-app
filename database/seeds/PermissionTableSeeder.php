@@ -40,7 +40,11 @@ class PermissionTableSeeder extends Seeder
             'sub-chapter-list',
             'sub-chapter-create',
             'sub-chapter-edit',
-            'sub-chapter-delete'
+            'sub-chapter-delete',
+            'schedule-list',
+            'schedule-create',
+            'schedule-edit',
+            'schedule-delete',
          ];
  
          foreach ($permissions as $permission) {

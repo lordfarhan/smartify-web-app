@@ -64,6 +64,8 @@
 						<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
 						@can('course-edit')
 							<a class="btn btn-warning" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen"></i></a>
+						@endcan
+						@can('schedule-edit')
 							<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
 						@endcan
 						@can('course-delete')

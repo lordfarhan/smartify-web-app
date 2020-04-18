@@ -188,11 +188,9 @@
                                 </div>
                               @endif
                             @endcan
-                            @if (!$chapter->sub_chapters->isEmpty() || !empty($chapter->attachment))
                             <div>
                               <i class="fas fa-check bg-green"></i>
                             </div>
-                            @endif
                           </div>
                           {{-- Populating sub chapters --}}
                         </div>
@@ -431,8 +429,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-warning btn-edit-chapter">Process</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">Process</button>
           </div>
         </div>
       </form>
@@ -459,7 +457,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
           </div>
         </div>
@@ -487,7 +485,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
           </div>
         </div>
@@ -535,8 +533,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-warning btn-edit-sub-chapter">Process</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-edit-sub-chapter">Process</button>
           </div>
         </div>
       </form>
@@ -563,7 +561,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
           </div>
         </div>

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Schedule;
+use App\Services\CalendarService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class ScheduleController extends Controller
 {
@@ -14,7 +17,29 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        if(request()->ajax()) {    
+            $data = Schedule::all();
+            return Response::json($data);
+        }
+        return view('schedules/index');
+    }
+
+    public function getScheduleData() {
+        $schedules = Schedule::all();
+        $scheduleData = array();
+        foreach ($schedules as $schedule) {
+            $e = array();
+            $e['id'] = $schedule->id;
+            $e['title'] = $schedule->course->subject->subject . " - " . $schedule->course->grade->grade;
+            $e['daysOfWeek'] = $schedule->day;
+            $e['startTime'] = Carbon::parse($schedule->start_time)->format('H:i:s');
+            $e['endTime'] = Carbon::parse($schedule->end_time)->format('H:i:s');
+            $e['url'] = route('courses.show', $schedule->course->id);
+            $e['color'] = 'green';
+
+            array_push($scheduleData, $e);
+        }
+        return json_encode($scheduleData);
     }
 
     /**

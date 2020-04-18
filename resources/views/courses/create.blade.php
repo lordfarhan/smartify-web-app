@@ -89,6 +89,7 @@
 						</div>
 					</div>
 				</div>
+				@can('schedule-create')
 				<div class="card">
 					<div class="card-header">
 						Schedule
@@ -127,6 +128,7 @@
 						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
+				@endcan
 			{{ Form::close() }}
 		</div>
 	</div>
