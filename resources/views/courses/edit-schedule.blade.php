@@ -51,6 +51,7 @@
 					@endforeach
 					<div id="new-schedule-row"></div>
 					<div id="new-schedule-script"></div>
+					<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add Field</i></button>
 				</div>
 				<div class="card-footer text-right">
 					{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}

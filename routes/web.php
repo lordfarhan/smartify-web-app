@@ -25,7 +25,7 @@ Auth::routes();
 
 Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function () {
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('subjects', 'SubjectController');
@@ -43,4 +43,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('sub-chapters', 'SubChapterController');
     Route::post('sub-chapter-edit', 'SubChapterController@update');
     Route::post('sub-chapter-delete', 'SubChapterController@destroy');
+
+    Route::resource('schedules', 'ScheduleController');
 });

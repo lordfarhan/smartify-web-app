@@ -94,6 +94,16 @@
 					</ul>
 				</li>
 
+				{{-- Schedules & Calendar --}}
+				<li class="nav-item">
+					<a href="{{ route('schedules.index') }}" class="nav-link {{ request()->is('schedules') ? 'active' : '' }}">
+						<i class="nav-icon far fa-calendar-alt"></i>
+						<p>
+							Schedules
+						</p>
+					</a>
+				</li>
+
 			</ul>
 		</nav>
 		<!-- /.sidebar-menu -->

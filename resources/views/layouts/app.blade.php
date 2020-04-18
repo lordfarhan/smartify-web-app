@@ -106,6 +106,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <!-- jQuery -->
 <script src="{{ asset("lte/plugins/jquery/jquery.min.js") }}"></script>
+<!-- jQuery UI -->
+<script src="{{ asset("lte/plugins/jquery-ui/jquery-ui.min.js") }}"></script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset("lte/plugins/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
 <!-- AdminLTE App -->

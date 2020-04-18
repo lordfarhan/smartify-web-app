@@ -64,7 +64,7 @@
 						<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
 						@can('course-edit')
 							<a class="btn btn-warning" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen"></i></a>
-							<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="fas fa-calendar"></i></a>
+							<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
 						@endcan
 						@can('course-delete')
 							{!! Form::open(['method' => 'DELETE','route' => ['courses.destroy', $course->id],'style'=>'display:inline']) !!}
