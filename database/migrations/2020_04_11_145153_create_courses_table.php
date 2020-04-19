@@ -15,6 +15,7 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('institution_id')->nullable()->references('id')->on('institutions')->onDelete('set null');
             $table->foreignId('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->foreignId('grade_id')->references('id')->on('grades')->onDelete('cascade');

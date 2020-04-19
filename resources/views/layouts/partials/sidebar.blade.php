@@ -31,6 +31,18 @@
 					</a>
 				</li>
 
+				{{-- Institutes --}}
+				@can('institution-list')
+				<li class="nav-item">
+					<a href="{{ route('institutions.index') }}" class="nav-link {{ request()->is('institutions') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-briefcase"></i>
+						<p>
+							Institutes
+						</p>
+					</a>
+				</li>
+				@endcan
+
 				{{-- Users --}}
 				@can('user-list')
 				<li class="nav-item">

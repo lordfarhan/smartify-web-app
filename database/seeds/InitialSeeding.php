@@ -1,9 +1,12 @@
 <?php
 
+use App\Institution;
+use App\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
-class PermissionTableSeeder extends Seeder
+class InitialSeeding extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +15,16 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        Institution::create([
+            'name' => 'Codeiva',
+            'description' => 'This institution is for public and non-partnership users'
+        ]);
+
         $permissions = [
+            'institution-list',
+            'institution-create',
+            'institution-edit',
+            'institution-delete',
             'role-list',
             'role-create',
             'role-edit',
@@ -45,10 +57,26 @@ class PermissionTableSeeder extends Seeder
             'schedule-create',
             'schedule-edit',
             'schedule-delete',
-         ];
- 
-         foreach ($permissions as $permission) {
-              Permission::create(['name' => $permission]);
-         }
+        ];
+
+        foreach ($permissions as $permission) {
+            Permission::create(['name' => $permission]);
+        }
+
+        $user = User::create([
+            'name' => 'Muhammad Farhan', 
+            'institution_id' => 1,
+            'email' => 'farhan@codeiva.com',
+            'password' => bcrypt('farhan123'),
+            'active' => '1'
+        ]);
+
+        $role = Role::create(['name' => 'CEO']);
+
+        $permissions = Permission::pluck('id','id')->all();
+
+        $role->syncPermissions($permissions);
+
+        $user->assignRole([$role->id]);
     }
 }

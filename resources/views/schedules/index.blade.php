@@ -14,8 +14,12 @@
 @endsection
 
 @section('content')
-	<div class="response"></div>
-	<div id='calendar'></div>  
+<div class="card">
+	<div class="card-body">
+		<div class="response"></div>
+		<div id='calendar'></div>  
+	</div>
+</div>
 @endsection
 
 @section('scripts')	
