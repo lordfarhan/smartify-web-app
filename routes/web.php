@@ -34,16 +34,25 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('courses', 'CourseController');
     Route::get('courses/{id}/schedule', 'CourseController@editSchedule');
     Route::post('courses/schedule', 'CourseController@updateSchedule')->name('courses.updateSchedule');
-    Route::get('course-delete-file/{id}/{type}', 'CourseController@deleteFile');
+    Route::get('courses.delete-file/{id}/{type}', 'CourseController@deleteFile');
+    Route::get('courses/{course_id}/tests/{id}', 'TestController@show');
 
     Route::resource('chapters', 'ChapterController');
-    Route::post('chapter-edit', 'ChapterController@update');
-    Route::post('chapter-delete', 'ChapterController@destroy');
-    Route::post('chapter-delete-file', 'ChapterController@deleteFile');
-    
+    Route::post('chapters.edit', 'ChapterController@update');
+    Route::post('chapters.delete', 'ChapterController@destroy');
+    Route::post('chapters.delete-file', 'ChapterController@deleteFile');
+
     Route::resource('sub-chapters', 'SubChapterController');
-    Route::post('sub-chapter-edit', 'SubChapterController@update');
-    Route::post('sub-chapter-delete', 'SubChapterController@destroy');
+    Route::post('sub-chapters.edit', 'SubChapterController@update');
+    Route::post('sub-chapters.delete', 'SubChapterController@destroy');
+
+    Route::resource('tests', 'TestController');
+    Route::post('tests.edit', 'TestController@update');
+    Route::post('tests.delete', 'TestController@destroy');
+
+    Route::resource('questions', 'QuestionController');
+    Route::post('questions.delete', 'QuestionController@destroy');
+    Route::get('/questions.delete-file/{id}/{type}', 'QuestionController@deleteFile');
 
     Route::resource('schedules', 'ScheduleController');
     Route::get('schedules.all', 'ScheduleController@getScheduleData');

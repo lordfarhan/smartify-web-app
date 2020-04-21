@@ -64,8 +64,8 @@
         <div class="card-header">
           <ul class="nav nav-pills">
             <li class="nav-item"><a class="nav-link active" href="#chapters" data-toggle="tab">Chapters</a></li>
-            <li class="nav-item"><a class="nav-link" href="#exams" data-toggle="tab">Exam</a></li>
-            <li class="nav-item"><a class="nav-link" href="#exams" data-toggle="tab">Members</a></li>
+            <li class="nav-item"><a class="nav-link" href="#tests" data-toggle="tab">Exam</a></li>
+            <li class="nav-item"><a class="nav-link" href="#members" data-toggle="tab">Members</a></li>
             <li class="nav-item"><a class="nav-link" href="#posts" data-toggle="tab">Discuss</a></li>
           </ul>
         </div><!-- /.card-header -->
@@ -148,7 +148,7 @@
                                       </div>
                                       <div class="col-md-10">
                                         <div class="form-group">
-                                          {{ Form::text('title', null, array('placeholder' => 'Su Chapter Title', 'class' => 'form-control')) }}
+                                          {{ Form::text('title', null, array('placeholder' => 'Sub Chapter Title', 'class' => 'form-control')) }}
                                         </div>
                                       </div>
                                       <div class="col-md-12">
@@ -192,7 +192,6 @@
                               <i class="fas fa-check bg-green"></i>
                             </div>
                           </div>
-                          {{-- Populating sub chapters --}}
                         </div>
                       </div>
                     </div>
@@ -250,7 +249,125 @@
 
             </div>
 
-            <div class="tab-pane" id="exams"></div>
+            <div class="tab-pane" id="tests">
+              <div class="row">
+                @if(!empty($errors->all()))
+                <div class="col-md-12">
+                  <div class="card alert alert-danger">
+                    {{ Html::ul($errors->all())}}
+                  </div>
+                </div>
+                @endif
+                {{-- test list --}}
+                @can('test-list')
+                  @foreach ($course->tests as $test)
+                    <div class="col-md-12">
+                      <div class="card card-success">
+                        <div class="card-header">
+                          <h3 class="card-title text-bold">{{ $test->title }}</h3>
+                          <div class="card-tools">
+                            @can('test-edit')
+                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $test->id }}" data-order="{{$test->order}}" data-title="{{ $test->title }}" data-type="{{ $test->type }}" data-assign="{{ $test->assign }}" data-description="{{ $test->description }}" class="edit-test-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
+                            @endcan
+                            @can('test-delete')
+                              <button type="button" data-id="{{ $test->id }}" class="delete-test-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
+                            @endcan
+                            <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                          </div>
+                        </div>
+                        <div class="card-body">
+                          <ul class="list-group list-group-unbordered mb-3">
+                            <li class="list-group-item">
+                              <b>Type</b> <a class="float-right">
+                                @if ($test->type == '0')
+                                  Chapter Test
+                                @elseif($test->type == '1')
+                                  Mid Test
+                                @else
+                                  Final Test
+                                @endif</a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>Assign</b> <a class="float-right">
+                                @if ($test->assign == '0')
+                                  <label class="badge badge-warning">NOT ASSIGNED</label>
+                                @else
+                                  <label class="badge badge-success">ASSIGNED</label>
+                                @endif
+                              </a>
+                            </li>
+                            @if (!empty($test->description))
+                            <li class="list-group-item">
+                              <b>Description</b> <a class="float-right">
+                                {{$test->description}}
+                              </a>
+                            </li>
+                            @endif
+                          </ul>
+                        </div>
+                        <div class="card-footer">
+                          <a class="btn btn-primary" href="/courses/{{$course->id}}/tests/{{$test->id}}">Open</a>
+                        </div>
+                      </div>
+                    </div>
+                  @endforeach
+                @endcan
+              </div>
+
+              {{-- Create test --}}
+              @can('test-create')
+              <div id="accordion">
+                <div class="card card-primary">
+                  <div class="card-header">
+                    <h4 class="card-title text-center">
+                      <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="text-center">
+                        Add Test
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="card-body">
+                      {{ Form::open(array('route' => 'tests.store', 'method'=>'POST')) }}
+                      {{ Form::hidden('course_id', $course->id) }}
+                      <div class="row">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            {{ Form::number('order', null, array('placeholder' => 'Test Order', 'class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-10">
+                          <div class="form-group">
+                            {{ Form::text('title', null, array('placeholder' => 'Test Title', 'class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            {{ Form::select('type', ['0' => 'Chapter Test', '1' => 'Mid Test', '2' => 'Final Test'], null, array('class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            {{ Form::select('assign', ['0' => 'Not Assigned', '1' => 'Assigned'], null, array('class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-10">
+                          <div class="form-group">
+                            {{ Form::text('description', null, array('placeholder' => 'Test description', 'class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
+                        </div>
+                      </div>
+                      {{ Form::close() }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              @endcan
+
+            </div>
 
             <div class="tab-pane" id="members"></div>
 
@@ -379,7 +496,7 @@
 @section('modals')
   <div id="chapter-edit-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="chapter-modal-form" action="/chapter-edit" method="POST" enctype="multipart/form-data">
+      <form id="chapter-modal-form" action="/chapters.edit" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="modal-content">
           <div class="modal-header">
@@ -415,9 +532,10 @@
                 </div>
               </div>
               <div id="existing-attachment-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-6" for="ex_attachment">Existing Attachment:</label><a id="delete-button-edit-chapter" class="float-right" href="url">Delete</a>
+                <label class="control-label col-md-6" for="ex_attachment">Existing Attachment:</label>
+                <a id="delete-button-edit-chapter" class="btn btn-sm float-right" href="url"><i class="fas fa-times"></i></a>
                 <div class="col-md-12">
-                  <input value="" type="text" name="ex_attachment" class="form-control" id="existing-attachment-edit-chapter" disabled>
+                  <input value="" type="text" name="ex_attachment" class="col-md-12 form-control" id="existing-attachment-edit-chapter" disabled>
                 </div>
               </div>
               <div id="attachment-title-edit-chapter-div" class="form-group">
@@ -439,7 +557,7 @@
 
   <div id="chapter-delete-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="chapter-modal-form" action="/chapter-delete" method="POST">
+      <form id="chapter-modal-form" action="/chapters.delete" method="POST">
         @csrf
         <div class="modal-content">
           <div class="modal-header">
@@ -467,7 +585,7 @@
 
   <div id="chapter-file-delete-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="chapter-modal-form" action="/chapter-delete-file" method="POST">
+      <form id="chapter-modal-form" action="/chapters.delete-file" method="POST">
         @csrf
         <div class="modal-content">
           <div class="modal-header">
@@ -480,6 +598,94 @@
               <div class="form-group">
                 <div class="col-sm-10">
                   <input value="" type="hidden" name="id" id="id-delete-file-chapter">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="test-edit-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="test-modal-form" action="/tests.edit" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Edit Test</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <input value="" id="course-id-edit-test" name="course_id" type="hidden">
+              </div>
+              <div class="form-group">
+                <div class="col-sm-12">
+                  <input value="" type="hidden" name="id" id="id-edit-test">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="order">Order:</label>
+                <div class="col-md-12">
+                  <input value="" type="number" name="order" class="form-control" id="order-edit-test">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Title:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="title" class="form-control" id="title-edit-test">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Title:</label>
+                <div class="col-md-12">
+                  {{Form::select('type', ['0' => 'Chapter Test', '1' => 'Mid Test', '2' => 'Final Test'], null, array('id' => 'type-edit-test', 'class' => 'form-control'))}}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Title:</label>
+                <div class="col-md-12">
+                  {{Form::select('assign', ['0' => 'Not Assigned', '1' => 'Assigned'], null, array('id' => 'assign-edit-test', 'class' => 'form-control'))}}
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Description:</label>
+                <div class="col-md-12">
+                  <input value="" type="text" name="description" class="form-control" id="description-edit-test">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">Process</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="test-delete-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="test-modal-form" action="/tests.delete" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>Be careful!</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            Are you sure want to delete this test?
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="id" id="id-delete-test">
                 </div>
               </div>
             </form>
@@ -576,7 +782,7 @@
     var ex_attachment = document.getElementById('existing-attachment-edit-chapter-div');
     var attachment_title = document.getElementById('attachment-title-edit-chapter-div')
     $(document).on('click', '.edit-chapter-modal', function() {
-      $("#delete-button-edit-chapter").attr("href", "/chapter-delete-file/" + $(this).data('id'));
+      $("#delete-button-edit-chapter").attr("href", "/chapters.delete-file/" + $(this).data('id'));
       $('#course-id-edit-chapter').val($(this).data('course_id'));
       $('#id-edit-chapter').val($(this).data('id'));
       $('#chapter-edit-chapter').val($(this).data('chapter'));
@@ -607,6 +813,24 @@
     $(document).on('click', '.delete-chapter-file-modal', function() {
       $('#id-delete-file-chapter').val($(this).data('id'));
       $('#chapter-file-delete-modal').modal('show');
+    });
+
+    // Edit test modal
+    $(document).on('click', '.edit-test-modal', function() {
+      $('#course-id-edit-test').val($(this).data('course_id'));
+      $('#id-edit-test').val($(this).data('id'));
+      $('#order-edit-test').val($(this).data('order'));
+      $('#title-edit-test').val($(this).data('title'));
+      $('#type-edit-test').val($(this).data('type'));
+      $('#assign-edit-test').val($(this).data('assign'));
+      $('#description-edit-test').val($(this).data('description'));
+      $('#test-edit-modal').modal('show');
+    });
+
+    // Delete chapter modal
+    $(document).on('click', '.delete-test-modal', function() {
+      $('#id-delete-test').val($(this).data('id'));
+      $('#test-delete-modal').modal('show');
     });
 
     // Edit sub chapter modal

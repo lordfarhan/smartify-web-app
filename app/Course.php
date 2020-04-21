@@ -40,6 +40,10 @@ class Course extends Model
         return $this->hasMany(Chapter::class)->orderBy('chapter');
     }
 
+    public function tests() {
+        return $this->hasMany(Test::class)->orderBy('order');
+    }
+
     public function schedules() {
         return $this->hasMany(Schedule::class)->orderBy('day');
     }

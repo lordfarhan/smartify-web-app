@@ -57,6 +57,14 @@ class InitialSeeding extends Seeder
             'schedule-create',
             'schedule-edit',
             'schedule-delete',
+            'test-list',
+            'test-create',
+            'test-edit',
+            'test-delete',
+            'question-list',
+            'question-create',
+            'question-edit',
+            'question-delete',
         ];
 
         foreach ($permissions as $permission) {

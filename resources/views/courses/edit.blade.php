@@ -78,7 +78,7 @@
                                 <div class="col-md-6">
                                     @if (!empty($course->image))
                                     <div class="form-group">
-                                        {{ Form::label('ex_image', 'Existing Image') }} <a class="float-right" href="/course-delete-file/{{ $course->id }}/image">Delete</a>
+                                        {{ Form::label('ex_image', 'Existing Image') }} <a class="float-right" href="/courses.delete-file/{{ $course->id }}/image">Delete</a>
                                         <input name="ex_image" class="form-control" type="text" value="{{ $course->image }}" disabled>
                                     </div>
                                     @endif
@@ -96,7 +96,7 @@
                                 <div class="col-md-6">
                                     @if (!empty($course->attachment))
                                     <div class="form-group">
-                                        {{ Form::label('ex_attachment', 'Existing Attachment') }} <a class="float-right" href="/course-delete-file/{{ $course->id }}/attachment">Delete</a>
+                                        {{ Form::label('ex_attachment', 'Existing Attachment') }} <a class="float-right" href="/courses.delete-file/{{ $course->id }}/attachment">Delete</a>
                                         <input name="ex_attachment" class="form-control" type="text" value="{{ $course->attachment }}" disabled>
                                     </div>
                                     @endif
