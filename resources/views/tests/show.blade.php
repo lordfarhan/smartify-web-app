@@ -78,8 +78,12 @@
 											</ul>
 										</div>
 										<div class="timeline-footer">
-											<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}" data-id="{{$question->id}}">Edit</a>
-											<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">Delete</a>
+											@can('question-edit')										
+												<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}">Edit</a>
+											@endcan
+											@can('question-delete')
+												<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">Delete</a>
+											@endcan
 										</div>
 									</div>
 								</div>
