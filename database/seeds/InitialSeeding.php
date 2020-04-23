@@ -69,6 +69,10 @@ class InitialSeeding extends Seeder
             'question-create',
             'question-edit',
             'question-delete',
+            'attendance-list',
+            'attendance-create',
+            'attendance-edit',
+            'attendance-delete',
         ];
 
         foreach ($permissions as $permission) {
