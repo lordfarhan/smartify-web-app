@@ -38,10 +38,16 @@
 									{{ Form::select('subject_id', $subjects, null, array('class' => 'form-control')) }}
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="form-group">
 									{{ Form::label('grade_id', 'Grade') }}
 									{{ Form::select('grade_id', $grades, null, array('class' => 'form-control')) }}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									{{ Form::label('section', 'Section (optional)') }}
+									{{ Form::select('section', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], null, array('class' => 'form-control', 'placeholder' => 'None')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -52,7 +58,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('enrollment_key', 'Enrollment Key') }}
+									{{ Form::label('enrollment_key', 'Enrollment Key (only for private type') }}
 									{{ Form::text('enrollment_key', null, array('placeholder' => 'Leave empty if your course is public', 'class' => 'form-control')) }}
 								</div>
 							</div>
@@ -76,13 +82,13 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('image', 'Image') }}
+									{{ Form::label('image', 'Image (optional)') }}
 									{{ Form::file('image', ['class'=>'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('attachment', 'Attachment') }}
+									{{ Form::label('attachment', 'Attachment (optional)') }}
 									{{ Form::file('attachment', ['id' => 'attachment', 'class'=>'form-control']) }}
 								</div>
 							</div>
@@ -91,17 +97,22 @@
 				</div>
 				@can('schedule-create')
 				<div class="card">
-					<div class="card-header">
+					<div class="card-header text-bold">
 						Schedule
 					</div>
 					<div class="card-body">
 						<div class="row" id="schedule-row">
-							<div class="col-md-6">
-								<div class="form-group">
-									{{ Form::select('day[]', $days, null, array('class' => 'form-control schedule-list', 'placeholder' => 'Select day')) }}
+							<div class="col-md-6 mb-3">
+								<label for="datepicker">Date</label>
+								<div class="input-group date" id="datepicker-date" data-target-input="nearest">
+									<input name="start_date" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date"/>
+									<div class="input-group-append" data-target="#datepicker-date" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+									</div>
 								</div>
 							</div>
 							<div class="col-md-2">
+								<label for="start_time[]">Start Course</label>
 								<div class="input-group date" id="timepicker-start" data-target-input="nearest">
 									<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start"/>
 									<div class="input-group-append" data-target="#timepicker-start" data-toggle="datetimepicker">
@@ -110,6 +121,7 @@
 								</div>
 							</div>
 							<div class="col-md-2">
+								<label for="end_time[]">End Course</label>
 								<div class="input-group date" id="timepicker-end" data-target-input="nearest">
 									<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end"/>
 									<div class="input-group-append" data-target="#timepicker-end" data-toggle="datetimepicker">
@@ -118,7 +130,8 @@
 								</div>
 							</div>
 							<div class="col-md-2">
-								<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add</i></button>
+								<label for="add-schedule-row" class="text-white">Add Day</label>
+								<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add Day</i></button>
 							</div>
 						</div>
 						<div id="new-schedule-row"></div>
@@ -171,44 +184,51 @@
 	<script type="text/javascript">
 		// add row
 		var i = 1
-    $("#add-schedule-row").click(function () {
-        var html = '';
-        html += '<div class="row" id="schedule-row">';
-        html += '<div class="col-md-6">';
-        html += '<div class="form-group">';
-        html += '{{ Form::select("day[]", $days, null, array("class" => "form-control schedule-list")) }}';
-        html += '</div>';
-        html += '</div>';
-				html += '<div class="col-md-2">';
-				html += '<div class="input-group date" id="timepicker-start'+i+'" data-target-input="nearest">';
-				html += '<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start' + i + '"/>';
-				html += '<div class="input-group-append" data-target="#timepicker-start'+i+'" data-toggle="datetimepicker">';
-				html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
-				html += '</div>';
-				html += '</div>';
-				html += '</div>';
-				html += '<div class="col-md-2">';
-				html += '<div class="input-group date" id="timepicker-end'+i+'" data-target-input="nearest">';
-				html += '<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end' + i + '"/>';
-				html += '<div class="input-group-append" data-target="#timepicker-end'+i+'" data-toggle="datetimepicker">';
-				html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
-				html += '</div>';
-				html += '</div>';
-				html += '</div>';
-				html += '<div class="col-md-2">';
-				html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>';
-				html += '</div>';
-				html += '</div>';
+		$("#add-schedule-row").click(function () {
+			var html = '';
+			html += '<div class="row" id="schedule-row">';
+			html +=	'<div class="col-md-6 mb-3">'
+			html +=	'<div class="input-group date" id="datepicker-date'+i+'" data-target-input="nearest">'
+			html +=	'<input name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date'+i+'"/>'
+			html +=	'<div class="input-group-append" data-target="#datepicker-date'+i+'" data-toggle="datetimepicker">'
+			html += '<div onclick="setCalendarFormat('+i+');" class="input-group-text"><i class="far fa-calendar-alt"></i></div>'
+			html += '</div>'
+			html += '</div>'
+			html += '</div>'
+			html += '<div class="col-md-2">';
+			html += '<div class="input-group date" id="timepicker-start'+i+'" data-target-input="nearest">';
+			html += '<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start' + i + '"/>';
+			html += '<div class="input-group-append" data-target="#timepicker-start'+i+'" data-toggle="datetimepicker">';
+			html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '<div class="col-md-2">';
+			html += '<div class="input-group date" id="timepicker-end'+i+'" data-target-input="nearest">';
+			html += '<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end' + i + '"/>';
+			html += '<div class="input-group-append" data-target="#timepicker-end'+i+'" data-toggle="datetimepicker">';
+			html += '<div class="input-group-text"><i class="far fa-clock"></i></div>';
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+			html += '<div class="col-md-2">';
+			html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>';
+			html += '</div>';
+			html += '</div>';
 
-				$('#new-schedule-row').append(html);
-				i++;
-    });
-
-    // remove row
-    $(document).on('click', '#remove-schedule-row', function () {
-        $(this).closest('#schedule-row').remove();
+			$('#new-schedule-row').append(html);
+			i++;
 		});
 
-		// $(function () { $("#timepicker").datetimepicker({ format: "HH:mm" }) })
+		// remove row
+		$(document).on('click', '#remove-schedule-row', function () {
+        	$(this).closest('#schedule-row').remove();
+		});
+
+		function setCalendarFormat(id){
+			return $("#datepicker-date"+id).datetimepicker({ format: "LL" })
+		}
+
+		$(function () { $("#datepicker-date").datetimepicker({ format: "LL" }) })
 	</script>
 @endsection

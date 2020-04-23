@@ -37,7 +37,7 @@
 				defaultView: 'timeGridWeek',
 				themeSystem: 'bootstrap',
 				events: {
-					url: 'schedules.all',
+					url: '/schedules.all',
 					failure: function() {
 						alert('there was an error while fetching events!');
 					}
@@ -49,6 +49,15 @@
 						trigger: 'hover',
 						container: 'body' 
 					});     
+				},
+				eventClick: function(info) {
+					// alert('Event: ' + info.event.date);
+					window.location.href = 'schedules/' + info.event.id + '/attendances/create/';
+
+					info.el.style.borderColor = 'red';
+				},
+				dayClick: function(date, jsEvent, view) { 
+					alert('Clicked on: ' + date.getDate()+"/"+date.getMonth()+"/"+date.getFullYear());  
 				},
 				nowIndicator: true,
 				eventTimeFormat: {

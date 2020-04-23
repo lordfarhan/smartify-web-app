@@ -31,10 +31,11 @@ class ScheduleController extends Controller
             $e = array();
             $e['id'] = $schedule->id;
             $e['title'] = $schedule->course->subject->subject . " - " . $schedule->course->grade->grade;
-            $e['daysOfWeek'] = $schedule->day;
-            $e['startTime'] = Carbon::parse($schedule->start_time)->format('H:i:s');
-            $e['endTime'] = Carbon::parse($schedule->end_time)->format('H:i:s');
-            $e['url'] = route('courses.show', $schedule->course->id);
+            $e['start'] = Carbon::parse($schedule->date)->format('Y-m-d')." ".Carbon::parse($schedule->start_time)->format('H:i:s');
+            $e['end'] = Carbon::parse($schedule->date)->format('Y-m-d')." ".Carbon::parse($schedule->end_time)->format('H:i:s');
+            // $e['startTime'] = ;
+            // $e['endTime'] = Carbon::parse($schedule->end_time)->format('H:i:s');
+            // $e['url'] = route('courses.show', $schedule->course->id);
             $e['color'] = 'green';
 
             array_push($scheduleData, $e);

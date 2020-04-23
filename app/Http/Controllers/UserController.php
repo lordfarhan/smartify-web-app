@@ -30,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::pluck('name', 'name')->all();
+        $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
         return view('users.create', compact('roles'));
     }
 
@@ -49,14 +49,17 @@ class UserController extends Controller
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
             'roles' => 'required',
-            'image'=>'required|mimes:jpg,png,jpeg,JPG',
+            'image'=> 'mimes:jpg,png,jpeg,JPG',
         ]);
 
-        $image = $request->file('image');
-        $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-        Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
         $input = $request->all();
-        $input['image'] = 'users/' . $imageName;
+
+        if (!empty($request->file('image'))) {
+            $image = $request->file('image');
+            $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
+            $input['image'] = 'users/' . $imageName;
+        }
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);

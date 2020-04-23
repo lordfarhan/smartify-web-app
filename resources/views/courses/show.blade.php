@@ -41,7 +41,7 @@
               <li class="list-group-item">
                 <b>@if ($index == 0)
                     Schedule
-                @endif</b> <a class="float-right">{{ $schedule->getDay() . ', ' .\Carbon\Carbon::parse($schedule->start_time)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end_time)->format('H:i')}}</a>
+                @endif</b> <a class="float-right">{{ \Carbon\Carbon::parse($schedule->date)->format('M, d Y') . ' (' .\Carbon\Carbon::parse($schedule->start_time)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end_time)->format('H:i') . ')' }}</a>
               </li>
             @endforeach
             <li class="list-group-item">
@@ -64,9 +64,10 @@
         <div class="card-header">
           <ul class="nav nav-pills">
             <li class="nav-item"><a class="nav-link active" href="#chapters" data-toggle="tab">Chapters</a></li>
-            <li class="nav-item"><a class="nav-link" href="#tests" data-toggle="tab">Exam</a></li>
+            <li class="nav-item"><a class="nav-link" href="#tests" data-toggle="tab">Tests</a></li>
             <li class="nav-item"><a class="nav-link" href="#members" data-toggle="tab">Members</a></li>
-            <li class="nav-item"><a class="nav-link" href="#posts" data-toggle="tab">Discuss</a></li>
+            <li class="nav-item"><a class="nav-link" href="#attendances" data-toggle="tab">Attendances</a></li>
+            {{-- <li class="nav-item"><a class="nav-link" href="#posts" data-toggle="tab">Discuss</a></li> --}}
           </ul>
         </div><!-- /.card-header -->
         <div class="card-body">
@@ -366,13 +367,66 @@
                 </div>
               </div>
               @endcan
-
             </div>
 
-            <div class="tab-pane" id="members"></div>
+            <div class="tab-pane" id="members">
+              <div class="row">
+                @if(!empty($errors->all()))
+                <div class="col-md-12">
+                  <div class="card alert alert-danger">
+                    {{ Html::ul($errors->all())}}
+                  </div>
+                </div>
+                @endif
+                @foreach ($course->enrollments as $enrollment)
+                  <div class="col-md-12">
+                    <div class="card card-body">
+                      <div class="row">
+                        <div class="col-md-1">
+                          <img src="{{ asset("storage/". $enrollment->user->image) }}" class="img-fluid img-circle elevation-2" alt="User Image" height="80" width="80">
+                        </div>
+                        <div class="col-md-11">
+                          <a href="{{route('users.show', $enrollment->user->id)}}" class="text-bold">{{ $enrollment->user->name }}</a>
+                          <p>{{ $enrollment->user->phone }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                @endforeach
+              </div>
+            </div>
 
-            <div class="tab-pane" id="posts">
-              
+            <div class="tab-pane" id="attendances">
+              <div class="row">
+                @if(!empty($errors->all()))
+                <div class="col-md-12">
+                  <div class="card alert alert-danger">
+                    {{ Html::ul($errors->all())}}
+                  </div>
+                </div>
+                @endif
+                @foreach ($course->schedules as $schedule)
+                  @foreach ($schedule->attendances->groupBy('date') as $date => $attendance)
+                    <div class="col-md-12">
+                      <div class="card card-body">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <a href="/courses/{{$course->id}}/schedules/{{$schedule->id}}/attendances">{{\Carbon\Carbon::parse($date)->format('M, d Y')}}</a>
+                          </div>
+                          <div class="col-md-10">
+                            <label class="badge badge-success">Present : {{ $attendance->where('status', '1')->count() - 1}}</label>
+                            <label class="badge badge-danger">Absent : {{ $attendance->where('status', '0')->count() }}</label>
+                            <a href="{{route('users.show', \App\User::find($attendance->last()['user_id'])->id)}}"><label class="badge badge-primary">Signer : {{ \App\User::find($attendance->last()['user_id'])->name }}</label></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endforeach
+                @endforeach
+              </div>
+            </div>
+
+            <div class="tab-pane" id="posts">              
               <!-- Post -->
               <div class="post">
                 <div class="user-block">
@@ -701,7 +755,7 @@
 
   <div id="sub-chapter-edit-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="sub-chapter-modal-form" action="/sub-chapter-edit" method="POST">
+      <form id="sub-chapter-modal-form" action="/sub-chapters.edit" method="POST">
         @csrf
         <div class="modal-content">
           <div class="modal-header">
@@ -749,7 +803,7 @@
 
   <div id="sub-chapter-delete-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-      <form id="sub-chapter-modal-form" action="/sub-chapter-delete" method="POST">
+      <form id="sub-chapter-modal-form" action="/sub-chapters.delete" method="POST">
         @csrf
         <div class="modal-content">
           <div class="modal-header">

@@ -31,15 +31,21 @@
                                 {{ Form::select('subject_id', $subjects, $course->subject_id, array('class' => 'form-control')) }}
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 {{ Form::label('grade_id', 'Grade') }}
                                 {{ Form::select('grade_id', $grades, $course->grade_id, array('class' => 'form-control')) }}
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                {{ Form::label('section', 'Section (optional)') }}
+                                {{ Form::select('section', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], $course->section, array('class' => 'form-control', 'placeholder' => 'None')) }}
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                {{ Form::label('type', 'Type') }}
+                                {{ Form::label('type', 'Type (only for private type)') }}
                                 {{ Form::select('type', ['0' => 'Public', '1' => 'Private'], $course->type, array('class' => 'form-control')) }}
                             </div>
                         </div>
@@ -71,7 +77,7 @@
                             <div class="row">
                                 <div class="@if(!empty($course->image)) col-md-6 @else col-md-12 @endif">
                                     <div class="form-group">
-                                        {{ Form::label('image', 'Image') }}
+                                        {{ Form::label('image', 'Image (optional)') }}
                                         {{ Form::file('image', ['class'=>'form-control']) }}
                                     </div>
                                 </div>
@@ -89,7 +95,7 @@
                             <div class="row">
                                 <div class="@if(!empty($course->attachment)) col-md-6 @else col-md-12 @endif">
                                     <div class="form-group">
-                                        {{ Form::label('attachment', 'Attachment') }}
+                                        {{ Form::label('attachment', 'Attachment (optional)') }}
                                         {{ Form::file('attachment', ['class'=>'form-control']) }}
                                     </div>
                                 </div>

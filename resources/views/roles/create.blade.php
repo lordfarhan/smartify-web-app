@@ -28,14 +28,16 @@
 							<div class="col-md-12">
 								<div class="form-group">
 									{{ Form::label('permission', 'Permission') }}
+									<div class="row">
 									@foreach($permission as $value)
-										{{-- {{ Form::checkbox('permission[]', $value->id, false, array('class' => 'form-control')) }} --}}
-										<div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="{{ $value->id }}" value="{{ $value->id }}">
-                      <label class="custom-control-label" for="{{ $value->id }}">{{ $value->name }}</label>
-                    </div>
-										<br/>
+										<div class="card card-body col-md-3">
+											<div class="custom-control custom-switch">
+												<input name="permission[]" type="checkbox" class="custom-control-input" id="{{ $value->id }}" value="{{ $value->id }}">
+												<label class="custom-control-label" for="{{ $value->id }}">{{ $value->name }}</label>
+											</div>
+										</div>
 									@endforeach
+									</div>
 								</div>
 							</div>
 						</div>

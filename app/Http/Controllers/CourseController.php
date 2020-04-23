@@ -34,7 +34,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $authors = User::pluck('name', 'id')->all();
+        $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
         $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
@@ -62,13 +62,13 @@ class CourseController extends Controller
         );
 
         // Schedule insertion
-        $days = $request->input('day');
+        $dates = $request->input('date');
         $start_times = $request->input('start_time');
         $end_times = $request->input('end_time');
 
-        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($days as $index => $day) {
-                $validation["day.{$index}"] = 'required';
+        if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($dates as $index => $date) {
+                $validation["date.{$index}"] = 'required';
                 $validation["start_time.{$index}"] = 'required';
                 $validation["end_time.{$index}"] = 'required';
             }
@@ -110,11 +110,11 @@ class CourseController extends Controller
 
         $course = Course::create($input);
 
-        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($days as $index => $day) {
+        if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($dates as $index => $date) {
                 $schedule = new Schedule();
                 $schedule->course_id = $course->id;
-                $schedule->day = $day;
+                $schedule->date = Carbon::parse($date);
                 $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
                 $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
                 $schedule->save();
@@ -143,7 +143,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $authors = User::pluck('name', 'id')->all();
+        $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
         return view('courses.edit', ['course' => $course, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
@@ -261,20 +261,19 @@ class CourseController extends Controller
 
     public function editSchedule($id) {
         $course = Course::find($id);
-        $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
-        return view('courses.edit-schedule', ['course' => $course, 'course_id' => $id, 'days' => $days]);
+        return view('courses.edit-schedule', ['course' => $course]);
     }
 
     public function updateSchedule(Request $request) {
         $validation = array();
         // Schedule insertion
-        $days = $request->input('day');
+        $dates = $request->input('date');
         $start_times = $request->input('start_time');
         $end_times = $request->input('end_time');
 
-        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($days as $index => $day) {
-                $validation["day.{$index}"] = 'required';
+        if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($dates as $index => $date) {
+                $validation["date.{$index}"] = 'required';
                 $validation["start_time.{$index}"] = 'required';
                 $validation["end_time.{$index}"] = 'required';
             }
@@ -284,11 +283,11 @@ class CourseController extends Controller
 
         Schedule::where('course_id', $request->id)->delete();
 
-        if($days[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($days as $index => $day) {
+        if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($dates as $index => $date) {
                 $schedule = new Schedule();
                 $schedule->course_id = $request->id;
-                $schedule->day = $day;
+                $schedule->date = Carbon::parse($date);
                 $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
                 $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
                 $schedule->save();

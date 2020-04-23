@@ -20,12 +20,32 @@
                     <a href="{{ route('courses.index') }}" class="btn btn-outline-info">Back</a>
                 </div>
 				<div class="card-body">
+					@if(!empty($errors->all()))
+                    <div class="alert alert-danger">
+                        {{ Html::ul($errors->all())}}
+                    </div>
+                    @endif
 					<input value="{{$course->id}}" name="id" type="hidden">
-					@foreach ($course->schedules as $index => $schedule)
 					<div class="row" id="schedule-row">
 						<div class="col-md-6">
-							<div class="form-group">
-								{{ Form::select('day[]', $days, $schedule->day, array('class' => 'form-control schedule-list', 'placeholder' => 'Select day')) }}
+							<label for="date[]">Date</label>
+						</div>
+						<div class="col-md-2">
+							<label for="start_time[]">Start Course</label>
+						</div>
+						<div class="col-md-2">
+							<label for="end_time[]">End Course</label>
+						</div>
+						<div class="col-md-2">
+							<label for="add-schedule-row" class="text-white">Add Day</label>
+						</div>
+						@foreach ($course->schedules as $index => $schedule)
+						<div class="col-md-6 mb-3">
+							<div class="input-group date" id="datepicker-date{{$index}}" data-target-input="nearest">
+								<input value="{{\Carbon\Carbon::parse($schedule->date)->format('Y-m-d')}}" name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date{{$index}}"/>
+								<div class="input-group-append" data-target="#datepicker-date{{$index}}" data-toggle="datetimepicker">
+									<div onclick="setCalendarFormat({{$index}});" class="input-group-text"><i class="far fa-calendar-alt"></i></div>
+								</div>
 							</div>
 						</div>
 						<div class="col-md-2">
@@ -47,8 +67,8 @@
 						<div class="col-md-2">
 							<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>
 						</div>
+						@endforeach
 					</div>
-					@endforeach
 					<div id="new-schedule-row"></div>
 					<div id="new-schedule-script"></div>
 					<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add Field</i></button>
@@ -88,11 +108,14 @@
 		$("#add-schedule-row").click(function () {
 			var html = '';
 			html += '<div class="row" id="schedule-row">';
-			html += '<div class="col-md-6">';
-			html += '<div class="form-group">';
-			html += '{{ Form::select("day[]", $days, null, array("class" => "form-control schedule-list", "placeholder" => "Select day")) }}';
-			html += '</div>';
-			html += '</div>';
+			html +=	'<div class="col-md-6 mb-3">'
+			html +=	'<div class="input-group date" id="datepicker-date'+i+'" data-target-input="nearest">'
+			html +=	'<input name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date'+i+'"/>'
+			html +=	'<div class="input-group-append" data-target="#datepicker-date'+i+'" data-toggle="datetimepicker">'
+			html += '<div onclick="setCalendarFormat('+i+');" class="input-group-text"><i class="far fa-calendar-alt"></i></div>'
+			html += '</div>'
+			html += '</div>'
+			html += '</div>'
 			html += '<div class="col-md-2">';
 			html += '<div class="input-group date" id="timepicker-start'+i+'" data-target-input="nearest">';
 			html += '<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start' + i + '"/>';
@@ -122,5 +145,11 @@
     	$(document).on('click', '#remove-schedule-row', function () {
         	$(this).closest('#schedule-row').remove();
 		});
+
+		function setCalendarFormat(id){
+			return $("#datepicker-date"+id).datetimepicker({ format: "LL" })
+		}
+
+		$(function () { $("#datepicker-date").datetimepicker({ format: "LL" }) })
 	</script>
 @endsection

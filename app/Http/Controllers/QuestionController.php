@@ -57,16 +57,18 @@ class QuestionController extends Controller
         $input = $request->all();
         
         if($request->type == '1') {
-            array_except($validation, 'incorrect_answer_2');
-            array_except($request, 'incorrect_answer_2');
-            array_except($validation, 'incorrect_answer_3');
-            array_except($request, 'incorrect_answer_3');
-            array_except($validation, 'incorrect_answer_4');
-            array_except($request, 'incorrect_answer_4');
+            unset($validation['incorrect_answer_2']);
+            unset($request['incorrect_answer_2']);
+            unset($validation['incorrect_answer_3']);
+            unset($request['incorrect_answer_3']);
+            unset($validation['incorrect_answer_4']);
+            unset($request['incorrect_answer_4']);
             $input['incorrect_answers'] = "$request->incorrect_answer_1";
         } else {
             $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
         }
+
+        $this->validate($request, $validation);
 
         if (!empty($request->file('question_image'))) {
             $image = $request->file('question_image');
@@ -142,16 +144,18 @@ class QuestionController extends Controller
         $input = $request->all();
         
         if($request->type == '1') {
-            array_except($validation, 'incorrect_answer_2');
-            array_except($request, 'incorrect_answer_2');
-            array_except($validation, 'incorrect_answer_3');
-            array_except($request, 'incorrect_answer_3');
-            array_except($validation, 'incorrect_answer_4');
-            array_except($request, 'incorrect_answer_4');
+            unset($validation['incorrect_answer_2']);
+            unset($request['incorrect_answer_2']);
+            unset($validation['incorrect_answer_3']);
+            unset($request['incorrect_answer_3']);
+            unset($validation['incorrect_answer_4']);
+            unset($request['incorrect_answer_4']);
             $input['incorrect_answers'] = "$request->incorrect_answer_1";
         } else {
             $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
         }
+
+        $this->validate($request, $validation);
 
         if (!empty($request->file('question_image'))) {
 
@@ -168,7 +172,7 @@ class QuestionController extends Controller
             })->save(public_path('storage/tests/questions/images/') . $imageName);
             $input['question_image'] = 'tests/questions/images/' . $imageName;
         } else {
-            $input = array_except($input, array('question_image'));
+            unset($input['question_image']);
         }
 
         if (!empty($request->file('question_audio'))) {
@@ -184,7 +188,7 @@ class QuestionController extends Controller
             $audio->move(public_path('storage/tests/questions/audios/'), $audioName);
             $input['question_audio'] = 'tests/questions/audios/' . $audioName;
         } else {
-            $input = array_except($input, array('question_audio'));
+            unset($input['question_audio']);
         }
 
         $question->update($input);

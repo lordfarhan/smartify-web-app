@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('courses/schedule', 'CourseController@updateSchedule')->name('courses.updateSchedule');
     Route::get('courses.delete-file/{id}/{type}', 'CourseController@deleteFile');
     Route::get('courses/{course_id}/tests/{id}', 'TestController@show');
+    Route::get('courses/{course_id}/schedules/{schedule_id}/attendances', 'AttendanceController@show');
 
     Route::resource('chapters', 'ChapterController');
     Route::post('chapters.edit', 'ChapterController@update');
@@ -56,4 +57,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('schedules', 'ScheduleController');
     Route::get('schedules.all', 'ScheduleController@getScheduleData');
+    Route::get('schedules/{id}/attendances/create', 'AttendanceController@create');
+
+    Route::resource('attendances', 'AttendanceController');
 });
