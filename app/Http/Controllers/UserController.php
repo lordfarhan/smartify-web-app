@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
@@ -18,7 +19,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::orderBy('id', 'desc')->paginate(5);
+        if(Auth::user()->institution->id != 1) {
+            $data = User::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
+        } else {
+            $data = User::orderBy('id', 'desc')->paginate(5);
+        }
         return view('users.index', compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }

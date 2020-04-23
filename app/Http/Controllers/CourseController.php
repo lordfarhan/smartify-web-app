@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Course;
 use App\Grade;
+use App\Institution;
 use App\Schedule;
 use App\Subject;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -22,8 +24,13 @@ class CourseController extends Controller
      */
     public function index(Request $request)
     {
-        $courses = Course::orderBy('id', 'desc')->paginate(5);
-        return view('courses.index', compact('courses'))
+        $grades = Grade::all();
+        if(Auth::user()->institution->id != 1) {
+            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
+        } else {
+            $courses = Course::orderBy('id', 'desc')->paginate(5);
+        }
+        return view('courses.index', compact('grades', 'courses'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
@@ -34,11 +41,17 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        if(Auth::user()->institution->id != 1) {
+            $institutions = Institution::where('id', Auth::user()->institution->id)->pluck('name', 'id');
+            $authors = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        } else {
+            $institutions = Institution::pluck('name', 'id')->all();
+            $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        }
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
         $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
-        return view('courses.create', ['authors' => $authors, 'subjects' => $subjects, 'grades' => $grades, 'days' => $days]);
+        return view('courses.create', ['institutions' => $institutions, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades, 'days' => $days]);
     }
 
     /**
@@ -143,10 +156,16 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        if(Auth::user()->institution->id != 1) {
+            $institutions = Institution::where('id', Auth::user()->institution->id)->pluck('name', 'id');
+            $authors = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        } else {
+            $institutions = Institution::pluck('name', 'id')->all();
+            $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        }
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
-        return view('courses.edit', ['course' => $course, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
+        return view('courses.edit', ['institutions' => $institutions, 'course' => $course, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
     }
 
     /**

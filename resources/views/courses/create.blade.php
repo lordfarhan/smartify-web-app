@@ -70,8 +70,8 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('vendor', 'Vendor') }}
-									{{ Form::text('vendor', 'Codeiva Edu Team', array('placeholder' => 'Codeiva Edu Team','class' => 'form-control')) }}
+									{{ Form::label('institution_id', 'Institution') }}
+									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div id="attachment-title-div" class="col-md-6">
@@ -105,7 +105,7 @@
 							<div class="col-md-6 mb-3">
 								<label for="datepicker">Date</label>
 								<div class="input-group date" id="datepicker-date" data-target-input="nearest">
-									<input name="start_date" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date"/>
+									<input name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date"/>
 									<div class="input-group-append" data-target="#datepicker-date" data-toggle="datetimepicker">
 										<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 									</div>

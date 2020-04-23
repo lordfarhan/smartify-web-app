@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\Schedule;
 use App\Services\CalendarService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class ScheduleController extends Controller
@@ -17,15 +19,27 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        if(request()->ajax()) {    
-            $data = Schedule::all();
+        // $data = Schedule::all();
+        
+        if(request()->ajax()) {
+            if(Auth::user()->institution->id == 1){
+                $data = Schedule::all();
+            } else {
+                $course_ids = Course::where('institution_id', Auth::user()->institution->id)->pluck('id');
+                $data = Schedule::whereIn('course_id', $course_ids)->get();
+            }
             return Response::json($data);
         }
         return view('schedules/index');
     }
 
     public function getScheduleData() {
-        $schedules = Schedule::all();
+        if(Auth::user()->institution->id == 1){
+            $schedules = Schedule::all();
+        } else {
+            $course_ids = Course::where('institution_id', Auth::user()->institution->id)->pluck('id');
+            $schedules = Schedule::whereIn('course_id', $course_ids)->get();
+        }
         $scheduleData = array();
         foreach ($schedules as $schedule) {
             $e = array();
@@ -33,8 +47,6 @@ class ScheduleController extends Controller
             $e['title'] = $schedule->course->subject->subject . " - " . $schedule->course->grade->grade;
             $e['start'] = Carbon::parse($schedule->date)->format('Y-m-d')." ".Carbon::parse($schedule->start_time)->format('H:i:s');
             $e['end'] = Carbon::parse($schedule->date)->format('Y-m-d')." ".Carbon::parse($schedule->end_time)->format('H:i:s');
-            // $e['startTime'] = ;
-            // $e['endTime'] = Carbon::parse($schedule->end_time)->format('H:i:s');
             // $e['url'] = route('courses.show', $schedule->course->id);
             $e['color'] = 'green';
 

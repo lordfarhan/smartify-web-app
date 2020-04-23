@@ -8,6 +8,7 @@ use App\Schedule;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class AttendanceController extends Controller
@@ -19,11 +20,7 @@ class AttendanceController extends Controller
      */
     public function index()
     {
-        if(request()->ajax()) {    
-            $data = Schedule::all();
-            return Response::json($data);
-        }
-        return view('schedules/index');
+        return redirect()->route('schedules.index');
     }
 
     /**
@@ -35,7 +32,11 @@ class AttendanceController extends Controller
     {
         $schedule = Schedule::find($id);
         if($schedule == null) {
-            $signers = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+            if (Auth::user()->institute->id == 1) {
+                $signers = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+            } else {
+                $signers = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+            }
             return view('attendances.create', compact('schedule', 'signers'));
         } else {
             $course_id = $schedule->course->id;

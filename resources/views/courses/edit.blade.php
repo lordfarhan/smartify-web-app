@@ -63,8 +63,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                {{ Form::label('vendor', 'Vendor') }}
-                                {{ Form::text('vendor', $course->vendor, array('placeholder' => 'Codeiva Edu Team','class' => 'form-control')) }}
+                                {{ Form::label('institution_id', 'Institution') }}
+                                {{ Form::select('institution_id', $institutions, $course->institution_id, array('class' => 'form-control')) }}
                             </div>
                         </div>
                         <div id="attachment-title-div" class="col-md-6">

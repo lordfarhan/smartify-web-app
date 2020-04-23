@@ -17,6 +17,10 @@ class InitialSeeding extends Seeder
     {
         Institution::create([
             'name' => 'Codeiva',
+            'description' => 'This institution is only for codeiva member'
+        ]);
+        Institution::create([
+            'name' => 'Smartify',
             'description' => 'This institution is for public and non-partnership users'
         ]);
 
@@ -72,14 +76,14 @@ class InitialSeeding extends Seeder
         }
 
         $user = User::create([
-            'name' => 'Muhammad Farhan', 
+            'name' => 'Lord Farhan', 
             'institution_id' => 1,
             'email' => 'farhan@codeiva.com',
             'password' => bcrypt('farhan123'),
             'active' => '1'
         ]);
 
-        $role = Role::create(['name' => 'CEO']);
+        $role = Role::create(['name' => 'Master']);
 
         $permissions = Permission::pluck('id','id')->all();
 

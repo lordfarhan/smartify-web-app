@@ -45,7 +45,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        'institution_id' => 1,
+        'institution_id' => 2,
         'active' => '0'
     ];
+
+    public function institution() {
+        return $this->belongsTo(Institution::class);
+    }
 }

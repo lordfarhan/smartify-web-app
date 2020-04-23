@@ -18,66 +18,87 @@
 
 <div class="card">
 	<div class="card-header">
-		@can('course-create')
-			<a class="btn btn-success" href="{{ route('courses.create') }}"> Create New course</a>
-		@endcan
+		<ul class="nav nav-pills">
+			@foreach ($grades as $index => $grade)
+            	<li class="nav-item"><a class="nav-link {{$index == 0 ? 'active' : ''}}" href="#grade-{{$grade->id}}" data-toggle="tab">{{$grade->grade}}</a></li>
+			@endforeach
+		</ul>
 	</div>
 	<div class="card-body">
-		<table id="table1" class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th width="20px">No</th>
-					<th>Subject</th>
-					<th>Grade</th>
-					<th>Author</th>
-					<th>Type</th>
-					<th>Status</th>
-					<th>Vendor</th>
-					<th>Image</th>
-					<th width="162px">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach ($courses as $key => $course)
-				<tr>
-					<td>{{ ++$i }}</td>
-					<td>{{ $course->subject->subject }}</td>
-					<td>{{ $course->grade->grade }}</td>
-					<td>{{ $course->author->name }}</td>
-					<td>
-						@if ($course->type == '0')
-							<label class="badge badge-success"><i class="fas fa-globe"></i> PUBLIC</label>
-						@else
-							<label class="badge badge-success"><i class="fas fa-lock"></i> PRIVATE</label>
-						@endif
-					</td>
-					<td>
-						@if ($course->status == '0')
-							<label class="badge badge-warning"><i class="fas fa-folder"></i> DRAFT</label>
-						@else
-							<label class="badge badge-success"><i class="fas fa-upload"></i> PUBLISHED</label>
-						@endif
-					</td>
-					<td>{{ $course->vendor }}</td>
-					<td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td>
-					<td>
-						<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
-						@can('course-edit')
-							<a class="btn btn-warning" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen"></i></a>
-						@endcan
-						@can('schedule-edit')
-							<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
-						@endcan
-						@can('course-delete')
-							{!! Form::open(['method' => 'DELETE','route' => ['courses.destroy', $course->id],'style'=>'display:inline']) !!}
-								<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-							{!! Form::close() !!}
-						@endcan
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+		@can('course-create')
+			<a class="btn btn-success mb-3" href="{{ route('courses.create') }}"> Create New course</a>
+		@endcan
+		<div class="tab-content">
+		@foreach ($grades as $index => $grade)			
+			<div class="tab-pane {{$index == 0 ? 'active' : ''}}" id="grade-{{$grade->id}}">
+				<table id="table{{++$index}}" class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th width="20px">No</th>
+							<th>Subject</th>
+							<th>Grade</th>
+							<th>Author</th>
+							<th>Type</th>
+							<th>Status</th>
+							<th>Vendor</th>
+							<th>Image</th>
+							<th width="162px">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($courses->where('grade_id', $grade->id) as $key => $course)
+						<tr>
+							<td>{{ ++$i }}</td>
+							<td>{{ $course->subject->subject }}</td>
+							<td>{{ $course->grade->grade }}</td>
+							<td>{{ $course->author->name }}</td>
+							<td>
+								@if ($course->type == '0')
+									<label class="badge badge-success"><i class="fas fa-globe"></i> PUBLIC</label>
+								@else
+									<label class="badge badge-success"><i class="fas fa-lock"></i> PRIVATE</label>
+								@endif
+							</td>
+							<td>
+								@if ($course->status == '0')
+									<label class="badge badge-warning"><i class="fas fa-folder"></i> DRAFT</label>
+								@else
+									<label class="badge badge-success"><i class="fas fa-upload"></i> PUBLISHED</label>
+								@endif
+							</td>
+							<td>{{ $course->vendor }}</td>
+							<td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td>
+							<td>
+								<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
+								@can('course-edit')
+									<a class="btn btn-warning" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen"></i></a>
+								@endcan
+								@can('schedule-edit')
+									<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
+								@endcan
+								@can('course-delete')
+									{!! Form::open(['method' => 'DELETE','route' => ['courses.destroy', $course->id],'style'=>'display:inline']) !!}
+										<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+									{!! Form::close() !!}
+								@endcan
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+			<script>
+				$(function () {
+				  $("#table"+{{++$index}}).DataTable({
+					"responsive": true,
+					"paging": true,
+					"searching": true,
+					"autoWidth": false,
+				  });
+				});
+			  </script>
+		@endforeach
+		</div>
 	</div>
 </div>
 {!! $courses->render() !!}
