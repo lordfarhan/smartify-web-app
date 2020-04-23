@@ -25,14 +25,13 @@
 			<!-- small box -->
 			<div class="small-box bg-info">
 				<div class="inner">
-					<h3>1999</h3>
-
-					<p>Products</p>
+					<h3>{{ \Illuminate\Support\Facades\Auth::user()->institution->id != 1 ? \App\Course::where('institution_id', Auth::user()->institution->id)->count() : \App\Course::count() }}</h3>
+					<p>Courses</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-bag"></i>
+					<i class="ion ion-ios-book"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+				<a href="{{route('courses.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
 		<!-- ./col -->
@@ -40,14 +39,19 @@
 			<!-- small box -->
 			<div class="small-box bg-success">
 				<div class="inner">
-					<h3>53<sup style="font-size: 20px">%</sup></h3>
+					{{-- <h3>53<sup style="font-size: 20px">%</sup></h3> --}}
+					@if (Auth::user()->institution->id == 1)
+						<h3>{{\App\Schedule::count()}}</h3>
+					@else
+						<h3>{{\App\Schedule::whereIn('course_id', \App\Course::where('institution_id', Auth::user()->institution->id)->pluck('id'))->count()}}</h3>
+					@endif
 
-					<p>Bounce Rate</p>
+					<p>Schedules</p>
 				</div>
 				<div class="icon">
-					<i class="ion ion-stats-bars"></i>
+					<i class="ion ion-android-calendar"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+				<a href="{{route('schedules.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
 		<!-- ./col -->
@@ -55,14 +59,13 @@
 			<!-- small box -->
 			<div class="small-box bg-warning">
 				<div class="inner">
-					<h3>{{ \App\User::count() }}</h3>
-
+					<h3>{{ \Illuminate\Support\Facades\Auth::user()->institution->id != 1 ? \App\User::where('institution_id', Auth::user()->institution->id)->count() : \App\User::count() }}</h3>
 					<p>Users</p>
 				</div>
 				<div class="icon">
 					<i class="ion ion-person-add"></i>
 				</div>
-				<a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+				<a href="{{route('users.index')}}" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
 			</div>
 		</div>
 		<!-- ./col -->
