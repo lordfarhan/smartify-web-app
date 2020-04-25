@@ -46,7 +46,8 @@ class User extends Authenticatable
      */
     protected $attributes = [
         'institution_id' => 2,
-        'active' => '0'
+        'active' => '0',
+        'image' => 'users/default.png'
     ];
 
     public function institution() {
