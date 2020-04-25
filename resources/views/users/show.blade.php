@@ -48,10 +48,14 @@
     <!-- About Me Box -->
     <div class="card card-primary">
       <div class="card-header">
-        <h3 class="card-title">About Me</h3>
+        <h3 class="card-title">About</h3>
       </div>
       <!-- /.card-header -->
       <div class="card-body">
+        <strong><i class="fas fa-briefcase mr-1"></i> Institution</strong>
+        <p class="text-muted">{{$user->institution->name}}</p>
+        <hr>
+
 				<strong><i class="fas fa-envelope mr-1"></i> E-Mail</strong>
         <p class="text-muted">{{$user->email}}</p>
         <hr>

@@ -106,7 +106,7 @@ class CourseController extends Controller
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
             $imageName = $courseName . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(public_path('storage/courses/images/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(storage_path('app/public/courses/images/') . $imageName);
             $input['image'] = 'courses/images/' . $imageName;
         } else {
             $input = array_except($input, array('image'));
@@ -115,7 +115,7 @@ class CourseController extends Controller
         if (!empty($request->file('attachment'))) {
             $attachment = $request->file('attachment');
             $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
-            $attachment->move(public_path('storage/courses/attachments/'), $attachmentName);
+            $attachment->move(storage_path('app/public/courses/attachments/'), $attachmentName);
             $input['attachment'] = 'courses/attachments/' . $attachmentName;
         } else {
             $input = array_except($input, array('attachment'));
@@ -208,28 +208,28 @@ class CourseController extends Controller
         if (!empty($request->file('image'))) {
 
             // Deleting existing image
-            if (File::exists(public_path('storage/' . $course->image))) {
-                File::delete(public_path('storage/' . $course->image));
+            if (File::exists(storage_path('app/public/' . $course->image))) {
+                File::delete(storage_path('app/public/' . $course->image));
             }
             $course->image = null;
 
             $image = $request->file('image');
             $imageName = $courseName . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(public_path('storage/courses/images/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(storage_path('app/public/courses/images/') . $imageName);
             $input['image'] = 'courses/images/' . $imageName;
         }
 
         if (!empty($request->file('attachment'))) {
 
             // Deleting existing attachment
-            if (File::exists(public_path('storage/' . $course->attachment))) {
-                File::delete(public_path('storage/' . $course->attachment));
+            if (File::exists(storage_path('app/public/' . $course->attachment))) {
+                File::delete(storage_path('app/public/' . $course->attachment));
             }
             $course->attachment = null;
 
             $attachment = $request->file('attachment');
             $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
-            $attachment->move(public_path('storage/courses/attachments/'), $attachmentName);
+            $attachment->move(storage_path('app/public/courses/attachments/'), $attachmentName);
             $input['attachment'] = 'courses/attachments/' . $attachmentName;
         }
 
@@ -246,12 +246,12 @@ class CourseController extends Controller
      */
     public function destroy(Course $course)
     {
-        if (File::exists(public_path('storage/' . $course->image))) {
-            File::delete(public_path('storage/' . $course->image));
+        if (File::exists(storage_path('app/public/' . $course->image))) {
+            File::delete(storage_path('app/public/' . $course->image));
         }
 
-        if (File::exists(public_path('storage/' . $course->attachment))) {
-            File::delete(public_path('storage/' . $course->attachment));
+        if (File::exists(storage_path('app/public/' . $course->attachment))) {
+            File::delete(storage_path('app/public/' . $course->attachment));
         }
 
         $course->delete();
@@ -262,13 +262,13 @@ class CourseController extends Controller
         $course = Course::find($id);
         
         if($type == 'image') {
-            if (File::exists(public_path('storage/' . $course->image))) {
-                File::delete(public_path('storage/' . $course->image));
+            if (File::exists(storage_path('app/public/' . $course->image))) {
+                File::delete(storage_path('app/public/' . $course->image));
             }
             $course->image = null;
         } else if ($type == 'attachment') {
-            if (File::exists(public_path('storage/' . $course->attachment))) {
-                File::delete(public_path('storage/' . $course->attachment));
+            if (File::exists(storage_path('app/public/' . $course->attachment))) {
+                File::delete(storage_path('app/public/' . $course->attachment));
             }
             $course->attachment = null;
             $course->attachment_title = null;

@@ -48,7 +48,7 @@ class InstitutionController extends Controller
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
             $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/institutions/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/institutions/') . $imageName);
             $input['image'] = 'institutions/' . $imageName;
         } else {
             $input = array_except($input, array('image'));
@@ -97,9 +97,13 @@ class InstitutionController extends Controller
         $input = $request->all();
 
         if (!empty($request->file('image'))) {
+            // Deleting existing image
+            if (File::exists(storage_path('app/public/' . $institution->image))) {
+                File::delete(storage_path('app/public/' . $institution->image));
+            }
             $image = $request->file('image');
             $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/institutions/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/institutions/') . $imageName);
             $input['image'] = 'institutions/' . $imageName;
         } else {
             $input = array_except($input, array('image'));
@@ -117,8 +121,8 @@ class InstitutionController extends Controller
      */
     public function destroy(Institution $institution)
     {
-        if (File::exists(public_path('storage/' . $institution->image))) {
-            File::delete(public_path('storage/' . $institution->image));
+        if (File::exists(storage_path('app/public/' . $institution->image))) {
+            File::delete(storage_path('app/public/' . $institution->image));
         }
 
         $institution->delete();

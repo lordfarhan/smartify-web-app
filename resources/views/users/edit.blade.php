@@ -45,20 +45,26 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
+									{{ Form::label('roles', 'Roles') }}
+									{{ Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) }}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									{{ Form::label('institution_id', 'Institution') }}
+									{{ Form::select('institution_id', $institutions, $user->institution_id, array('class' => 'form-control')) }}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
 									{{ Form::label('date_of_birth', 'Date of Birth') }}
 									{{ Form::date('date_of_birth', \Carbon\Carbon::parse($user->date_of_birth), ['class' => 'form-control']) }}
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="form-group">
 									{{ Form::label('gender', 'Gender') }}
 									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], $user->gender, ['class' => 'form-control']) }}
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									{{ Form::label('roles', 'Roles') }}
-									{{ Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">

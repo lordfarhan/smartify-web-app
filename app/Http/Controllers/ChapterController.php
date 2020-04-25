@@ -53,7 +53,7 @@ class ChapterController extends Controller
         if (!empty($request->file('attachment'))) {
             $attachment = $request->file('attachment');
             $attachmentName = $courseName . '-' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
-            $attachment->move(public_path('storage/chapters/attachments/'), $attachmentName);
+            $attachment->move(storage_path('app/public/chapters/attachments/'), $attachmentName);
             $input['attachment'] = 'chapters/attachments/' . $attachmentName;
         } else {
             $input = array_except($input, array('attachment'));
@@ -98,14 +98,14 @@ class ChapterController extends Controller
 
         if (!empty($request->file('attachment'))) {
             // Deleting existing attachment
-            if (File::exists(public_path('storage/' . $chapter->attachment))) {
-                File::delete(public_path('storage/' . $chapter->attachment));
+            if (File::exists(storage_path('app/public/' . $chapter->attachment))) {
+                File::delete(storage_path('app/public/' . $chapter->attachment));
             }
             $chapter->attachment = null;
 
             $attachment = $request->file('attachment');
             $attachmentName = $courseName . '-' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
-            $attachment->move(public_path('storage/chapters/attachments/'), $attachmentName);
+            $attachment->move(storage_path('app/public/chapters/attachments/'), $attachmentName);
             $input['attachment'] = 'chapters/attachments/' . $attachmentName;
         } else {
             $input = array_except($input, array('attachment'));
@@ -125,8 +125,8 @@ class ChapterController extends Controller
     public function destroy(Request $request)
     {
         $chapter = Chapter::find($request->id);
-        if (File::exists(public_path('storage/' . $chapter->attachment))) {
-            File::delete(public_path('storage/' . $chapter->attachment));
+        if (File::exists(storage_path('app/public/' . $chapter->attachment))) {
+            File::delete(storage_path('app/public/' . $chapter->attachment));
         }
         $chapter->delete();
         return back()->with('success', 'Chapter deleted successfully');
@@ -135,8 +135,8 @@ class ChapterController extends Controller
     public function deleteFile(Request $request) {
         $chapter = Chapter::find($request->id);
 
-        if (File::exists(public_path('storage/' . $chapter->attachment))) {
-            File::delete(public_path('storage/' . $chapter->attachment));
+        if (File::exists(storage_path('app/public/' . $chapter->attachment))) {
+            File::delete(storage_path('app/public/' . $chapter->attachment));
         }
         $chapter->attachment = null;
         $chapter->attachment_title = null;

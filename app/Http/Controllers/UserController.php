@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Institution;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -35,8 +37,15 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
-        return view('users.create', compact('roles'));
+        if(Auth::user()->roles('master')) {
+            $roles = Role::pluck('name', 'name')->all();
+            $institutions = Institution::pluck('name', 'id')->all();
+        } else {
+            $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
+            $institutions = Institution::whereNotIn('id', [1])->pluck('name', 'id')->all();
+        }
+        $institutions = Institution::pluck('name', 'id')->all();
+        return view('users.create', compact('institutions', 'roles'));
     }
 
     /**
@@ -53,6 +62,7 @@ class UserController extends Controller
             'password' => 'required|same:confirm-password',
             'phone' => 'required|unique:users,phone',
             'address' => 'required',
+            'institution_id' => 'required',
             'roles' => 'required',
             'image'=> 'mimes:jpg,png,jpeg,JPG',
         ]);
@@ -62,7 +72,7 @@ class UserController extends Controller
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
             $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
             $input['image'] = 'users/' . $imageName;
         }
         $input['password'] = Hash::make($input['password']);
@@ -95,10 +105,15 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = Role::pluck('name', 'name')->all();
+        if(Auth::user()->roles('master')) {
+            $roles = Role::pluck('name', 'name')->all();
+            $institutions = Institution::pluck('name', 'id')->all();
+        } else {
+            $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
+            $institutions = Institution::whereNotIn('id', [1])->pluck('name', 'id')->all();
+        }
         $userRole = $user->roles->pluck('name', 'name')->all();
-
-        return view('users.edit', compact('user', 'roles', 'userRole'));
+        return view('users.edit', compact('user', 'institutions', 'roles', 'userRole'));
     }
 
     /**
@@ -119,6 +134,7 @@ class UserController extends Controller
                 'password' => 'same:confirm-password',
                 'phone' => 'required',
                 'address' => 'required',
+                'institution_id' => 'required',
                 'roles' => 'required',
                 'image'=> 'mimes:jpg,png,jpeg,JPG',
             ]);
@@ -129,6 +145,7 @@ class UserController extends Controller
                 'password' => 'same:confirm-password',
                 'phone' => 'required',
                 'address' => 'required',
+                'institution_id' => 'required',
                 'roles' => 'required',
                 'image'=>'mimes:jpg,png,jpeg,JPG',
             ]);
@@ -137,9 +154,13 @@ class UserController extends Controller
         $input = $request->all();
 
         if (!empty($request->file('image'))) {
+            // Deleting existing image
+            if (File::exists(storage_path('app/public/' . $user->image))) {
+                File::delete(storage_path('app/public/' . $user->image));
+            }
             $image = $request->file('image');
             $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(public_path('storage/users/') . $imageName);
+            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
             $input['image'] = 'users/' . $imageName;
         } else {
             $input = array_except($input, array('image'));
@@ -168,7 +189,11 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
+        $user = User::find($id);
+        if (File::exists(storage_path('app/public/' . $user->image))) {
+            File::delete(storage_path('app/public/' . $user->image));
+        }
+        $user->delete();
         return redirect()->route('users.index')
             ->with('success', 'User deleted successfully');
     }

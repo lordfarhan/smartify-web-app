@@ -45,20 +45,26 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
+									{{ Form::label('roles', 'Roles') }}
+									{{ Form::select('roles[]', $roles, [], array('class' => 'form-control')) }}
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									{{ Form::label('institution_id', 'Institution') }}
+									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control')) }}
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
 									{{ Form::label('date_of_birth', 'Date of Birth') }}
 									{{ Form::date('date_of_birth', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
 								</div>
 							</div>
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="form-group">
 									{{ Form::label('gender', 'Gender') }}
 									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], '0', ['class' => 'form-control']) }}
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
-									{{ Form::label('roles', 'Roles') }}
-									{{ Form::select('roles[]', $roles,[], array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">

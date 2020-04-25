@@ -75,7 +75,7 @@ class QuestionController extends Controller
             $imageName = $testName . '-question_image.' . 'png';
             Image::make($image->getRealPath())->encode('png')->resize(400, null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->save(public_path('storage/tests/questions/images/') . $imageName);
+            })->save(storage_path('app/public/tests/questions/images/') . $imageName);
             $input['question_image'] = 'tests/questions/images/' . $imageName;
         } else {
             $input = array_except($input, array('question_image'));
@@ -84,7 +84,7 @@ class QuestionController extends Controller
         if (!empty($request->file('question_audio'))) {
             $audio = $request->file('question_audio');
             $audioName = $testName . '-question_audio.' . $audio->getClientOriginalExtension();
-            $audio->move(public_path('storage/tests/questions/audios/'), $audioName);
+            $audio->move(storage_path('app/public/tests/questions/audios/'), $audioName);
             $input['question_audio'] = 'tests/questions/audios/' . $audioName;
         } else {
             $input = array_except($input, array('question_audio'));
@@ -160,8 +160,8 @@ class QuestionController extends Controller
         if (!empty($request->file('question_image'))) {
 
             // Deleting existing question image
-            if (File::exists(public_path('storage/' . $question->question_image))) {
-                File::delete(public_path('storage/' . $question->question_image));
+            if (File::exists(storage_path('app/public/' . $question->question_image))) {
+                File::delete(storage_path('app/public/' . $question->question_image));
             }
             $question->question_image = null;
 
@@ -169,7 +169,7 @@ class QuestionController extends Controller
             $imageName = $testName . '-question_image.' . 'png';
             Image::make($image->getRealPath())->encode('png')->resize(400, null, function ($constraint) {
                 $constraint->aspectRatio();
-            })->save(public_path('storage/tests/questions/images/') . $imageName);
+            })->save(storage_path('app/public/tests/questions/images/') . $imageName);
             $input['question_image'] = 'tests/questions/images/' . $imageName;
         } else {
             unset($input['question_image']);
@@ -178,14 +178,14 @@ class QuestionController extends Controller
         if (!empty($request->file('question_audio'))) {
 
             // Deleting existing question audio
-            if (File::exists(public_path('storage/' . $question->question_audio))) {
-                File::delete(public_path('storage/' . $question->question_audio));
+            if (File::exists(storage_path('app/public/' . $question->question_audio))) {
+                File::delete(storage_path('app/public/' . $question->question_audio));
             }
 
             $question->question_audio = null;
             $audio = $request->file('question_audio');
             $audioName = $testName . '-question_audio.' . $audio->getClientOriginalExtension();
-            $audio->move(public_path('storage/tests/questions/audios/'), $audioName);
+            $audio->move(storage_path('app/public/tests/questions/audios/'), $audioName);
             $input['question_audio'] = 'tests/questions/audios/' . $audioName;
         } else {
             unset($input['question_audio']);
@@ -205,11 +205,11 @@ class QuestionController extends Controller
     public function destroy(Request $request)
     {
         $question = Question::find($request->id);
-        if (File::exists(public_path('storage/' . $question->question_image))) {
-            File::delete(public_path('storage/' . $question->question_image));
+        if (File::exists(storage_path('app/public/' . $question->question_image))) {
+            File::delete(storage_path('app/public/' . $question->question_image));
         }
-        if (File::exists(public_path('storage/' . $question->question_audio))) {
-            File::delete(public_path('storage/' . $question->question_audio));
+        if (File::exists(storage_path('app/public/' . $question->question_audio))) {
+            File::delete(storage_path('app/public/' . $question->question_audio));
         }
         $question->delete();
         return back()->with('success', 'Question deleted successfully');
@@ -219,13 +219,13 @@ class QuestionController extends Controller
         $question = Question::find($id);
         
         if($type == 'question-image') {
-            if (File::exists(public_path('storage/' . $question->question_image))) {
-                File::delete(public_path('storage/' . $question->question_image));
+            if (File::exists(storage_path('app/public/' . $question->question_image))) {
+                File::delete(storage_path('app/public/' . $question->question_image));
             }
             $question->question_image = null;
         } else if ($type == 'question-audio') {
-            if (File::exists(public_path('storage/' . $question->question_audio))) {
-                File::delete(public_path('storage/' . $question->question_audio));
+            if (File::exists(storage_path('app/public/' . $question->question_audio))) {
+                File::delete(storage_path('app/public/' . $question->question_audio));
             }
             $question->question_audio = null;
         }
