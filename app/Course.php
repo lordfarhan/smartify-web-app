@@ -33,6 +33,10 @@ class Course extends Model
         'institution_id' => 2,
     ];
 
+    public function institution() {
+        return $this->belongsTo(Institution::class);
+    }
+
     public function author() {
         return $this->belongsTo(User::class);
     }

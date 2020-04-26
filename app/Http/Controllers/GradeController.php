@@ -14,10 +14,9 @@ class GradeController extends Controller
      */
     public function index(Request $request)
     {
-        $grades = Grade::orderBy('grade', 'desc')->paginate(5);
+        $grades = Grade::orderBy('id', 'asc')->get();
         
-        return view('grades.index', compact('grades'))
-        ->with('i', ($request->input('page', 1) -1) *5);
+        return view('grades.index', compact('grades'));
     }
 
     /**

@@ -35,7 +35,7 @@
               <b>Author</b> <a class="float-right">{{ $course->author->name }}</a>
             </li>
             <li class="list-group-item">
-              <b>Vendor</b> <a class="float-right">{{ $course->vendor }}</a>
+              <b>Institution</b> <a class="float-right">{{ $course->institution->name }}</a>
             </li>
             @foreach ($course->schedules as $index => $schedule)
               <li class="list-group-item">

@@ -21,13 +21,12 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->institution->id != 1) {
-            $data = User::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
+        if(Auth::user()->institution->id == 1) {
+            $data = User::orderBy('id', 'desc')->get();
         } else {
-            $data = User::orderBy('id', 'desc')->paginate(5);
+            $data = User::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
         }
-        return view('users.index', compact('data'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('users.index', compact('data'));
     }
 
     /**

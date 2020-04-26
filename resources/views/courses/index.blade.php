@@ -16,11 +16,11 @@
 	</div>
 @endif
 
-<div class="card">
-	<div class="card-header">
-		<ul class="nav nav-pills">
+<div class="card card card-primary card-outline card-outline-tabs">
+	<div class="card-header p-0 border-bottom-0">
+		<ul class="nav nav-tabs">
 			@foreach ($grades as $index => $grade)
-            	<li class="nav-item"><a class="nav-link {{$index == 0 ? 'active' : ''}}" href="#grade-{{$grade->id}}" data-toggle="tab">{{$grade->grade}}</a></li>
+				<li class="nav-item"><a class="nav-link {{$index == 0 ? 'active' : ''}}" href="#grade-{{$grade->id}}" data-toggle="tab">{{$grade->grade . " " . $grade->getEducationalStage()}}</a></li>
 			@endforeach
 		</ul>
 	</div>
@@ -31,16 +31,16 @@
 		<div class="tab-content">
 		@foreach ($grades as $index => $grade)			
 			<div class="tab-pane {{$index == 0 ? 'active' : ''}}" id="grade-{{$grade->id}}">
-				<table id="table{{++$index}}" class="table table-bordered table-striped">
+				<table id="table{{$grade->id}}" class="table table-bordered table-striped">
 					<thead>
 						<tr>
 							<th width="20px">No</th>
+							<th>Institution</th>
 							<th>Subject</th>
 							<th>Grade</th>
 							<th>Author</th>
 							<th>Type</th>
 							<th>Status</th>
-							<th>Vendor</th>
 							<th>Image</th>
 							<th width="162px">Action</th>
 						</tr>
@@ -48,7 +48,8 @@
 					<tbody>
 						@foreach ($courses->where('grade_id', $grade->id) as $key => $course)
 						<tr>
-							<td>{{ ++$i }}</td>
+							<td>{{ ++$key}}</td>
+							<td>{{ $course->institution->name }}</td>
 							<td>{{ $course->subject->subject }}</td>
 							<td>{{ $course->grade->grade }}</td>
 							<td>{{ $course->author->name }}</td>
@@ -66,7 +67,6 @@
 									<label class="badge badge-success"><i class="fas fa-upload"></i> PUBLISHED</label>
 								@endif
 							</td>
-							<td>{{ $course->vendor }}</td>
 							<td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td>
 							<td>
 								<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
@@ -87,44 +87,26 @@
 					</tbody>
 				</table>
 			</div>
-			<script>
-				$(function () {
-				  $("#table"+{{++$index}}).DataTable({
-					"responsive": true,
-					"paging": true,
-					"searching": true,
-					"autoWidth": false,
-				  });
-				});
-			  </script>
 		@endforeach
 		</div>
 	</div>
 </div>
-{!! $courses->render() !!}
 @endsection
 
 @section('scripts')
   <!-- DataTables -->
-  <script src="{{ asset("lte/plugins/datatables/jquery.dataTables.min.js") }}""></script>
-  <script src="{{ asset("lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js") }}""></script>
+  <script src="{{ asset("lte/plugins/datatables/jquery.dataTables.min.js") }}"></script>
+  <script src="{{ asset("lte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js") }}"></script>
   <script src="{{ asset("lte/plugins/datatables-responsive/js/dataTables.responsive.min.js") }}"></script>
-  <script src="{{ asset("lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js") }}"></script>
-  <script>
-    $(function () {
-      $("#table1").DataTable({
-        "responsive": true,
-        "autoWidth": false,
-      });
-      $('#table2').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-      });
-    });
-  </script>
+	<script src="{{ asset("lte/plugins/datatables-responsive/js/responsive.bootstrap4.min.js") }}"></script>
+	@foreach ($grades as $index => $grade)
+	<script type="text/javascript">
+		$(function () {
+			$("#table"+{{$grade->id}}).DataTable({
+				"responsive": true,
+				"autoWidth": false,
+			});
+		});
+	</script>
+@endforeach
 @endsection

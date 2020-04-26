@@ -41,7 +41,7 @@
       <tbody>
         @foreach ($data as $key => $user)
           <tr>
-            <td>{{ ++$i }}</td>
+            <td>{{ ++$key }}</td>
             <td><img src="{{ asset("storage/". $user->image) }}" class="img-square elevation-2" alt="User Image" height="80" width="80"></td>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
@@ -71,7 +71,6 @@
     </table>
   </div>
 </div>
-{!! $data->render() !!}
 @endsection
 
 @section('scripts')

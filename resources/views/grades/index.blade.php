@@ -36,7 +36,7 @@
 			<tbody>
 				@foreach ($grades as $key => $grade)
 				<tr>
-					<td>{{ ++$i }}</td>
+					<td>{{ ++$key }}</td>
 					<td>{{ $grade->grade }}</td>
 					<td>{{ $grade->getEducationalStage() }}</td>
 					<td>{{ $grade->information }}</td>
@@ -57,7 +57,6 @@
 		</table>
 	</div>
 </div>
-{!! $grades->render() !!}
 @endsection
 
 @section('scripts')

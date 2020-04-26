@@ -34,7 +34,7 @@
 			<tbody>
 				@foreach ($roles as $key => $role)
 				<tr>
-					<td>{{ ++$i }}</td>
+					<td>{{ ++$key }}</td>
 					<td>{{ $role->name }}</td>
 					<td>
 						<a class="btn btn-primary" href="{{ route('roles.show', $role->id) }}"><i class="fa fa-eye"></i></a>
@@ -53,7 +53,6 @@
 		</table>
 	</div>
 </div>
-{!! $roles->render() !!}
 @endsection
 
 @section('scripts')

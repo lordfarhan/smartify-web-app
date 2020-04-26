@@ -25,13 +25,12 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $grades = Grade::all();
-        if(Auth::user()->institution->id != 1) {
-            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
+        if(Auth::user()->institution->id == 1) {
+            $courses = Course::orderBy('id', 'desc')->get();
         } else {
-            $courses = Course::orderBy('id', 'desc')->paginate(5);
+            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
         }
-        return view('courses.index', compact('grades', 'courses'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('courses.index', compact('grades', 'courses'));
     }
 
     /**

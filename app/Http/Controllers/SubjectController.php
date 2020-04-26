@@ -14,10 +14,9 @@ class SubjectController extends Controller
      */
     public function index(Request $request)
     {
-        $subjects = Subject::orderBy('subject', 'desc')->paginate(5);
+        $subjects = Subject::orderBy('subject', 'desc')->get();
         
-        return view('subjects.index', compact('subjects'))
-            ->with('i', ($request->input('page', 1) -1) *5);
+        return view('subjects.index', compact('subjects'));
     }
 
     /**

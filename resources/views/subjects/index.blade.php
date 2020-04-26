@@ -35,7 +35,7 @@
 			<tbody>
 				@foreach ($subjects as $key => $subject)
 				<tr>
-					<td>{{ ++$i }}</td>
+					<td>{{ ++$key }}</td>
 					<td>{{ $subject->subject }}</td>
 					<td>{{ $subject->information }}</td>
 					<td>
@@ -55,7 +55,6 @@
 		</table>
 	</div>
 </div>
-{!! $subjects->render() !!}
 @endsection
 
 @section('scripts')

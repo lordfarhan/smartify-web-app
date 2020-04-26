@@ -35,7 +35,7 @@
                 <tbody>
                     @foreach ($institutions as $key => $institution)
                         <tr>
-                            <td>{{ $key+1 }}</td>
+                            <td>{{ ++$key }}</td>
                             <td><img src="{{ asset("storage/". $institution->image) }}" class="img-square elevation-2" alt="Institution Image" height="80" width="80"></td>
                             <td>{{$institution->name}}</td>
                             <td>{{$institution->description}}</td>

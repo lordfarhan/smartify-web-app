@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -24,10 +25,13 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id', 'asc')->paginate(5);
+        if(Auth::user()->institution->id == 1) {
+            $roles = Role::orderBy('id', 'asc')->get();
+        } else {
+            $roles = Role::whereNotIn('name', ['master'])->orderBy('id', 'asc')->get();
+        }
 
-        return view('roles.index',compact('roles'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('roles.index',compact('roles'));
     }
 
     /**
