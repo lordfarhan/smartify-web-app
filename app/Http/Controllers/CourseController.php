@@ -28,7 +28,7 @@ class CourseController extends Controller
         if(Auth::user()->institution->id == 1) {
             $courses = Course::orderBy('id', 'desc')->get();
         } else {
-            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->paginate(5);
+            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
         }
         return view('courses.index', compact('grades', 'courses'));
     }

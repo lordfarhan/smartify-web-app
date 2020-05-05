@@ -17,11 +17,11 @@ class Grade extends Model
 
     public function getEducationalStage() {
         if ($this->educational_stage == '0') {
-            return 'SD/MI';
+            return 'SD';
         } else if ($this->educational_stage == '1') {
-            return 'SMP/MTs';
+            return 'SMP';
         } else {
-            return 'SMA/SMK/MA';
+            return 'SMA';
         }
     }
 }
