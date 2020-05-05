@@ -20,7 +20,7 @@
 	<div class="card-header p-0 border-bottom-0">
 		<ul class="nav nav-tabs">
 			@foreach ($grades as $index => $grade)
-				<li class="nav-item"><a class="nav-link {{$index == 0 ? 'active' : ''}}" href="#grade-{{$grade->id}}" data-toggle="tab">{{$grade->grade . " " . $grade->getEducationalStage()}}</a></li>
+				<li class="nav-item"><a class="nav-link {{$index == 0 ? 'active' : ''}}" href="#grade-{{$grade->id}}" data-toggle="tab">{{$grade->grade}}</a></li>
 			@endforeach
 		</ul>
 	</div>
