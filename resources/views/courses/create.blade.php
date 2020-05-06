@@ -47,7 +47,7 @@
 							<div class="col-md-3">
 								<div class="form-group">
 									{{ Form::label('section', 'Section (optional)') }}
-									{{ Form::select('section', ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], null, array('class' => 'form-control', 'placeholder' => 'None')) }}
+									{{ Form::text('section', null, array('class' => 'form-control', 'placeholder' => 'Ex: A, B, C, IPA A, IPA B,')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
