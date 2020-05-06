@@ -12,5 +12,5 @@
 		</form>
 	</div>
 	<!-- Default to the left -->
-	<strong>Copyright &copy; 2020 <a href="https://codeiva.com">Codeiva</a>.</strong> All rights reserved.
+	<strong>Smartify v0.8 - Copyright &copy; 2020 <a href="https://codeiva.com">Codeiva</a>.</strong> All rights reserved.
 </footer>

@@ -64,4 +64,8 @@ class Course extends Model
     public function enrollments() {
         return $this->hasMany(CourseEnrollment::class);
     }
+
+    public function forumPosts() {
+        return $this->hasMany(ForumPost::class);
+    }
 }

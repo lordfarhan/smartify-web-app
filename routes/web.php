@@ -37,6 +37,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('courses.delete-file/{id}/{type}', 'CourseController@deleteFile');
     Route::get('courses/{course_id}/tests/{id}', 'TestController@show');
     Route::get('courses/{course_id}/schedules/{schedule_id}/attendances', 'AttendanceController@show');
+    Route::get('courses/{course_id}/forum/create', 'ForumPostController@create');
+    Route::get('courses/{course_id}/forum/{slug}', 'ForumPostController@show');
+    Route::get('courses/{course_id}/forum/{slug}/edit', 'ForumPostController@edit');
+    Route::get('courses/{course_id}/forum/{slug}/delete', 'ForumPostController@delete');
+    Route::get('courses/{course_id}/forum/{slug}/replies/{reply_id}/edit', 'ForumReplyController@edit');
+    Route::get('courses/{course_id}/forum/{slug}/replies/{reply_id}/delete', 'ForumReplyController@delete');
 
     Route::resource('chapters', 'ChapterController');
     Route::post('chapters.edit', 'ChapterController@update');
@@ -60,4 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('schedules/{id}/attendances/create', 'AttendanceController@create');
 
     Route::resource('attendances', 'AttendanceController');
+
+    Route::resource('forumPosts', 'ForumPostController');
+    Route::resource('forumReplies', 'ForumReplyController');
 });

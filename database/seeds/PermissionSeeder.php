@@ -13,10 +13,10 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
-            'attendance-list',
-            'attendance-create',
-            'attendance-edit',
-            'attendance-delete',
+            '-list',
+            '-create',
+            '-edit',
+            '-delete',
         ];
 
         foreach ($permissions as $permission) {
