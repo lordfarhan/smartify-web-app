@@ -53,7 +53,7 @@ class QuestionController extends Controller
             'incorrect_answer_4' => 'required',
         ];
 
-        $testName = $request->test_id . '-' . Str::random();
+        $testName = $request->test_id . '_' . $request->order . '_' . Str::random();
         $input = $request->all();
         
         if($request->type == '1') {
@@ -72,7 +72,7 @@ class QuestionController extends Controller
 
         if (!empty($request->file('question_image'))) {
             $image = $request->file('question_image');
-            $imageName = $testName . '-question_image.' . 'png';
+            $imageName = 'testQuestionImage' . Carbon::now()->format('YmdHis') . '_' . $testName . 'png';
             Image::make($image->getRealPath())->encode('png')->resize(400, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->save(storage_path('app/public/tests/questions/images/') . $imageName);
@@ -83,7 +83,7 @@ class QuestionController extends Controller
 
         if (!empty($request->file('question_audio'))) {
             $audio = $request->file('question_audio');
-            $audioName = $testName . '-question_audio.' . $audio->getClientOriginalExtension();
+            $audioName = 'testQuestionAudio' . Carbon::now()->format('YmdHis') . '_' . $testName . $audio->getClientOriginalExtension();
             $audio->move(storage_path('app/public/tests/questions/audios/'), $audioName);
             $input['question_audio'] = 'tests/questions/audios/' . $audioName;
         } else {
@@ -140,7 +140,7 @@ class QuestionController extends Controller
             'incorrect_answer_4' => 'required',
         ];
 
-        $testName = $request->test_id . '-' . Str::random();
+        $testName = $request->test_id . '_' . $request->order . '_' . Str::random();
         $input = $request->all();
         
         if($request->type == '1') {
@@ -166,7 +166,7 @@ class QuestionController extends Controller
             $question->question_image = null;
 
             $image = $request->file('question_image');
-            $imageName = $testName . '-question_image.' . 'png';
+            $imageName = 'testQuestionImage' . Carbon::now()->format('YmdHis') . '_' . $testName . 'png';
             Image::make($image->getRealPath())->encode('png')->resize(400, null, function ($constraint) {
                 $constraint->aspectRatio();
             })->save(storage_path('app/public/tests/questions/images/') . $imageName);
@@ -184,7 +184,7 @@ class QuestionController extends Controller
 
             $question->question_audio = null;
             $audio = $request->file('question_audio');
-            $audioName = $testName . '-question_audio.' . $audio->getClientOriginalExtension();
+            $audioName = 'testQuestionAudio' . Carbon::now()->format('YmdHis') . '_' . $testName . $audio->getClientOriginalExtension();
             $audio->move(storage_path('app/public/tests/questions/audios/'), $audioName);
             $input['question_audio'] = 'tests/questions/audios/' . $audioName;
         } else {

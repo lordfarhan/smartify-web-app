@@ -100,11 +100,11 @@ class CourseController extends Controller
         $subject = Subject::where('id', request('subject_id'))->value('subject');
         $grade = Grade::where('id', request('grade_id'))->value('grade');
 
-        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
+        $courseName = preg_replace('/\s+/', '', $subject) . '_' . preg_replace('/\s+/', '', $grade) . '_' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
-            $imageName = $courseName . '.' . 'png';
+            $imageName = 'courseImage'. Carbon::now()->format('YmdHis'). '_' .$courseName . '.' . 'png';
             Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(storage_path('app/public/courses/images/') . $imageName);
             $input['image'] = 'courses/images/' . $imageName;
         } else {
@@ -113,7 +113,7 @@ class CourseController extends Controller
 
         if (!empty($request->file('attachment'))) {
             $attachment = $request->file('attachment');
-            $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
+            $attachmentName = 'courseAttachment'. Carbon::now()->format('YmdHis'). '_' .$courseName . '.' . $attachment->getClientOriginalExtension();
             $attachment->move(storage_path('app/public/courses/attachments/'), $attachmentName);
             $input['attachment'] = 'courses/attachments/' . $attachmentName;
         } else {
@@ -202,7 +202,7 @@ class CourseController extends Controller
         $subject = Subject::where('id', request('subject_id'))->value('subject');
         $grade = Grade::where('id', request('grade_id'))->value('grade');
 
-        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
+        $courseName = preg_replace('/\s+/', '', $subject) . '_' . preg_replace('/\s+/', '', $grade) . '_' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('image'))) {
 
@@ -213,7 +213,7 @@ class CourseController extends Controller
             $course->image = null;
 
             $image = $request->file('image');
-            $imageName = $courseName . '.' . 'png';
+            $imageName = 'courseImage'. Carbon::now()->format('YmdHis').'_'.$courseName . '.' . 'png';
             Image::make($image->getRealPath())->encode('png')->fit(1200, 600)->save(storage_path('app/public/courses/images/') . $imageName);
             $input['image'] = 'courses/images/' . $imageName;
         }
@@ -227,7 +227,7 @@ class CourseController extends Controller
             $course->attachment = null;
 
             $attachment = $request->file('attachment');
-            $attachmentName = $courseName . '.' . $attachment->getClientOriginalExtension();
+            $attachmentName = 'courseAttachment'. Carbon::now()->format('YmdHis').'_'.$courseName . '.' . $attachment->getClientOriginalExtension();
             $attachment->move(storage_path('app/public/courses/attachments/'), $attachmentName);
             $input['attachment'] = 'courses/attachments/' . $attachmentName;
         }

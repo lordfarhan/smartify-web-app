@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Chapter;
 use App\Course;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -48,11 +49,11 @@ class ChapterController extends Controller
         $grade = $course->grade->grade;
         $author = $course->author->name;
         
-        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
+        $courseName = preg_replace('/\s+/', '', $subject) . '_' . preg_replace('/\s+/', '', $grade) . '_' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('attachment'))) {
             $attachment = $request->file('attachment');
-            $attachmentName = $courseName . '-' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
+            $attachmentName = 'chapterAttachment'. Carbon::now()->format('YmdHis'). '_' .$courseName . '_' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
             $attachment->move(storage_path('app/public/chapters/attachments/'), $attachmentName);
             $input['attachment'] = 'chapters/attachments/' . $attachmentName;
         } else {
@@ -94,7 +95,7 @@ class ChapterController extends Controller
         $grade = $course->grade->grade;
         $author = $course->author->name;
         
-        $courseName = preg_replace('/\s+/', '', $subject) . '-' . preg_replace('/\s+/', '', $grade) . '-' . preg_replace('/\s+/', '', $author);
+        $courseName = preg_replace('/\s+/', '', $subject) . '_' . preg_replace('/\s+/', '', $grade) . '_' . preg_replace('/\s+/', '', $author);
 
         if (!empty($request->file('attachment'))) {
             // Deleting existing attachment
@@ -104,7 +105,7 @@ class ChapterController extends Controller
             $chapter->attachment = null;
 
             $attachment = $request->file('attachment');
-            $attachmentName = $courseName . '-' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
+            $attachmentName = 'chapterAttachment'. Carbon::now()->format('YmdHis'). '_' .$courseName . '_' . $request->chapter . '.' . $attachment->getClientOriginalExtension();
             $attachment->move(storage_path('app/public/chapters/attachments/'), $attachmentName);
             $input['attachment'] = 'chapters/attachments/' . $attachmentName;
         } else {

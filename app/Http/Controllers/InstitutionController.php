@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Institution;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -47,7 +48,7 @@ class InstitutionController extends Controller
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
-            $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+            $imageName = 'institutionImage' . Carbon::now()->format('YmdHis'). '_' . preg_replace('/\s+/', '', request('name')) . '.' . 'png';
             Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/institutions/') . $imageName);
             $input['image'] = 'institutions/' . $imageName;
         } else {
@@ -102,7 +103,7 @@ class InstitutionController extends Controller
                 File::delete(storage_path('app/public/' . $institution->image));
             }
             $image = $request->file('image');
-            $imageName = preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+            $imageName = 'institutionImage' . Carbon::now()->format('YmdHis'). '_' . preg_replace('/\s+/', '', request('name')) . '.' . 'png';
             Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/institutions/') . $imageName);
             $input['image'] = 'institutions/' . $imageName;
         } else {

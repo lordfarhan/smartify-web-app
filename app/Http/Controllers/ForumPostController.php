@@ -57,12 +57,12 @@ class ForumPostController extends Controller
             $attachmentName = '';
             $ext = $request->file('attachment')->getClientOriginalExtension();
             if ($ext == 'jpg' || $ext == 'png') {
-                $attachmentName = Carbon::now()->format('YmdHis') . '-' . Str::random() . '.' . 'png';
+                $attachmentName = 'forumAttachment'.Carbon::now()->format('YmdHis') . '_' . $request->input('user_id') . '_' . Str::random() . '.' . 'png';
                 Image::make($attachment->getRealPath())->encode('png')->resize(600, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save(storage_path('app/public/forum/posts/attachments/') . $attachmentName);
             } else {
-                $attachmentName = Carbon::now()->format('YmdHis') . '-' . Str::random() . '.' . $attachment->getClientOriginalExtension();
+                $attachmentName = 'forumAttachment'.Carbon::now()->format('YmdHis') . '_' . $request->input('user_id') . '_' . Str::random() . '.' . $attachment->getClientOriginalExtension();
                 $attachment->move(storage_path('app/public/forum/posts/attachments/'), $attachmentName);
             }
             $input['attachment'] = 'forum/posts/attachments/' . $attachmentName;
@@ -131,12 +131,12 @@ class ForumPostController extends Controller
             $attachmentName = '';
             $ext = $request->file('attachment')->getClientOriginalExtension();
             if ($ext == 'jpg' || $ext == 'png') {
-                $attachmentName = Carbon::now()->format('YmdHis') . '-' . Str::random() . '.' . 'png';
+                $attachmentName = 'forumAttachment'.Carbon::now()->format('YmdHis') . '_' . $request->input('user_id') . '_' . Str::random() . '.' . 'png';
                 Image::make($attachment->getRealPath())->encode('png')->resize(600, null, function ($constraint) {
                     $constraint->aspectRatio();
                 })->save(storage_path('app/public/forum/posts/attachments/') . $attachmentName);
             } else {
-                $attachmentName = Carbon::now()->format('YmdHis') . '-' . Str::random() . '.' . $attachment->getClientOriginalExtension();
+                $attachmentName = 'forumAttachment'.Carbon::now()->format('YmdHis') . '_' . $request->input('user_id') . '_' . Str::random() . '.' . $attachment->getClientOriginalExtension();
                 $attachment->move(storage_path('app/public/forum/posts/attachments/'), $attachmentName);
             }
             $input['attachment'] = 'forum/posts/attachments/' . $attachmentName;
