@@ -1,7 +1,7 @@
 @extends('layouts/app')
 
 @section('title')
-    Test Question Management
+  {{__('common.tests.show.title')}}
 @endsection
 
 @section('content')
@@ -9,32 +9,32 @@
 		<div class="col-md-12">
 			<div class="card">
 				<div class="card-header">
-					<a href="{{ route('courses.show', $course_id) }}" class="btn btn-outline-info">Back</a>
+					<a href="{{ route('courses.show', $course_id) }}" class="btn btn-outline-info">{{__('common.tests.actions.back')}}</a>
 				</div>
 				<div class="card-body">
 					<h3 class="profile-coursename text-center">{{ $test->title }}</h3>
       
           <p class="text-muted text-center">
             @if ($test->assign == '0')
-              <label class="badge badge-warning">NOT ASSIGNED</label>
+              <label class="badge badge-warning">{{__('common.tests.attributes.test_not_assigned')}}</label>
             @else
-              <label class="badge badge-success">ASSIGNED</label>
+              <label class="badge badge-success">{{__('common.tests.attributes.test_assigned')}}</label>
             @endif
           </p>
 					<ul class="list-group list-group-unbordered mb-3">
 						<li class="list-group-item">
 							<b>Type</b> <a class="float-right">
 								@if ($test->type == '0')
-									Chapter Test
+									{{__('common.tests.attributes.test_type_chapter')}}
 								@elseif($test->type == '1')
-									Mid Test
+                {{__('common.tests.attributes.test_type_middle')}}
 								@else
-									Final Test
+                {{__('common.tests.attributes.test_type_final')}}
 								@endif</a>
 						</li>
 						@if (!empty($test->description))
 						<li class="list-group-item">
-							<b>Description</b> <a class="float-right">
+							<b>{{{{__('common.tests.attributes.description')}}}}</b> <a class="float-right">
 								{{$test->description}}
 							</a>
 						</li>
@@ -51,7 +51,7 @@
 					@endif
 					<div class="timeline">
 						<div class="time-label">
-							<span class="bg-green">Questions</span>
+							<span class="bg-green">{{{{__('common.tests.show.questions')}}}}</span>
 						</div>
 						@can('question-list')
 							@foreach ($questions as $question)
@@ -66,12 +66,12 @@
 											@endif
 											<ul class="list-group list-group-unbordered mb-3">
 												<li class="list-group-item">
-													<b>Correct Answer</b> <a class="text-success float-right">{{ $question->correct_answer }}</a>
+													<b>{{{{__('common.tests.attributes.correct_answer')}}}}</b> <a class="text-success float-right">{{ $question->correct_answer }}</a>
 												</li>
 												@foreach (explode("; ", ltrim($question->incorrect_answers)) as $index => $incorrect_answer)
 													<li class="list-group-item">
 														<b>@if ($index == 0)
-															Incorrect Answer
+															{{{{__('common.tests.attributes.incorrect_answers')}}}}
 														@endif</b> <a class="text-danger float-right">{{ $incorrect_answer }}</a>
 													</li>
 												@endforeach
@@ -79,10 +79,10 @@
 										</div>
 										<div class="timeline-footer">
 											@can('question-edit')										
-												<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}">Edit</a>
+												<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}">{{{{__('common.tests.actions.edit')}}}}</a>
 											@endcan
 											@can('question-delete')
-												<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">Delete</a>
+												<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">{{{{__('common.tests.actions.delete')}}}}</a>
 											@endcan
 										</div>
 									</div>
@@ -93,7 +93,7 @@
 							<div>
 								<i class="fas fa-plus bg-maroon"></i>
 								<div class="timeline-item">
-									<h3 class="timeline-header"><a href="#">Add Question</a></h3>
+									<h3 class="timeline-header"><a href="#">{{__('common.tests.show.add_question')}}</a></h3>
 
 									<div class="timeline-body">
 										{{-- Add sub chapter --}}
@@ -102,19 +102,19 @@
 										<div class="row">
 											<div class="col-md-2">
 												<div class="form-group">
-													{{ Form::number('order', null, array('placeholder' => 'Question order', 'class' => 'form-control')) }}
+													{{ Form::number('order', null, array('placeholder' => __('common.tests.attributes.order_placeholder'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											<div class="col-md-10">
 												<div class="form-group">
-													{{ Form::text('question', null, array('placeholder' => 'Put question here', 'class' => 'form-control')) }}
+													{{ Form::text('question', null, array('placeholder' => __('common.tests.attributes.question_placeholder'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<div class="custom-file">
 														<input type="file" name="question_image" class="custom-file-input" id="question_image">
-														<label class="custom-file-label" for="question_image">Choose question image</label>
+														<label class="custom-file-label" for="question_image">{{__('common.tests.attributes.question_image_placeholder')}}</label>
 													</div>
 												</div>
 											</div>
@@ -122,28 +122,28 @@
 												<div class="form-group">
 													<div class="custom-file">
 														<input type="file" name="question_audio" class="custom-file-input" id="question_audio">
-														<label class="custom-file-label" for="question_audio">Choose question audio</label>
+														<label class="custom-file-label" for="question_audio">{{__('common.tests.attributes.question_audio_placeholder')}}</label>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-12 ml-1">
-												<label for="">Correct Answer</label>
+												<label for="">{{__('common.tests.attributes.correct_answer')}}</label>
 											</div>
 											{{-- Correct answer --}}
 											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('correct_answer', null, array('placeholder' => 'This form is the correct answer of it question', 'class' => 'form-control')) }}
+													{{ Form::text('correct_answer', null, array('placeholder' => __('common.tests.attributes.correct_answer_placeholder'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											<div class="col-sm-6">
 												<div class="form-group">
 													<div class="custom-control custom-radio">
 														<input class="custom-control-input" type="radio" id="multiple" name="type" value="0" onclick="checkType()" checked>
-														<label for="multiple" class="custom-control-label">Multiple Choice</label>
+														<label for="multiple" class="custom-control-label">{{__('common.tests.attributes.multiple_choice')}}</label>
 													</div>
 													<div class="custom-control custom-radio">
 														<input class="custom-control-input" type="radio" id="boolean" name="type" value="1" onclick="checkType()">
-														<label for="boolean" class="custom-control-label">True or False</label>
+														<label for="boolean" class="custom-control-label">{{__('common.tests.attributes.true_or_false')}}</label>
 													</div>
 												</div>
 											</div>
@@ -164,12 +164,12 @@
 												</div>
 											</div> --}}
 											<div class="col-md-12 ml-1">
-												<label for="">Incorrect Answers</label>
+												<label for="">{{__('common.tests.attributes.incorrect_answers')}}</label>
 											</div>
 											{{-- 1st incorrect answer --}}
 											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('incorrect_answer_1', null, array('id' => 'incorrect_answer_1', 'placeholder' => 'This form is for first incorrect answer', 'class' => 'form-control')) }}
+													{{ Form::text('incorrect_answer_1', null, array('id' => 'incorrect_answer_1', 'placeholder' => __('common.tests.attributes.incorrect_answer_1'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											{{-- <div class="col-md-3">
@@ -191,7 +191,7 @@
 											{{-- 2nd incorrect answer --}}
 											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('incorrect_answer_2', null, array('id' => 'incorrect_answer_2', 'placeholder' => 'This form is for second incorrect answer', 'class' => 'form-control')) }}
+													{{ Form::text('incorrect_answer_2', null, array('id' => 'incorrect_answer_2', 'placeholder' => __('common.tests.attributes.incorrect_answer_2'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											{{-- <div class="col-md-3">
@@ -213,7 +213,7 @@
 											{{-- 3rd incorrect answer --}}
 											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('incorrect_answer_3', null, array('id' => 'incorrect_answer_3', 'placeholder' => 'This form is for third incorrect answer', 'class' => 'form-control')) }}
+													{{ Form::text('incorrect_answer_3', null, array('id' => 'incorrect_answer_3', 'placeholder' => __('common.tests.attributes.incorrect_answer_3'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											{{-- <div class="col-md-3">
@@ -235,7 +235,7 @@
 											{{-- 4th incorrect answer --}}
 											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('incorrect_answer_4', null, array('id' => 'incorrect_answer_4', 'placeholder' => 'This form is for fourth incorrect answer', 'class' => 'form-control')) }}
+													{{ Form::text('incorrect_answer_4', null, array('id' => 'incorrect_answer_4', 'placeholder' => __('common.tests.attributes.incorrect_answer_4'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											{{-- <div class="col-md-3">
@@ -258,7 +258,7 @@
 										{{-- Add sub chapter --}}
 									</div>
 									<div class="timeline-footer">
-										<button class="btn btn-sm btn-primary col-12" type="submit"></i>Process</button>
+										<button class="btn btn-sm btn-primary col-12" type="submit"></i>{{__('common.tests.actions.process')}}</button>
 									</div>
 									{{ Form::close() }}
 								</div>
@@ -281,11 +281,11 @@
 			@csrf
 			<div class="modal-content">
 				<div class="modal-header">
-					<h4>Be careful!</h4>
+					<h4>{{__('common.tests.show.be_careful')}}</h4>
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 				</div>
 				<div class="modal-body">
-					Are you sure want to delete this question?
+					{{__('common.tests.show.be_careful_msg')}}
 					<form class="form-horizontal" role="form">
 						<div class="form-group">
 							<div class="col-sm-10">
@@ -295,8 +295,8 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-					<button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+					<button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.tests.actions.cancel')}}</button>
+					<button type="submit" class="btn btn-danger btn-edit-chapter">{{{{__('common.tests.actions.delete')}}}}</button>
 				</div>
 			</div>
 		</form>

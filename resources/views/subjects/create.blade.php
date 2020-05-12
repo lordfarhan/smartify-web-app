@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Create Subject
+  {{__('common.subjects.create.title')}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 			{{ Form::open(array('route' => 'subjects.store','method'=>'POST')) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('subjects.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('subjects.index') }}" class="btn btn-outline-info">{{__('common.subjects.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if(!empty($errors->all()))
@@ -21,18 +21,18 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									{{ Form::label('subject', 'Subject') }}
-									{{ Form::text('subject', null, array('placeholder' => 'Pendidikan Informatika','class' => 'form-control')) }}
+									{{ Form::label('subject', __('common.subjects.attributes.subject')) }}
+									{{ Form::text('subject', null, array('placeholder' => __('common.subjects.attributes.subject_placeholder'), 'class' => 'form-control')) }}
 								</div>
 								<div class="form-group">
-									{{ Form::label('information', 'Information') }}
-									{{ Form::text('information', null, array('placeholder' => 'Optional information about subject','class' => 'form-control')) }}
+									{{ Form::label('information', __('common.subjects.attributes.information')) }}
+									{{ Form::text('information', null, array('placeholder' => __('common.subjects.attributes.information_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.subjects.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 			{{ Form::close() }}

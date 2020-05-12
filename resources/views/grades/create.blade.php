@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Create Grade
+  {{__('common.grades.create.title')}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 			{{ Form::open(array('route' => 'grades.store','method'=>'POST')) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('grades.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('grades.index') }}" class="btn btn-outline-info">{{__('common.grades.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if(!empty($errors->all()))
@@ -21,22 +21,22 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									{{ Form::label('grade', 'Grade') }}
-									{{ Form::text('grade', null, array('placeholder' => '12 IPA','class' => 'form-control')) }}
+									{{ Form::label('grade', __('common.grades.attributes.grade')) }}
+									{{ Form::text('grade', null, array('placeholder' => __('common.grades.attributes.grade_placeholder'), 'class' => 'form-control')) }}
 								</div>
 								<div class="form-group">
-									{{ Form::label('educational_stage', 'Educational Stage') }}
-									{{ Form::select('educational_stage', ['0' => 'SD/MI', '1' => 'SMP/MTs', '2' => 'SMA/SMK/MA'], '0', ['class' => 'form-control']) }}
+									{{ Form::label('educational_stage', __('common.grades.attributes.educational_stage')) }}
+									{{ Form::select('educational_stage', ['0' => 'SD', '1' => 'SMP', '2' => 'SMA'], null, ['placeholder' => __('common.grades.attributes.educational_stage_placeholder'), 'class' => 'form-control']) }}
 								</div>
 								<div class="form-group">
-									{{ Form::label('information', 'Information') }}
-									{{ Form::text('information', null, array('placeholder' => 'Optional information about subject','class' => 'form-control')) }}
+									{{ Form::label('information', __('common.grades.attributes.information')) }}
+									{{ Form::text('information', null, array('placeholder' => __('common.grades.attributes.information_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.grades.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 			{{ Form::close() }}

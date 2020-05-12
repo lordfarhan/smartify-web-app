@@ -8,7 +8,7 @@
 @endsection
 
 @section('title')
-    Create Course
+  {{__('common.courses.create.title')}}
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
 			{{ Form::open(array('route' => 'courses.store','method'=>'POST', 'files' => true)) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('courses.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if(!empty($errors->all()))
@@ -28,67 +28,67 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('author_id', 'Author') }}
-									{{ Form::select('author_id', $authors, null, array('class' => 'form-control')) }}
+									{{ Form::label('author_id', __('common.courses.attributes.author')) }}
+									{{ Form::select('author_id', $authors, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.author_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('subject_id', 'Subject') }}
-									{{ Form::select('subject_id', $subjects, null, array('class' => 'form-control')) }}
+									{{ Form::label('subject_id', __('common.courses.attributes.subject')) }}
+									{{ Form::select('subject_id', $subjects, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.subject_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('grade_id', 'Grade') }}
-									{{ Form::select('grade_id', $grades, null, array('class' => 'form-control')) }}
+									{{ Form::label('grade_id', __('common.courses.attributes.grade')) }}
+									{{ Form::select('grade_id', $grades, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.grade_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('section', 'Section (optional)') }}
-									{{ Form::text('section', null, array('class' => 'form-control', 'placeholder' => 'Ex: A, B, C, IPA A, IPA B,')) }}
+									{{ Form::label('section', __('common.courses.attributes.section')) }}
+									{{ Form::text('section', null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.section_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('type', 'Type') }}
-									{{ Form::select('type', ['0' => 'Public', '1' => 'Private'], '0', array('class' => 'form-control')) }}
+									{{ Form::label('type', __('common.courses.attributes.type')) }}
+									{{ Form::select('type', ['0' => 'Public', '1' => 'Private'], null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.type_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('enrollment_key', 'Enrollment Key (only for private type') }}
-									{{ Form::text('enrollment_key', null, array('placeholder' => 'Leave empty if your course is public', 'class' => 'form-control')) }}
+									{{ Form::label('enrollment_key', __('common.courses.attributes.enrollment_key')) }}
+									{{ Form::text('enrollment_key', null, array('placeholder' => __('common.courses.attributes.enrollment_key_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('status', 'Status') }}
-									{{ Form::select('status', ['0' => 'Draft', '1' => 'Published'], '0', array('class' => 'form-control')) }}
+									{{ Form::label('status', __('common.courses.attributes.status')) }}
+									{{ Form::select('status', ['0' => 'Draft', '1' => 'Published'], null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.status_placeholder'))) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('institution_id', 'Institution') }}
-									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control')) }}
+									{{ Form::label('institution_id', __('common.courses.attributes.institution')) }}
+									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.institution_placeholder'))) }}
 								</div>
 							</div>
 							<div id="attachment-title-div" class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('attachment_title', 'Attachment Title') }}
-									{{ Form::text('attachment_title', null, array('placeholder' => 'Course attachment title', 'class' => 'form-control')) }}
+									{{ Form::label('attachment_title', __('common.courses.attributes.attachment_title')) }}
+									{{ Form::text('attachment_title', null, array('placeholder' => __('common.courses.attributes.attachment_title_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('image', 'Image (optional)') }}
+									{{ Form::label('image', __('common.courses.attributes.image')) }}
 									{{ Form::file('image', ['class'=>'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('attachment', 'Attachment (optional)') }}
+									{{ Form::label('attachment', __('common.courses.attributes.attachment')) }}
 									{{ Form::file('attachment', ['id' => 'attachment', 'class'=>'form-control']) }}
 								</div>
 							</div>
@@ -98,47 +98,47 @@
 				@can('schedule-create')
 				<div class="card">
 					<div class="card-header text-bold">
-						Schedule
+						{{__('common.courses.attributes.schedule')}}
 					</div>
 					<div class="card-body">
 						<div class="row" id="schedule-row">
 							<div class="col-md-6 mb-3">
-								<label for="datepicker">Date</label>
+								<label for="datepicker">{{__('common.courses.attributes.date')}}</label>
 								<div class="input-group date" id="datepicker-date" data-target-input="nearest">
-									<input name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date"/>
+									<input name="date[]" type="text" class="form-control datetimepicker-input" placeholder="{{__('common.courses.attributes.date_placeholder')}}" data-target="#datepicker-date"/>
 									<div class="input-group-append" data-target="#datepicker-date" data-toggle="datetimepicker">
 										<div class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-2">
-								<label for="start_time[]">Start Course</label>
+								<label for="start_time[]">{{__('common.courses.attributes.start_course')}}</label>
 								<div class="input-group date" id="timepicker-start" data-target-input="nearest">
-									<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start"/>
+									<input name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="{{__('common.courses.attributes.start_course_placeholder')}}" data-target="#timepicker-start"/>
 									<div class="input-group-append" data-target="#timepicker-start" data-toggle="datetimepicker">
 										<div class="input-group-text"><i class="far fa-clock"></i></div>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-2">
-								<label for="end_time[]">End Course</label>
+								<label for="end_time[]">{{__('common.courses.attributes.end_course')}}</label>
 								<div class="input-group date" id="timepicker-end" data-target-input="nearest">
-									<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end"/>
+									<input name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="{{__('common.courses.attributes.end_course_placeholder')}}" data-target="#timepicker-end"/>
 									<div class="input-group-append" data-target="#timepicker-end" data-toggle="datetimepicker">
 										<div class="input-group-text"><i class="far fa-clock"></i></div>
 									</div>
 								</div>
 							</div>
 							<div class="col-md-2">
-								<label for="add-schedule-row" class="text-white">Add Day</label>
-								<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add Day</i></button>
+								<label for="add-schedule-row" class="text-white">{{__('common.courses.create.add')}}</label>
+								<button id="add-schedule-row" type="button" class="btn btn-primary col-12">{{__('common.courses.actions.add')}}</i></button>
 							</div>
 						</div>
 						<div id="new-schedule-row"></div>
 						<div id="new-schedule-script"></div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.courses.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 				@endcan
@@ -212,7 +212,7 @@
 			html += '</div>';
 			html += '</div>';
 			html += '<div class="col-md-2">';
-			html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>';
+			html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">{{__("common.courses.actions.remove")}}</i></button>';
 			html += '</div>';
 			html += '</div>';
 

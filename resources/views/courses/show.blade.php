@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Grade Detail
+    {{__('common.courses.show.title')}}
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@
     <div class="col-3">
       <div class="card card-primary card-outline">
         <div class="card-header">
-            <a href="{{ route('courses.index') }}" class="btn btn-outline-info">Back</a>
+            <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
         </div>
         <div class="card-body box-profile">
           @if (!empty($course->image))
@@ -32,27 +32,27 @@
       
           <ul class="list-group list-group-unbordered mb-3">
             <li class="list-group-item">
-              <b>Author</b> <a class="float-right">{{ $course->author->name }}</a>
+              <b>{{__('common.courses.attributes.author')}}</b> <a class="float-right">{{ $course->author->name }}</a>
             </li>
             <li class="list-group-item">
-              <b>Institution</b> <a class="float-right">{{ $course->institution->name }}</a>
+              <b>{{__('common.courses.attributes.institution')}}</b> <a class="float-right">{{ $course->institution->name }}</a>
             </li>
             @foreach ($course->schedules as $index => $schedule)
               <li class="list-group-item">
                 <b>@if ($index == 0)
-                    Schedule
+                    {{__('common.courses.attributes.schedule')}}
                 @endif</b> <a class="float-right">{{ \Carbon\Carbon::parse($schedule->date)->format('M, d Y') . ' (' .\Carbon\Carbon::parse($schedule->start_time)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end_time)->format('H:i') . ')' }}</a>
               </li>
             @endforeach
             <li class="list-group-item">
-              <b>Created at</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->created_at)->format("M, d Y H:i:s") }}</a>
+              <b>{{__('common.courses.show.created_at')}}</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->created_at)->format("M, d Y H:i:s") }}</a>
             </li>
             <li class="list-group-item">
-              <b>Last Update</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->updated_at)->format("M, d Y H:i:s") }}</a>
+              <b>{{__('common.courses.show.updated_at')}}</b> <a class="float-right">{{ \Carbon\Carbon::parse($course->updated_at)->format("M, d Y H:i:s") }}</a>
             </li>
           </ul>
       
-          <a href="#" class="btn btn-primary btn-block"><b>Open</b></a>
+          <a href="#" class="btn btn-primary btn-block"><b>{{__('common.courses.actions.open')}}</b></a>
         </div>
         <!-- /.card-body -->
       </div>
@@ -89,7 +89,7 @@
                     <div class="col-md-12">
                       <div class="card card-success">
                         <div class="card-header">
-                          <h3 class="card-title text-bold">{{ 'Chapter ' . $chapter->chapter . ' - ' . $chapter->title }}</h3>
+                          <h3 class="card-title text-bold">{{ __('common.courses.attributes.chapter'). ' ' . $chapter->chapter . ' - ' . $chapter->title }}</h3>
                           <div class="card-tools">
                             @can('chapter-edit')
                               <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $chapter->id }}" data-chapter="{{ $chapter->chapter }}" data-title="{{ $chapter->title }}" data-attachment="{{ $chapter->attachment }}" data-attachment_title="{{ $chapter->attachment_title }}" class="edit-chapter-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
@@ -104,7 +104,7 @@
                         <div class="card-body">
                           <div class="timeline">
                             <div class="time-label">
-                              <span class="bg-green">Sub Chapters</span>
+                              <span class="bg-green">{{__('common.courses.show.sub_chapters')}}</span>
                             </div>
                             @can('sub-chapter-list')
                               {{-- Populating sub chapters --}}
@@ -123,9 +123,9 @@
                                       @endif
                                     </div>
                                     <div class="timeline-footer">
-                                      <a class="btn btn-primary btn-sm">Open</a>
-                                      <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}" data-materials="{{$sub_chapter->materials}}">Edit</a>
-                                      <a class="delete-sub-chapter-modal btn btn-danger btn-sm" data-id="{{$sub_chapter->id}}">Delete</a>
+                                      <a class="btn btn-sm btn-primary">{{__('common.courses.actions.open')}}</a>
+                                      <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}" data-materials="{{$sub_chapter->materials}}">{{__('common.courses.actions.edit')}}</a>
+                                      <a class="delete-sub-chapter-modal btn btn-danger btn-sm" data-id="{{$sub_chapter->id}}">{{__('common.courses.actions.delete')}}</a>
                                     </div>
                                   </div>
                                 </div>
@@ -135,7 +135,7 @@
                               <div>
                                 <i class="fas fa-plus bg-maroon"></i>
                                 <div class="timeline-item">
-                                  <h3 class="timeline-header"><a href="#">Add Sub Chapter</a></h3>
+                                  <h3 class="timeline-header"><a href="#">{{__('common.courses.show.add_sub_chapter')}}</a></h3>
                 
                                   <div class="timeline-body">
                                     {{-- Add sub chapter --}}
@@ -144,24 +144,22 @@
                                     <div class="row">
                                       <div class="col-md-2">
                                         <div class="form-group">
-                                          {{ Form::text('sub_chapter', null, array('placeholder' => 'A','class' => 'form-control')) }}
+                                          {{ Form::text('sub_chapter', null, array('placeholder' => __('common.courses.attributes.sub_chapter_placeholder'), 'class' => 'form-control')) }}
                                         </div>
                                       </div>
                                       <div class="col-md-10">
                                         <div class="form-group">
-                                          {{ Form::text('title', null, array('placeholder' => 'Sub Chapter Title', 'class' => 'form-control')) }}
+                                          {{ Form::text('title', null, array('placeholder' => __('common.courses.attributes.sub_chapter_title_placeholder'), 'class' => 'form-control')) }}
                                         </div>
                                       </div>
                                       <div class="col-md-12">
                                         <div class="form-group">
-                                          {{ Form::text('materials', null, array('placeholder' => 'Put your video link or something feeling good here', 'class' => 'form-control')) }}
+                                          {{ Form::text('materials', null, array('placeholder' => __('common.courses.attributes.materials_placeholder'), 'class' => 'form-control')) }}
                                         </div>
                                       </div>
                                     </div>
                                     {{-- Add sub chapter --}}
-                                  </div>
-                                  <div class="timeline-footer">
-                                    <button class="btn btn-sm btn-primary col-12" type="submit"></i>Process</button>
+                                    <button class="btn btn-sm btn-primary col-12" type="submit"></i>{{__('common.courses.actions.process')}}</button>
                                   </div>
                                   {{ Form::close() }}
                                 </div>
@@ -170,7 +168,7 @@
                             @can('chapter-list')
                               @if (!empty($chapter->attachment))
                                 <div class="time-label">
-                                  <span class="bg-green">Attachment</span>
+                                  <span class="bg-green">{{__('common.courses.attributes.attachment')}}</span>
                                 </div>
                                 <div>
                                   <i class="fas fa-paperclip bg-purple"></i>
@@ -182,8 +180,8 @@
                                       {{ $chapter->attachment }}
                                     </div>
                                     <div class="timeline-footer">
-                                      <a class="btn btn-primary btn-sm">Open</a>
-                                      <a data-id="{{ $chapter->id }}" class="delete-chapter-file-modal btn btn-danger btn-sm">Delete File</a>
+                                      <a href="{{asset('storage/' . $chapter->attachment)}}" class="btn btn-primary btn-sm">{{__('common.courses.actions.open')}}</a>
+                                      <a data-id="{{ $chapter->id }}" class="delete-chapter-file-modal btn btn-danger btn-sm">{{__('common.courses.actions.delete')}}</a>
                                     </div>
                                   </div>
                                 </div>
@@ -207,7 +205,7 @@
                   <div class="card-header">
                     <h4 class="card-title text-center">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="text-center">
-                        Add Chapter
+                        {{__('common.courses.show.add_chapter')}}
                       </a>
                     </h4>
                   </div>
@@ -218,17 +216,17 @@
                       <div class="row">
                         <div class="col-md-2">
                           <div class="form-group">
-                            {{ Form::text('chapter', null, array('placeholder' => 'XI','class' => 'form-control')) }}
+                            {{ Form::text('chapter', null, array('placeholder' => __('common.courses.attributes.chapter_placeholder'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-10">
                           <div class="form-group">
-                            {{ Form::text('title', null, array('placeholder' => 'Chapter Title', 'class' => 'form-control')) }}
+                            {{ Form::text('title', null, array('placeholder' => __('common.courses.attributes.chapter_title_placeholder'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div id="attachment-title-div" class="col-md-5">
                           <div class="form-group">
-                            {{ Form::text('attachment_title', null, array('placeholder' => 'Attachment Title', 'class' => 'form-control')) }}
+                            {{ Form::text('attachment_title', null, array('placeholder' => __('common.courses.attributes.attachment_title_placeholder'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div id="attachment-div" class="col-md-5">
@@ -237,7 +235,7 @@
                           </div>
                         </div>
                         <div class="col-md-2">
-                          <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
+                          <button class="btn btn-primary col-12" type="submit">{{__('common.courses.actions.process')}}</button>
                         </div>
                       </div>
                       {{ Form::close() }}
@@ -282,25 +280,25 @@
                             <li class="list-group-item">
                               <b>Type</b> <a class="float-right">
                                 @if ($test->type == '0')
-                                  Chapter Test
+                                  {{__('common.courses.attributes.test_type_chapter')}}
                                 @elseif($test->type == '1')
-                                  Mid Test
+                                  {{__('common.courses.attributes.test_type_middle')}}
                                 @else
-                                  Final Test
+                                  {{__('common.courses.attributes.test_type_final')}}
                                 @endif</a>
                             </li>
                             <li class="list-group-item">
-                              <b>Assign</b> <a class="float-right">
+                              <b>{{__('common.courses.attributes.test_assign')}}</b> <a class="float-right">
                                 @if ($test->assign == '0')
-                                  <label class="badge badge-warning">NOT ASSIGNED</label>
+                                  <label class="badge badge-warning">{{__('common.courses.attributes.test_not_assigned')}}</label>
                                 @else
-                                  <label class="badge badge-success">ASSIGNED</label>
+                                  <label class="badge badge-success">{{__('common.courses.attributes.test_assigned')}}</label>
                                 @endif
                               </a>
                             </li>
                             @if (!empty($test->description))
                             <li class="list-group-item">
-                              <b>Description</b> <a class="float-right">
+                              <b>{{__('common.courses.attributes.description')}}</b> <a class="float-right">
                                 {{$test->description}}
                               </a>
                             </li>
@@ -308,7 +306,7 @@
                           </ul>
                         </div>
                         <div class="card-footer">
-                          <a class="btn btn-primary" href="/courses/{{$course->id}}/tests/{{$test->id}}">Open</a>
+                          <a class="btn btn-primary" href="/courses/{{$course->id}}/tests/{{$test->id}}">{{__('common.courses.actions.open')}}</a>
                         </div>
                       </div>
                     </div>
@@ -323,7 +321,7 @@
                   <div class="card-header">
                     <h4 class="card-title text-center">
                       <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" class="text-center">
-                        Add Test
+                        {{__('common.courses.show.add_test')}}
                       </a>
                     </h4>
                   </div>
@@ -334,31 +332,31 @@
                       <div class="row">
                         <div class="col-md-2">
                           <div class="form-group">
-                            {{ Form::number('order', null, array('placeholder' => 'Test Order', 'class' => 'form-control')) }}
+                            {{ Form::number('order', null, array('placeholder' => __('common.courses.attributes.test_order'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-10">
                           <div class="form-group">
-                            {{ Form::text('title', null, array('placeholder' => 'Test Title', 'class' => 'form-control')) }}
+                            {{ Form::text('title', null, array('placeholder' => __('common.courses.attributes.test_title'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                            {{ Form::select('type', ['0' => 'Chapter Test', '1' => 'Mid Test', '2' => 'Final Test'], null, array('class' => 'form-control')) }}
+                            {{ Form::select('type', ['0' => __('common.courses.attributes.test_type_chapter'), '1' => __('common.courses.attributes.test_type_middle'), '2' => __('common.courses.attributes.test_type_final')], null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.test_type'))) }}
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-group">
-                            {{ Form::select('assign', ['0' => 'Not Assigned', '1' => 'Assigned'], null, array('class' => 'form-control')) }}
+                            {{ Form::select('assign', ['0' => __('common.courses.attributes.test_not_assigned'), '1' => __('common.courses.attributes.test_assigned')], null, array('class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-10">
                           <div class="form-group">
-                            {{ Form::text('description', null, array('placeholder' => 'Test description', 'class' => 'form-control')) }}
+                            {{ Form::text('description', null, array('placeholder' => __('common.courses.attributes.description'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-2">
-                          <button class="btn btn-primary col-12" type="submit">Add Chapter</button>
+                          <button class="btn btn-primary col-12" type="submit">{{__('common.courses.actions.process')}}</button>
                         </div>
                       </div>
                       {{ Form::close() }}
@@ -414,9 +412,9 @@
                             <a href="/courses/{{$course->id}}/schedules/{{$schedule->id}}/attendances">{{\Carbon\Carbon::parse($date)->format('M, d Y')}}</a>
                           </div>
                           <div class="col-md-10">
-                            <label class="badge badge-success">Present : {{ $attendance->where('status', '1')->count() - 1}}</label>
-                            <label class="badge badge-danger">Absent : {{ $attendance->where('status', '0')->count() }}</label>
-                            <a href="{{route('users.show', \App\User::find($attendance->last()['user_id'])->id)}}"><label class="badge badge-primary">Signer : {{ \App\User::find($attendance->last()['user_id'])->name }}</label></a>
+                            <label class="badge badge-success">{{__('common.courses.attributes.present')}} : {{ $attendance->where('status', '1')->count() - 1}}</label>
+                            <label class="badge badge-danger">{{__('common.courses.attributes.absent')}} : {{ $attendance->where('status', '0')->count() }}</label>
+                            <a href="{{route('users.show', \App\User::find($attendance->last()['user_id'])->id)}}"><label class="badge badge-primary">{{__('common.courses.attributes.signer')}} : {{ \App\User::find($attendance->last()['user_id'])->name }}</label></a>
                           </div>
                         </div>
                       </div>
@@ -440,24 +438,24 @@
                 <div class="col-md-1">
                   <div class="card card-body p-0 card-warning card-outline text-center">
                     <p class="mb-1" style="font-size: 20px">{{$post->forumReplies->count()}}</p>
-                    <p style="font-size: 10px">Votes</p>
+                    <p style="font-size: 10px">{{__('common.courses.attributes.votes')}}</p>
                   </div>
                 </div>
                 <div class="col-md-1">
                   <div class="card card-body p-0 card-success card-outline text-center">
                     <p class="mb-1" style="font-size: 20px">{{$post->forumReplies->count()}}</p>
-                    <p style="font-size: 10px">Replies</p>
+                    <p style="font-size: 10px">{{__('common.courses.attributes.replies')}}</p>
                   </div>
                 </div>
                 <div class="col-md-10">
                   <a class="col-md-12" style="font-size: 28px;" href="/courses/{{$course->id}}/forum/{{$post->slug}}">
                     {{$post->title}}
                   </a>
-                  <p class="col-md-12 text-right" style="font-size: 12px;">Asked by <a style="font-size: 12px;" href="{{route('users.show', $post->user->id)}}">{{$post->user->name}}</a> on {{\Carbon\Carbon::parse($post->updated_at)->format('M d, Y')}}</p>
+                  <p class="col-md-12 text-right" style="font-size: 12px;">{{__('common.courses.attributes.asked_by')}} <a style="font-size: 12px;" href="{{route('users.show', $post->user->id)}}">{{$post->user->name}}</a> {{__('common.courses.attributes.on')}} {{\Carbon\Carbon::parse($post->updated_at)->format('M d, Y')}}</p>
                 </div>
                 @endforeach
                 <div class="col-md-12">
-                  <a href="/courses/{{$course->id}}/forum/create" class="col-md-12 btn btn-primary">Create Post</a>
+                  <a href="/courses/{{$course->id}}/forum/create" class="col-md-12 btn btn-primary">{{__('common.courses.actions.post')}}</a>
                 </div>
               </div>
               <!-- /.post -->
@@ -477,7 +475,7 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Edit Chapter</h4>
+            <h4>{{__('common.courses.show.edit_chapter')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
@@ -491,32 +489,32 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="chapter">Chapter:</label>
+                <label class="control-label col-md-12" for="chapter">{{__('common.courses.attributes.chapter')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="chapter" class="form-control" id="chapter-edit-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Title:</label>
+                <label class="control-label col-md-12" for="title">{{__('common.courses.attributes.title')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="attachment">Attachment:</label>
+                <label class="control-label col-md-12" for="attachment">{{__('common.courses.attributes.attachment')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="file" name="attachment" class="form-control" id="attachment-edit-chapter">
                 </div>
               </div>
               <div id="existing-attachment-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-6" for="ex_attachment">Existing Attachment:</label>
+                <label class="control-label col-md-6" for="ex_attachment">{{__('common.courses.attributes.existing_attachment')}}:</label>
                 <a id="delete-button-edit-chapter" class="btn btn-sm float-right" href="url"><i class="fas fa-times"></i></a>
                 <div class="col-md-12">
                   <input value="" type="text" name="ex_attachment" class="col-md-12 form-control" id="existing-attachment-edit-chapter" disabled>
                 </div>
               </div>
               <div id="attachment-title-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-12" for="attachment_title">Attachment Title:</label>
+                <label class="control-label col-md-12" for="attachment_title">{{__('common.courses.attributes.attachment_title')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="attachment_title" class="form-control" id="attachment-title-edit-chapter">
                 </div>
@@ -524,8 +522,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-edit-chapter">Process</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">{{__('common.courses.actions.process')}}</button>
           </div>
         </div>
       </form>
@@ -538,11 +536,11 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Be careful!</h4>
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Are you sure want to delete this chapter?
+            {{__('common.courses.show.be_careful_msg')}}
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-10">
@@ -552,8 +550,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">{{__('common.courses.actions.delete')}}</button>
           </div>
         </div>
       </form>
@@ -566,11 +564,11 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Be careful!</h4>
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Are you sure want to delete this chapter file attachment?
+            {{__('common.courses.show.be_careful_msg')}}
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-10">
@@ -580,8 +578,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">{{__('common.courses.actions.delete')}}</button>
           </div>
         </div>
       </form>
@@ -594,7 +592,7 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Edit Test</h4>
+            <h4>{{__('common.courses.show.edit_test')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
@@ -608,31 +606,31 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="order">Order:</label>
+                <label class="control-label col-md-12" for="order">{{__('common.courses.attributes.test_order')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="number" name="order" class="form-control" id="order-edit-test">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Title:</label>
+                <label class="control-label col-md-12" for="title">{{__('common.courses.attributes.title')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-test">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Title:</label>
+                <label class="control-label col-md-12" for="type">{{__('common.courses.attributes.type')}}:</label>
                 <div class="col-md-12">
                   {{Form::select('type', ['0' => 'Chapter Test', '1' => 'Mid Test', '2' => 'Final Test'], null, array('id' => 'type-edit-test', 'class' => 'form-control'))}}
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Title:</label>
+                <label class="control-label col-md-12" for="assign">{{__('common.courses.attributes.test_assign')}}:</label>
                 <div class="col-md-12">
                   {{Form::select('assign', ['0' => 'Not Assigned', '1' => 'Assigned'], null, array('id' => 'assign-edit-test', 'class' => 'form-control'))}}
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Description:</label>
+                <label class="control-label col-md-12" for="description">{{__('common.courses.attributes.description')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="description" class="form-control" id="description-edit-test">
                 </div>
@@ -640,8 +638,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-edit-chapter">Process</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">{{__('common.courses.actions.process')}}</button>
           </div>
         </div>
       </form>
@@ -654,11 +652,11 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Be careful!</h4>
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Are you sure want to delete this test?
+            {{__('common.courses.show.be_careful_msg')}}
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-10">
@@ -668,8 +666,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">{{__('common.courses.actions.delete')}}</button>
           </div>
         </div>
       </form>
@@ -682,7 +680,7 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Edit Sub Chapter</h4>
+            <h4>{{__('common.courses.show.edit_sub_chapter')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
@@ -696,19 +694,19 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="sub_chapter">Sub Chapter:</label>
+                <label class="control-label col-md-12" for="sub_chapter">{{__('common.courses.attributes.sub_chapter')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="sub_chapter" class="form-control" id="chapter-edit-sub-chapter">
                 </div>
               </div>
               <div class="form-group">
-                <label class="control-label col-md-12" for="title">Title:</label>
+                <label class="control-label col-md-12" for="title">{{__('common.courses.attributes.title')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-sub-chapter">
                 </div>
               </div>
               <div id="attachment-title-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-2" for="materials">Materials:</label>
+                <label class="control-label col-md-2" for="materials">{{__('common.courses.attributes.materials')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="materials" class="form-control" id="materials-edit-sub-chapter">
                 </div>
@@ -716,8 +714,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary btn-edit-sub-chapter">Process</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-primary btn-edit-sub-chapter">{{__('common.courses.actions.process')}}</button>
           </div>
         </div>
       </form>
@@ -730,11 +728,11 @@
         @csrf
         <div class="modal-content">
           <div class="modal-header">
-            <h4>Be careful!</h4>
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
           <div class="modal-body">
-            Are you sure want to delete this sub chapter?
+            {{__('common.courses.show.be_careful_msg')}}
             <form class="form-horizontal" role="form">
               <div class="form-group">
                 <div class="col-sm-10">
@@ -744,8 +742,8 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-danger btn-edit-chapter">Delete</button>
+            <button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-danger btn-edit-chapter">{{__('common.courses.actions.delete')}}</button>
           </div>
         </div>
       </form>

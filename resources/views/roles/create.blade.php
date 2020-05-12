@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Create Role
+  {{__('common.roles.create.title')}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 			{{ Form::open(array('route' => 'roles.store','method'=>'POST')) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('roles.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('roles.index') }}" class="btn btn-outline-info">{{__('common.roles.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if(!empty($errors->all()))
@@ -21,13 +21,13 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="form-group">
-									{{ Form::label('name', 'Name') }}
-									{{ Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) }}
+									{{ Form::label('name', __('common.roles.attributes.name')) }}
+									{{ Form::text('name', null, array('placeholder' => __('common.roles.attributes.name_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-12">
 								<div class="form-group">
-									{{ Form::label('permission', 'Permission') }}
+									{{ Form::label('permission', __('common.roles.attributes.permission')) }}
 									<div class="row">
 									@foreach($permission as $value)
 										<div class="card card-body col-md-3">
@@ -43,7 +43,7 @@
 						</div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.roles.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 			{{ Form::close() }}

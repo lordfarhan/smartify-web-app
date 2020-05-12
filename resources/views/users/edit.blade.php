@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-	Edit User
+	{{__('common.users.edit.title')}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 			{{ Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id], 'files' => true]) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('users.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('users.index') }}" class="btn btn-outline-info">{{__('common.users.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if (!empty($errors->all()))
@@ -21,152 +21,77 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('name', 'Name') }}
-									{{ Form::text('name', $user->name, ['class' => 'form-control', 'placeholder' => 'User Name']) }}
+									{{ Form::label('name', __('common.users.attributes.name')) }}
+									{{ Form::text('name', $user->name, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.name_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('email', 'Email') }}
-									{{ Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => 'user@domain.com']) }}
+									{{ Form::label('email', __('common.users.attributes.email')) }}
+									{{ Form::text('email', $user->email, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.email_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('phone', 'Phone') }}
-									{{ Form::text('phone', $user->phone, ['class' => 'form-control', 'placeholder' => '081111111']) }}
+									{{ Form::label('phone', __('common.users.attributes.phone')) }}
+									{{ Form::text('phone', $user->phone, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.phone_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('address', 'Address') }}
-									{{ Form::text('address', $user->address, ['class' => 'form-control', 'placeholder' => 'Some Location']) }}
+									{{ Form::label('address', __('common.users.attributes.address')) }}
+									{{ Form::text('address', $user->address, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.address_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('roles', 'Roles') }}
+									{{ Form::label('roles', __('common.users.attributes.roles')) }}
 									{{ Form::select('roles[]', $roles, $userRole, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('institution_id', 'Institution') }}
+									{{ Form::label('institution_id', __('common.users.attributes.institution')) }}
 									{{ Form::select('institution_id', $institutions, $user->institution_id, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('date_of_birth', 'Date of Birth') }}
+									{{ Form::label('date_of_birth', __('common.users.attributes.date_of_birth')) }}
 									{{ Form::date('date_of_birth', \Carbon\Carbon::parse($user->date_of_birth), ['class' => 'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('gender', 'Gender') }}
-									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], $user->gender, ['class' => 'form-control']) }}
+									{{ Form::label('gender', __('common.users.attributes.gender')) }}
+									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], $user->gender, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.gender_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('image', 'Image') }}
+									{{ Form::label('image', __('common.users.attributes.image')) }}
 									{{ Form::file('image', ['class'=>'form-control']) }}        
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('password', 'Password') }}
-									{{ Form::password('password', array('placeholder' => 'Empty if you do not desire to change password', 'class' => 'form-control')) }}
+									{{ Form::label('password', __('common.users.attributes.password')) }}
+									{{ Form::password('password', array('placeholder' => __('common.users.attributes.password_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('confirm-password', 'Confirm Password') }}
-									{{ Form::password('confirm-password', array('placeholder' => 'Empty if you do not desire to change password','class' => 'form-control')) }}
+									{{ Form::label('confirm-password', __('common.users.attributes.confirm_password')) }}
+									{{ Form::password('confirm-password', array('placeholder' => __('common.users.attributes.confirm_password_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.users.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 			{{ Form::close() }}
 		</div>
 	</div>
 @endsection
-
-{{-- @section('content')
-<div class="row">
-    <div class="col-lg-12 margin-tb">
-        <div class="pull-left">
-            <h2>Edit New User</h2>
-        </div>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
-        </div>
-    </div>
-</div>
-
-@if (count($errors) > 0)
-  <div class="alert alert-danger">
-    <strong>Whoops!</strong> There were some problems with your input.<br><br>
-    <ul>
-       @foreach ($errors->all() as $error)
-         <li>{{ $error }}</li>
-       @endforeach
-    </ul>
-  </div>
-@endif
-
-{!! Form::model($user, ['method' => 'PATCH','route' => ['users.update', $user->id]]) !!}
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            {!! Form::text('name', null, array('placeholder' => 'Name','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Email:</strong>
-            {!! Form::text('email', null, array('placeholder' => 'Email','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Phone:</strong>
-            {!! Form::text('phone', null, array('placeholder' => 'Phone','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Address:</strong>
-            {!! Form::text('address', null, array('placeholder' => 'Address','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Password:</strong>
-            {!! Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Confirm Password:</strong>
-            {!! Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Role:</strong>
-            {!! Form::select('roles[]', $roles,$userRole, array('class' => 'form-control','multiple')) !!}
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </div>
-</div>
-{!! Form::close() !!}
-
-@endsection --}}

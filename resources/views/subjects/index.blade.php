@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-    Subjects Management
+  {{__('common.subjects.index.title')}}
 @endsection
 
 @section('content')
@@ -19,17 +19,17 @@
 <div class="card">
 	<div class="card-header">
 		@can('subject-create')
-			<a class="btn btn-success" href="{{ route('subjects.create') }}"> Create New subject</a>
+			<a class="btn btn-success" href="{{ route('subjects.create') }}"> {{__('common.subjects.actions.create')}}</a>
 		@endcan
 	</div>
 	<div class="card-body">
 		<table id="table1" class="table table-bordered table-striped">
 			<thead>
 				<tr>
-					<th width="20px">No</th>
-					<th>Name</th>
-					<th>Information</th>
-					<th width="117px">Action</th>
+					<th width="20px">{{__('common.subjects.attributes.no')}}</th>
+					<th>{{__('common.subjects.attributes.subject')}}</th>
+					<th>{{__('common.subjects.attributes.information')}}</th>
+					<th width="117px">{{__('common.subjects.attributes.action')}}</th>
 				</tr>
 			</thead>
 			<tbody>

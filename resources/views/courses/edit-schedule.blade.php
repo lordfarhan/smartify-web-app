@@ -8,7 +8,7 @@
 @endsection
 
 @section('title')
-    Edit Course
+    {{__('common.courses.edit.title')}}
 @endsection
 
 @section('content')
@@ -17,27 +17,27 @@
             {{ Form::open(array('route' => 'courses.updateSchedule','method'=>'POST')) }}
 			<div class="card">
 				<div class="card-header">
-                    <a href="{{ route('courses.index') }}" class="btn btn-outline-info">Back</a>
+                    <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
                 </div>
 				<div class="card-body">
 					@if(!empty($errors->all()))
-                    <div class="alert alert-danger">
-                        {{ Html::ul($errors->all())}}
-                    </div>
-                    @endif
+            <div class="alert alert-danger">
+              {{ Html::ul($errors->all())}}
+            </div>
+          @endif
 					<input value="{{$course->id}}" name="id" type="hidden">
 					<div class="row" id="schedule-row">
 						<div class="col-md-6">
-							<label for="date[]">Date</label>
+							<label for="date[]">{{__('common.courses.attributes.date')}}</label>
 						</div>
 						<div class="col-md-2">
-							<label for="start_time[]">Start Course</label>
+							<label for="start_time[]">{{__('common.courses.attributes.start_course')}}</label>
 						</div>
 						<div class="col-md-2">
-							<label for="end_time[]">End Course</label>
+							<label for="end_time[]">{{__('common.courses.attributes.end_course')}}</label>
 						</div>
 						<div class="col-md-2">
-							<label for="add-schedule-row" class="text-white">Add Day</label>
+							<label for="add-schedule-row" class="text-white">{{__('common.courses.actions.add')}}</label>
 						</div>
 						@foreach ($course->schedules as $index => $schedule)
 						<div class="col-md-6 mb-3">
@@ -65,13 +65,13 @@
 							</div>
 						</div>
 						<div class="col-md-2">
-							<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>
+							<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">{{__('common.courses.actions.remove')}}</i></button>
 						</div>
 						@endforeach
 					</div>
 					<div id="new-schedule-row"></div>
 					<div id="new-schedule-script"></div>
-					<button id="add-schedule-row" type="button" class="btn btn-primary col-12">Add Field</i></button>
+					<button id="add-schedule-row" type="button" class="btn btn-primary col-12">{{__('common.courses.actions.add')}}</i></button>
 				</div>
 				<div class="card-footer text-right">
 					{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
@@ -133,7 +133,7 @@
 			html += '</div>';
 			html += '</div>';
 			html += '<div class="col-md-2">';
-			html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">Remove</i></button>';
+			html += '<button id="remove-schedule-row" type="button" class="btn btn-danger col-12">{{__("common.courses.actions.remove")}}</i></button>';
 			html += '</div>';
 			html += '</div>';
 

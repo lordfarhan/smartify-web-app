@@ -1,45 +1,45 @@
 @extends('layouts.app')
 
 @section('title')
-    Edit Grade
+  {{__('common.institutions.edit.title')}}
 @endsection
 
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            {{ Form::model($institution, ['method' => 'PATCH','route' => ['institutions.update', $institution->id], 'files' => true]) }}
-            <div class="card">
-                <div class="card-header">
-                    <a href="{{ route('institutions.index') }}" class="btn btn-outline-info">Back</a>
-                </div>
-                <div class="card-body">
-                    @if(!empty($errors->all()))
-                    <div class="alert alert-danger">
-                        {{ Html::ul($errors->all())}}
-                    </div>
-                    @endif
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{ Form::label('name', 'Name') }}
-                                {{ Form::text('name', $institution->name, array('placeholder' => 'Codeiva Edu','class' => 'form-control')) }}
-                            </div>
-                            <div class="form-group">
-                                {{ Form::label('description', 'Description') }}
-                                {{ Form::text('description', $institution->description, array('placeholder' => 'Optional information about institution','class' => 'form-control')) }}
-                            </div>
-                            <div class="form-group">
-                                {{ Form::label('image', 'Image') }}
-                                {{ Form::file('image', ['class'=>'form-control']) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer text-right">
-                    {{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
-                </div>
-            </div>
-            {{ Form::close() }}
+  <div class="row">
+    <div class="col-12">
+      {{ Form::model($institution, ['method' => 'PATCH','route' => ['institutions.update', $institution->id], 'files' => true]) }}
+      <div class="card">
+        <div class="card-header">
+          <a href="{{ route('institutions.index') }}" class="btn btn-outline-info">{{__('common.institutions.actions.back')}}</a>
         </div>
+        <div class="card-body">
+          @if(!empty($errors->all()))
+          <div class="alert alert-danger">
+            {{ Html::ul($errors->all())}}
+          </div>
+          @endif
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                {{ Form::label('name', __('common.institutions.attributes.name')) }}
+                {{ Form::text('name', $institution->name, array('placeholder' => __('common.institutions.attributes.name_placeholder'), 'class' => 'form-control')) }}
+              </div>
+              <div class="form-group">
+                {{ Form::label('description', __('common.institutions.attributes.description')) }}
+                {{ Form::text('description', $institution->description, array('placeholder' => __('common.institutions.attributes.description_placeholder'),'class' => 'form-control')) }}
+              </div>
+              <div class="form-group">
+                {{ Form::label('image', __('common.institutions.attributes.image')) }}
+                {{ Form::file('image', ['class'=>'form-control']) }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-right">
+            {{ Form::submit(__('common.institutions.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
+        </div>
+      </div>
+      {{ Form::close() }}
     </div>
+  </div>
 @endsection

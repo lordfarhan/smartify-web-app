@@ -69,4 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('forumPosts', 'ForumPostController');
     Route::resource('forumReplies', 'ForumReplyController');
+
 });
+
+Route::get('lang/{locale}', 'HomeController@lang');

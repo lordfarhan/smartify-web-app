@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-    Roles Management
+  {{__('common.roles.index.title')}}
 @endsection
 
 @section('content')
@@ -19,16 +19,16 @@
 <div class="card">
 	<div class="card-header">
 		@can('role-create')
-			<a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
+			<a class="btn btn-success" href="{{ route('roles.create') }}"> {{__('common.roles.actions.create')}}</a>
 		@endcan
 	</div>
 	<div class="card-body">
 		<table id="table1" class="table table-bordered table-striped">
 			<thead>
 				<tr>
-					<th width="20px">No</th>
-					<th>Name</th>
-					<th width="117px">Action</th>
+					<th width="20px">{{__('common.roles.attributes.no')}}</th>
+					<th>{{__('common.roles.attributes.name')}}</th>
+					<th width="117px">{{__('common.roles.attributes.action')}}</th>
 				</tr>
 			</thead>
 			<tbody>

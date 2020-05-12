@@ -32,9 +32,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset("lte/dist/css/adminlte.min.css") }}">
+
+  <!-- flag-icon-css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
   
 	<!-- Google Font: Source Sans Pro -->
-  {{-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet"> --}}
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   @yield('head')
 </head>
 <body class="hold-transition sidebar-mini">

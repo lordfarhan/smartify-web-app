@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-    Grades Management
+  {{__('common.grades.index.title')}}
 @endsection
 
 @section('content')
@@ -19,18 +19,18 @@
 <div class="card">
 	<div class="card-header">
 		@can('grade-create')
-			<a class="btn btn-success" href="{{ route('grades.create') }}"> Create New grade</a>
+			<a class="btn btn-success" href="{{ route('grades.create') }}"> {{__('common.grades.actions.create')}}</a>
 		@endcan
 	</div>
 	<div class="card-body">
 		<table id="table1" class="table table-bordered table-striped">
 			<thead>
 				<tr>
-					<th width="20px">No</th>
-					<th>Name</th>
-					<th>Educational Stage</th>
-					<th>Information</th>
-					<th width="117px">Action</th>
+					<th width="20px">{{__('common.grades.attributes.no')}}</th>
+					<th>{{__('common.grades.attributes.grade')}}</th>
+					<th>{{__('common.grades.attributes.educational_stage')}}</th>
+					<th>{{__('common.grades.attributes.information')}}</th>
+					<th width="117px">{{__('common.grades.attributes.action')}}</th>
 				</tr>
 			</thead>
 			<tbody>

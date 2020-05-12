@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-    Courses Management
+    {{__('common.courses.index.title')}}
 @endsection
 
 @section('content')
@@ -26,7 +26,7 @@
 	</div>
 	<div class="card-body">
 		@can('course-create')
-			<a class="btn btn-success mb-3" href="{{ route('courses.create') }}"> Create New course</a>
+			<a class="btn btn-success mb-3" href="{{ route('courses.create') }}"> {{__('common.courses.actions.create')}}</a>
 		@endcan
 		<div class="tab-content">
 		@foreach ($grades as $index => $grade)			
@@ -34,15 +34,15 @@
 				<table id="table{{$grade->id}}" class="table table-bordered table-striped">
 					<thead>
 						<tr>
-							<th width="20px">No</th>
-							<th>Institution</th>
-							<th>Subject</th>
-							<th>Grade</th>
-							<th>Author</th>
-							<th>Type</th>
-							<th>Status</th>
-							<th>Image</th>
-							<th width="162px">Action</th>
+							<th width="20px">{{__('common.courses.attributes.no')}}</th>
+							<th>{{__('common.courses.attributes.institution')}}</th>
+							<th>{{__('common.courses.attributes.subject')}}</th>
+							<th>{{__('common.courses.attributes.grade')}}</th>
+							<th>{{__('common.courses.attributes.author')}}</th>
+							<th>{{__('common.courses.attributes.type')}}</th>
+							<th>{{__('common.courses.attributes.status')}}</th>
+							<th>{{__('common.courses.attributes.image')}}</th>
+							<th width="162px">{{__('common.courses.attributes.action')}}</th>
 						</tr>
 					</thead>
 					<tbody>

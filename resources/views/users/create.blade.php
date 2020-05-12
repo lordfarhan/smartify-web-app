@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-	Create User
+	{{__('common.users.create.title')}}
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
 			{{ Form::open(array('route' => 'users.store', 'method' => 'post', 'files' => true)) }}
 				<div class="card">
 					<div class="card-header">
-						<a href="{{ route('users.index') }}" class="btn btn-outline-info">Back</a>
+						<a href="{{ route('users.index') }}" class="btn btn-outline-info">{{__('common.users.actions.back')}}</a>
 					</div>
 					<div class="card-body">
 						@if (!empty($errors->all()))
@@ -21,74 +21,74 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('name', 'Name') }}
-									{{ Form::text('name', '', ['class' => 'form-control', 'placeholder' => 'User Name']) }}
+									{{ Form::label('name', __('common.users.attributes.name')) }}
+									{{ Form::text('name', '', ['class' => 'form-control', 'placeholder' => __('common.users.attributes.name_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('email', 'Email') }}
-									{{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => 'user@domain.com']) }}
+									{{ Form::label('email', __('common.users.attributes.email')) }}
+									{{ Form::text('email', '', ['class' => 'form-control', 'placeholder' => __('common.users.attributes.email_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('phone', 'Phone') }}
-									{{ Form::text('phone', '', ['class' => 'form-control', 'placeholder' => '081100000']) }}
+									{{ Form::label('phone', __('common.users.attributes.phone')) }}
+									{{ Form::text('phone', '', ['class' => 'form-control', 'placeholder' => __('common.users.attributes.phone_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('address', 'Address') }}
-									{{ Form::text('address', '', ['class' => 'form-control', 'placeholder' => 'Location Unknown']) }}
+									{{ Form::label('address', __('common.users.attributes.address')) }}
+									{{ Form::text('address', '', ['class' => 'form-control', 'placeholder' => __('common.users.attributes.address_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('roles', 'Roles') }}
+									{{ Form::label('roles', __('common.users.attributes.roles')) }}
 									{{ Form::select('roles[]', $roles, [], array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('institution_id', 'Institution') }}
+									{{ Form::label('institution_id', __('common.users.attributes.institution')) }}
 									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('date_of_birth', 'Date of Birth') }}
+									{{ Form::label('date_of_birth', __('common.users.attributes.date_of_birth')) }}
 									{{ Form::date('date_of_birth', \Carbon\Carbon::now(), ['class' => 'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									{{ Form::label('gender', 'Gender') }}
-									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], '0', ['class' => 'form-control']) }}
+									{{ Form::label('gender', __('common.users.attributes.gender')) }}
+									{{ Form::select('gender', ['0' => 'Male', '1' => 'Female'], null, ['class' => 'form-control', 'placeholder' => __('common.users.attributes.gender_placeholder')]) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('image', 'Image') }}
+									{{ Form::label('image', __('common.users.attributes.image')) }}
 									{{ Form::file('image', ['class'=>'form-control']) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('password', 'Password') }}
-									{{ Form::password('password', array('placeholder' => 'Password','class' => 'form-control')) }}
+									{{ Form::label('password', __('common.users.attributes.password')) }}
+									{{ Form::password('password', array('placeholder' => __('common.users.attributes.password_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('confirm-password', 'Confirm Password') }}
-									{{ Form::password('confirm-password', array('placeholder' => 'Confirm Password','class' => 'form-control')) }}
+									{{ Form::label('confirm-password', __('common.users.attributes.confirm_password')) }}
+									{{ Form::password('confirm-password', array('placeholder' => __('common.users.attributes.confirm_password_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="card-footer text-right">
-						{{ Form::submit('Process', ['class' => 'btn btn-primary pull-right']) }}
+						{{ Form::submit(__('common.users.attributes.process'), ['class' => 'btn btn-primary pull-right']) }}
 					</div>
 				</div>
 			{{ Form::close() }}

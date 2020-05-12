@@ -82,12 +82,12 @@
             @if (Route::has('login'))
                 <div id="header-links" class="top-right links">
                     @auth
-                        <a href="{{ url('/dashboard') }}">Dashboard</a>
+                        <a href="{{ url('/dashboard') }}">{{__('common.welcome.dashboard')}}</a>
                     @else
-                        <a href="{{ route('login') }}">Login</a>
+                        <a href="{{ route('login') }}">{{__('common.welcome.login')}}</a>
 
                         @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
+                            <a href="{{ route('register') }}">{{__('common.welcome.register')}}</a>
                         @endif
                     @endauth
                 </div>
@@ -95,7 +95,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <img src="{{asset("storage/home/smartify.png")}}" width="400" alt="Smartify Logo">
+                    <img src="{{asset("storage/home/smartify.png")}}" width="250" alt="Smartify Logo">
                 </div>
 
                 <div id="links" class="links">

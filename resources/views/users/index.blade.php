@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-    Users Management
+  {{__('common.users.index.title')}}
 @endsection
 
 @section('content')
@@ -20,21 +20,22 @@
 <div class="card">
   <div class="card-header">
     @can('user-create')
-      <a class="btn btn-success" href="{{ route('users.create') }}"> Create New User</a>      
+      <a class="btn btn-success" href="{{ route('users.create') }}"> {{__('common.users.actions.create')}}</a>      
     @endcan
   </div>
   <div class="card-body">
     <table id="table1" class="table table-bordered table-hover">
       <thead>
         <tr>
-          <th width="20px">No</th>
-          <th>Avatar</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Address</th>
-          <th>Roles</th>
-          <th width="117px">Action</th>
+          <th width="20px">{{__('common.users.attributes.no')}}</th>
+          <th>{{__('common.users.attributes.institution')}}</th>
+          <th>{{__('common.users.attributes.name')}}</th>
+          {{-- <th>{{__('common.users.attributes.image')}}</th> --}}
+          <th>{{__('common.users.attributes.email')}}</th>
+          <th>{{__('common.users.attributes.phone')}}</th>
+          <th>{{__('common.users.attributes.address')}}</th>
+          <th>{{__('common.users.attributes.roles')}}</th>
+          <th width="117px">{{__('common.users.attributes.action')}}</th>
         </tr>
       </thead>
     
@@ -42,8 +43,9 @@
         @foreach ($data as $key => $user)
           <tr>
             <td>{{ ++$key }}</td>
-            <td><img src="{{ asset("storage/". $user->image) }}" class="img-square elevation-2" alt="User Image" height="80" width="80"></td>
+            <td>{{ $user->institution->name }}</td>
             <td>{{ $user->name }}</td>
+            {{-- <td><img src="{{ asset("storage/". $user->image) }}" class="img-square elevation-2" alt="User Image" height="80" width="80"></td> --}}
             <td>{{ $user->email }}</td>
             <td>{{ $user->phone }}</td>
             <td>{{ $user->address }}</td>

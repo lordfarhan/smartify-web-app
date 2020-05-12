@@ -26,7 +26,7 @@
 					<a href="{{ route('dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
 						<i class="nav-icon fas fa-tachometer-alt"></i>
 						<p>
-							Dashboard
+							{{__('common.sidebar.dashboard')}}
 						</p>
 					</a>
 				</li>
@@ -37,7 +37,7 @@
 					<a href="{{ route('institutions.index') }}" class="nav-link {{ request()->is('institutions') ? 'active' : '' }}">
 						<i class="nav-icon fas fa-briefcase"></i>
 						<p>
-							Institutes
+							{{__('common.sidebar.institutions')}}
 						</p>
 					</a>
 				</li>
@@ -49,7 +49,7 @@
 					<a href="{{ route('users.index') }}" class="nav-link {{ request()->is('users') ? 'active' : '' }}">
 						<i class="nav-icon fas fa-user"></i>
 						<p>
-							Users
+							{{__('common.sidebar.users')}}
 						</p>
 					</a>
 				</li>
@@ -61,19 +61,20 @@
 					<a href="{{ route('roles.index') }}" class="nav-link {{ request()->is('roles') ? 'active' : '' }}">
 						<i class="nav-icon fas fa-users"></i>
 						<p>
-							Roles
+							{{__('common.sidebar.roles')}}
 						</p>
 					</a>
 				</li>
 				@endcan
 
 				{{-- Academic --}}
-				<li class="nav-header">Academic</li>
+        <li class="nav-header">{{__('common.sidebar.academic')}}</li>
+        
 				@can('subject-list')
 					<li class="nav-item">
 						<a href="{{ route('subjects.index') }}" class="nav-link {{ request()->is('subjects') ? 'active' : '' }}">
 							<i class="nav-icon fas fa-paragraph"></i>
-							<p>Subjects</p>
+							<p>{{__('common.sidebar.subjects')}}</p>
 						</a>
 					</li>
 				@endcan
@@ -82,7 +83,7 @@
 					<li class="nav-item">
 						<a href="{{ route('grades.index') }}" class="nav-link {{ request()->is('grades') ? 'active' : '' }}">
 							<i class="nav-icon fas fa-project-diagram"></i>
-							<p>Grade</p>
+							<p>{{__('common.sidebar.grades')}}</p>
 						</a>
 					</li>
 				@endcan
@@ -91,7 +92,7 @@
 					<li class="nav-item">
 						<a href="{{ route('courses.index') }}" class="nav-link {{ request()->is('courses') ? 'active' : '' }}">
 							<i class="nav-icon fas fa-book"></i>
-							<p>Courses</p>
+							<p>{{__('common.sidebar.courses')}}</p>
 						</a>
 					</li>
 				@endcan
@@ -102,11 +103,24 @@
 					<a href="{{ route('schedules.index') }}" class="nav-link {{ request()->is('schedules') ? 'active' : '' }}">
 						<i class="nav-icon far fa-calendar-alt"></i>
 						<p>
-							Schedules
+							{{__('common.sidebar.schedules')}}
 						</p>
 					</a>
 				</li>
-				@endcan
+        @endcan
+        
+        {{-- Academic --}}
+        <li class="nav-header">{{__('common.sidebar.utilities')}}</li>
+
+        {{-- Settings --}}
+				<li class="nav-item">
+					<a href="#" class="nav-link {{ request()->is('settings') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-cog"></i>
+						<p>
+							{{__('common.sidebar.settings')}}
+						</p>
+					</a>
+				</li>
 
 			</ul>
 		</nav>

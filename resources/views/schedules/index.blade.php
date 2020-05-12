@@ -3,14 +3,14 @@
 @section('head')
 	<!-- fullCalendar -->
 	<link href="{{ asset('fullcalendar/core/main.css') }}" rel='stylesheet' />
-    <link href="{{ asset('fullcalendar/daygrid/main.css') }}" rel='stylesheet' />
+  <link href="{{ asset('fullcalendar/daygrid/main.css') }}" rel='stylesheet' />
 	<link href="{{ asset('fullcalendar/timegrid/main.css') }}" rel='stylesheet' />
 	<link href="{{ asset('fullcalendar/bootstrap/main.css') }}" rel='stylesheet' />
 
 @endsection
 
 @section('title')
-    Schedules
+    {{__('common.schedules.index.title')}}
 @endsection
 
 @section('content')
