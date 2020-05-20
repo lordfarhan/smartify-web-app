@@ -42,7 +42,7 @@
 						@foreach ($course->schedules as $index => $schedule)
 						<div class="col-md-6 mb-3">
 							<div class="input-group date" id="datepicker-date{{$index}}" data-target-input="nearest">
-								<input value="{{\Carbon\Carbon::parse($schedule->date)->format('Y-m-d')}}" name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date{{$index}}"/>
+								<input value="{{\Carbon\Carbon::parse($schedule->date)->format('d/m/Y')}}" name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date{{$index}}"/>
 								<div class="input-group-append" data-target="#datepicker-date{{$index}}" data-toggle="datetimepicker">
 									<div onclick="setCalendarFormat({{$index}});" class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 								</div>
@@ -147,7 +147,7 @@
 		});
 
 		function setCalendarFormat(id){
-			return $("#datepicker-date"+id).datetimepicker({ format: "LL" })
+			return $("#datepicker-date"+id).datetimepicker({ format: "D/MM/YYYY" })
 		}
 
 		$(function () { $("#datepicker-date").datetimepicker({ format: "LL" }) })

@@ -69,6 +69,30 @@
 
 				{{-- Academic --}}
         <li class="nav-header">{{__('common.sidebar.academic')}}</li>
+
+        {{-- Teachers --}}
+				@can('user-list')
+				<li class="nav-item">
+					<a href="{{ route('teachers.index') }}" class="nav-link {{ request()->is('teachers') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-chalkboard-teacher"></i>
+						<p>
+							{{__('common.sidebar.teachers')}}
+						</p>
+					</a>
+				</li>
+				@endcan
+
+        {{-- Students --}}
+				@can('user-list')
+				<li class="nav-item">
+					<a href="{{ route('students.index') }}" class="nav-link {{ request()->is('students') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-user-graduate"></i>
+						<p>
+							{{__('common.sidebar.students')}}
+						</p>
+					</a>
+				</li>
+				@endcan
         
 				@can('subject-list')
 					<li class="nav-item">
@@ -82,7 +106,7 @@
 				@can('grade-list')
 					<li class="nav-item">
 						<a href="{{ route('grades.index') }}" class="nav-link {{ request()->is('grades') ? 'active' : '' }}">
-							<i class="nav-icon fas fa-project-diagram"></i>
+							<i class="nav-icon fas fa-chalkboard"></i>
 							<p>{{__('common.sidebar.grades')}}</p>
 						</a>
 					</li>

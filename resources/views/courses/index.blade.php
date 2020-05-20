@@ -15,7 +15,11 @@
 		<p>{{ $message }}</p>
 	</div>
 @endif
-
+@can('course-create')
+<div class="text-right">
+  <a class="btn btn-success mb-3" href="{{ route('courses.create') }}"> {{__('common.courses.actions.create')}}</a>
+</div>
+@endcan
 <div class="card card card-primary card-outline card-outline-tabs">
 	<div class="card-header p-0 border-bottom-0">
 		<ul class="nav nav-tabs">
@@ -25,14 +29,11 @@
 		</ul>
 	</div>
 	<div class="card-body">
-		@can('course-create')
-			<a class="btn btn-success mb-3" href="{{ route('courses.create') }}"> {{__('common.courses.actions.create')}}</a>
-		@endcan
 		<div class="tab-content">
 		@foreach ($grades as $index => $grade)			
 			<div class="tab-pane {{$index == 0 ? 'active' : ''}}" id="grade-{{$grade->id}}">
-				<table id="table{{$grade->id}}" class="table table-bordered table-striped">
-					<thead>
+				<table id="table{{$grade->id}}" class="table table-borderless table-hover">
+					<thead class="thead-light">
 						<tr>
 							<th width="20px">{{__('common.courses.attributes.no')}}</th>
 							<th>{{__('common.courses.attributes.institution')}}</th>
@@ -41,8 +42,8 @@
 							<th>{{__('common.courses.attributes.author')}}</th>
 							<th>{{__('common.courses.attributes.type')}}</th>
 							<th>{{__('common.courses.attributes.status')}}</th>
-							<th>{{__('common.courses.attributes.image')}}</th>
-							<th width="162px">{{__('common.courses.attributes.action')}}</th>
+							{{-- <th>{{__('common.courses.attributes.image')}}</th> --}}
+							<th width="122px">{{__('common.courses.attributes.action')}}</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -67,18 +68,18 @@
 									<label class="badge badge-success"><i class="fas fa-upload"></i> PUBLISHED</label>
 								@endif
 							</td>
-							<td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td>
+							{{-- <td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td> --}}
 							<td>
-								<a class="btn btn-primary" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
+								<a class="btn btn-primary btn-sm elevation-2" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
 								@can('course-edit')
-									<a class="btn btn-warning" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen"></i></a>
+									<a class="btn btn-warning text-white btn-sm elevation-2" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen-alt"></i></a>
 								@endcan
 								@can('schedule-edit')
-									<a class="btn btn-warning" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
+									<a class="btn btn-warning text-white btn-sm elevation-2" href="/courses/{{$course->id}}/schedule"><i class="far fa-calendar-alt"></i></a>
 								@endcan
 								@can('course-delete')
 									{!! Form::open(['method' => 'DELETE','route' => ['courses.destroy', $course->id],'style'=>'display:inline']) !!}
-										<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
+										<button class="btn btn-danger btn-sm elevation-2" type="submit"><i class="fa fa-trash"></i></button>
 									{!! Form::close() !!}
 								@endcan
 							</td>

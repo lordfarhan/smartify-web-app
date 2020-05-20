@@ -21,40 +21,39 @@
       <a class="btn btn-success" href="{{ route('institutions.create') }}"> {{__('common.institutions.actions.create')}}</a>
       @endcan
     </div>
-      <div class="card-body">
-        <table id="table" class="table table-bordered table-hover">
-          <thead>
+    <div class="card-body">
+      <table id="table" class="table table-borderless table-hover">
+        <thead class="thead-light" >
+          <tr>
+            <th width="20px">{{__('common.institutions.attributes.no')}}</th>
+            <th>{{__('common.institutions.attributes.image')}}</th>
+            <th>{{__('common.institutions.attributes.name')}}</th>
+            <th>{{__('common.institutions.attributes.description')}}</th>
+            <th width="48px">{{__('common.institutions.attributes.action')}}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($institutions as $key => $institution)
             <tr>
-              <th width="20px">{{__('common.institutions.attributes.no')}}</th>
-              <th>{{__('common.institutions.attributes.image')}}</th>
-              <th>{{__('common.institutions.attributes.name')}}</th>
-              <th>{{__('common.institutions.attributes.description')}}</th>
-              <th width="69px">{{__('common.institutions.attributes.action')}}</th>
+              <td>{{ ++$key }}</td>
+              <td><img src="{{ asset("storage/". $institution->image) }}" class="img-square elevation-2" alt="Institution Image" height="80" width="80"></td>
+              <td>{{$institution->name}}</td>
+              <td>{{$institution->description}}</td>
+              <td>
+                {{-- <a class="btn btn-primary" href="{{ route('institutions.show', $institution->id) }}"><i class="fa fa-eye"></i></a> --}}
+                @can('grade-edit')
+                    <a class="btn btn-sm btn-warning elevation-2 text-white" href="{{ route('institutions.edit', $institution->id) }}"><i class="fa fa-pen-alt"></i></a>
+                @endcan
+                @can('grade-delete')
+                    {!! Form::open(['method' => 'DELETE','route' => ['institutions.destroy', $institution->id],'style'=>'display:inline']) !!}
+                        <button class="btn btn-sm btn-danger elevation-2" type="submit"><i class="fa fa-trash-alt"></i></button>
+                    {!! Form::close() !!}
+                @endcan
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            @foreach ($institutions as $key => $institution)
-              <tr>
-                <td>{{ ++$key }}</td>
-                <td><img src="{{ asset("storage/". $institution->image) }}" class="img-square elevation-2" alt="Institution Image" height="80" width="80"></td>
-                <td>{{$institution->name}}</td>
-                <td>{{$institution->description}}</td>
-                <td>
-                  {{-- <a class="btn btn-primary" href="{{ route('institutions.show', $institution->id) }}"><i class="fa fa-eye"></i></a> --}}
-                  @can('grade-edit')
-                      <a class="btn btn-warning" href="{{ route('institutions.edit', $institution->id) }}"><i class="fa fa-pen"></i></a>
-                  @endcan
-                  @can('grade-delete')
-                      {!! Form::open(['method' => 'DELETE','route' => ['institutions.destroy', $institution->id],'style'=>'display:inline']) !!}
-                          <button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-                      {!! Form::close() !!}
-                  @endcan
-                </td>
-              </tr>
-            @endforeach
-          </tbody>
-        </table>
-      </div>
+          @endforeach
+        </tbody>
+      </table>
     </div>
   </div>
 @endsection

@@ -23,34 +23,34 @@
 		@endcan
 	</div>
 	<div class="card-body">
-		<table id="table1" class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th width="20px">{{__('common.roles.attributes.no')}}</th>
-					<th>{{__('common.roles.attributes.name')}}</th>
-					<th width="117px">{{__('common.roles.attributes.action')}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach ($roles as $key => $role)
-				<tr>
-					<td>{{ ++$key }}</td>
-					<td>{{ $role->name }}</td>
-					<td>
-						<a class="btn btn-primary" href="{{ route('roles.show', $role->id) }}"><i class="fa fa-eye"></i></a>
-						@can('role-edit')
-							<a class="btn btn-warning" href="{{ route('roles.edit', $role->id) }}"><i class="fa fa-pen"></i></a>
-						@endcan
-						@can('role-delete')
-							{!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
-								<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-							{!! Form::close() !!}
-						@endcan
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+    <table id="table1" class="table table-borderless table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th width="20px">{{__('common.roles.attributes.no')}}</th>
+          <th>{{__('common.roles.attributes.name')}}</th>
+          <th width="87px">{{__('common.roles.attributes.action')}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($roles as $key => $role)
+        <tr>
+          <td>{{ ++$key }}</td>
+          <td>{{ $role->name }}</td>
+          <td>
+            <a class="btn btn-sm btn-primary elevation-2" href="{{ route('roles.show', $role->id) }}"><i class="fa fa-eye"></i></a>
+            @can('role-edit')
+              <a class="btn btn-sm btn-warning text-white elevation-2" href="{{ route('roles.edit', $role->id) }}"><i class="fa fa-pen-alt"></i></a>
+            @endcan
+            @can('role-delete')
+              {!! Form::open(['method' => 'DELETE','route' => ['roles.destroy', $role->id],'style'=>'display:inline']) !!}
+                <button class="btn btn-sm btn-danger elevation-2" type="submit"><i class="fa fa-trash"></i></button>
+              {!! Form::close() !!}
+            @endcan
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
 	</div>
 </div>
 @endsection

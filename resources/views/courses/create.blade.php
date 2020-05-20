@@ -225,8 +225,8 @@
         	$(this).closest('#schedule-row').remove();
 		});
 
-		function setCalendarFormat(id){
-			return $("#datepicker-date"+id).datetimepicker({ format: "LL" })
+    function setCalendarFormat(id){
+			return $("#datepicker-date"+id).datetimepicker({ format: "D/MM/YYYY" })
 		}
 
 		$(function () { $("#datepicker-date").datetimepicker({ format: "LL" }) })

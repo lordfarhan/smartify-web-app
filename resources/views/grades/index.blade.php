@@ -23,38 +23,38 @@
 		@endcan
 	</div>
 	<div class="card-body">
-		<table id="table1" class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th width="20px">{{__('common.grades.attributes.no')}}</th>
-					<th>{{__('common.grades.attributes.grade')}}</th>
-					<th>{{__('common.grades.attributes.educational_stage')}}</th>
-					<th>{{__('common.grades.attributes.information')}}</th>
-					<th width="117px">{{__('common.grades.attributes.action')}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach ($grades as $key => $grade)
-				<tr>
-					<td>{{ ++$key }}</td>
-					<td>{{ $grade->grade }}</td>
-					<td>{{ $grade->getEducationalStage() }}</td>
-					<td>{{ $grade->information }}</td>
-					<td>
-						<a class="btn btn-primary" href="{{ route('grades.show', $grade->id) }}"><i class="fa fa-eye"></i></a>
-						@can('grade-edit')
-							<a class="btn btn-warning" href="{{ route('grades.edit', $grade->id) }}"><i class="fa fa-pen"></i></a>
-						@endcan
-						@can('grade-delete')
-							{!! Form::open(['method' => 'DELETE','route' => ['grades.destroy', $grade->id],'style'=>'display:inline']) !!}
-								<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-							{!! Form::close() !!}
-						@endcan
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+    <table id="table1" class="table table-borderless table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th width="20px">{{__('common.grades.attributes.no')}}</th>
+          <th>{{__('common.grades.attributes.grade')}}</th>
+          <th>{{__('common.grades.attributes.educational_stage')}}</th>
+          <th>{{__('common.grades.attributes.information')}}</th>
+          <th width="87px">{{__('common.grades.attributes.action')}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($grades as $key => $grade)
+        <tr>
+          <td>{{ ++$key }}</td>
+          <td>{{ $grade->grade }}</td>
+          <td>{{ $grade->getEducationalStage() }}</td>
+          <td>{{ $grade->information }}</td>
+          <td>
+            <a class="btn btn-primary btn-sm elevation-2" href="{{ route('grades.show', $grade->id) }}"><i class="fa fa-eye"></i></a>
+            @can('grade-edit')
+              <a class="btn btn-warning text-white btn-sm elevation-2" href="{{ route('grades.edit', $grade->id) }}"><i class="fa fa-pen-alt"></i></a>
+            @endcan
+            @can('grade-delete')
+              {!! Form::open(['method' => 'DELETE','route' => ['grades.destroy', $grade->id],'style'=>'display:inline']) !!}
+                <button class="btn btn-danger btn-sm elevation-2" type="submit"><i class="fa fa-trash"></i></button>
+              {!! Form::close() !!}
+            @endcan
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
 	</div>
 </div>
 @endsection

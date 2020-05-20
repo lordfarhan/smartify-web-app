@@ -404,12 +404,13 @@
                 </div>
                 @endif
                 @foreach ($course->schedules as $schedule)
-                  @foreach ($schedule->attendances->groupBy('date') as $date => $attendance)
+                  @if (count($schedule->attendances) != 0)
+                    @foreach ($schedule->attendances->groupBy('date') as $date => $attendance)
                     <div class="col-md-12">
                       <div class="card card-body">
                         <div class="row">
                           <div class="col-md-2">
-                            <a href="/courses/{{$course->id}}/schedules/{{$schedule->id}}/attendances">{{\Carbon\Carbon::parse($date)->format('M, d Y')}}</a>
+                            <a href="/courses/{{$course->id}}/schedules/{{$schedule->id}}/attendances">{{\Carbon\Carbon::parse($date)->format('d M Y')}}</a>
                           </div>
                           <div class="col-md-10">
                             <label class="badge badge-success">{{__('common.courses.attributes.present')}} : {{ $attendance->where('status', '1')->count() - 1}}</label>
@@ -419,7 +420,21 @@
                         </div>
                       </div>
                     </div>
-                  @endforeach
+                    @endforeach
+                  @else
+                    <div class="col-md-12">
+                      <div class="card card-body">
+                        <div class="row">
+                          <div class="col-md-2">
+                            <a href="/schedules/{{$schedule->id}}/attendances/create/">{{\Carbon\Carbon::parse($schedule->date)->format('d M Y')}}</a>
+                          </div>
+                          <div class="col-md-10">
+                            <label class="badge badge-info">{{__('common.courses.attributes.not_yet_reported')}}</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  @endif
                 @endforeach
               </div>
             </div>

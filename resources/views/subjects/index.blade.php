@@ -23,36 +23,36 @@
 		@endcan
 	</div>
 	<div class="card-body">
-		<table id="table1" class="table table-bordered table-striped">
-			<thead>
-				<tr>
-					<th width="20px">{{__('common.subjects.attributes.no')}}</th>
-					<th>{{__('common.subjects.attributes.subject')}}</th>
-					<th>{{__('common.subjects.attributes.information')}}</th>
-					<th width="117px">{{__('common.subjects.attributes.action')}}</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach ($subjects as $key => $subject)
-				<tr>
-					<td>{{ ++$key }}</td>
-					<td>{{ $subject->subject }}</td>
-					<td>{{ $subject->information }}</td>
-					<td>
-						<a class="btn btn-primary" href="{{ route('subjects.show', $subject->id) }}"><i class="fa fa-eye"></i></a>
-						@can('subject-edit')
-							<a class="btn btn-warning" href="{{ route('subjects.edit', $subject->id) }}"><i class="fa fa-pen"></i></a>
-						@endcan
-						@can('subject-delete')
-							{!! Form::open(['method' => 'DELETE','route' => ['subjects.destroy', $subject->id],'style'=>'display:inline']) !!}
-								<button class="btn btn-danger" type="submit"><i class="fa fa-trash"></i></button>
-							{!! Form::close() !!}
-						@endcan
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+    <table id="table1" class="table table-borderless table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th width="20px">{{__('common.subjects.attributes.no')}}</th>
+          <th>{{__('common.subjects.attributes.subject')}}</th>
+          <th>{{__('common.subjects.attributes.information')}}</th>
+          <th width="87px">{{__('common.subjects.attributes.action')}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach ($subjects as $key => $subject)
+        <tr>
+          <td>{{ ++$key }}</td>
+          <td>{{ $subject->subject }}</td>
+          <td>{{ $subject->information }}</td>
+          <td>
+            <a class="btn btn-primary btn-sm elevation-2" href="{{ route('subjects.show', $subject->id) }}"><i class="fa fa-eye"></i></a>
+            @can('subject-edit')
+              <a class="btn btn-warning btn-sm text-white elevation-2" href="{{ route('subjects.edit', $subject->id) }}"><i class="fa fa-pen-alt"></i></a>
+            @endcan
+            @can('subject-delete')
+              {!! Form::open(['method' => 'DELETE','route' => ['subjects.destroy', $subject->id],'style'=>'display:inline']) !!}
+                <button class="btn btn-danger btn-sm elevation-2" type="submit"><i class="fa fa-trash"></i></button>
+              {!! Form::close() !!}
+            @endcan
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
 	</div>
 </div>
 @endsection

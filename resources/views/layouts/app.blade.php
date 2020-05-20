@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
           @yield('content')
       </div><!-- /.container-fluid -->
-      @include('layouts/partials/modals')
+      @yield('modals')
     </div>
     <!-- /.content -->
   </div>

@@ -79,11 +79,17 @@ class CourseController extends Controller
         $end_times = $request->input('end_time');
 
         if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($dates as $index => $date) {
-                $validation["date.{$index}"] = 'required';
-                $validation["start_time.{$index}"] = 'required';
-                $validation["end_time.{$index}"] = 'required';
-            }
+          foreach($dates as $index => $date) {
+            $validation["date.$index"] = "required";
+            $validation["start_time.$index"] = "required";
+            $validation["end_time.$index"] = "required|after:start_time.$index";
+
+            $key = $index + 1;
+            $message["date.$index.required"] = "Date $key must not be empty";
+            $message["start_time.$index.required"] = "Start time $key must not be empty";
+            $message["end_time.$index.required"] = "End time $key must not be empty";
+            $message["end_time.$index.after"] = "End time $key must after $start_times[$index]";
+          }
         }
         
         if($request->type == '0') {
@@ -123,14 +129,14 @@ class CourseController extends Controller
         $course = Course::create($input);
 
         if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($dates as $index => $date) {
-                $schedule = new Schedule();
-                $schedule->course_id = $course->id;
-                $schedule->date = Carbon::parse($date);
-                $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
-                $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
-                $schedule->save();
-            }
+          foreach($dates as $index => $date) {
+            $schedule = new Schedule();
+            $schedule->course_id = $course->id;
+            $schedule->date = Carbon::createFromFormat("d/m/Y",$date);
+            $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+            $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+            $schedule->save();
+          }
         }
         
         return redirect()->route('courses.index')->with('success', 'Course created successfully');
@@ -284,32 +290,77 @@ class CourseController extends Controller
 
     public function updateSchedule(Request $request) {
         $validation = array();
+
         // Schedule insertion
         $dates = $request->input('date');
         $start_times = $request->input('start_time');
         $end_times = $request->input('end_time');
 
+        $message = [];
+
         if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
-            foreach($dates as $index => $date) {
-                $validation["date.{$index}"] = 'required';
-                $validation["start_time.{$index}"] = 'required';
-                $validation["end_time.{$index}"] = 'required';
-            }
+          foreach($dates as $index => $date) {
+            $validation["date.$index"] = 'required';
+            $validation["start_time.$index"] = 'required';
+            $validation["end_time.$index"] = "required|after:start_time.$index";
+
+            $key = $index + 1;
+            $message["date.$index.required"] = "Date $key must not be empty";
+            $message["start_time.$index.required"] = "Start time $key must not be empty";
+            $message["end_time.$index.required"] = "End time $key must not be empty";
+            $message["end_time.$index.after"] = "End time $key must after $start_times[$index]";
+          }
         }
 
-        $this->validate($request, $validation);
+        $this->validate($request, $validation, $message);
 
-        Schedule::where('course_id', $request->id)->delete();
+        $old_schedule = Schedule::where('course_id', $request->id)->get();
 
-        if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+        if(count($old_schedule) == count($dates)) {
+          if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
             foreach($dates as $index => $date) {
+              $schedule = $old_schedule[$index];
+              $schedule->course_id = $request->id;
+              $schedule->date = Carbon::createFromFormat('d/m/Y',$date);
+              $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+              $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+              $schedule->update();
+            }
+          }
+        } else if(count($old_schedule) > count($dates)) {
+          if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($old_schedule as $index => $schedule) {
+              if($index < count($dates)) {
+                $schedule->course_id = $request->id;
+                $schedule->date = Carbon::createFromFormat('d/m/Y',$date);
+                $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+                $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+                $schedule->update();
+              } else {
+                $schedule->delete();
+              }
+            }
+          }
+        } else {
+          if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
+            foreach($dates as $index => $date) {
+              if($index < count($old_schedule)) {
+                $schedule = $old_schedule[$index];
+                $schedule->course_id = $request->id;
+                $schedule->date = Carbon::createFromFormat('d/m/Y',$date);
+                $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
+                $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
+                $schedule->update();
+              } else {
                 $schedule = new Schedule();
                 $schedule->course_id = $request->id;
-                $schedule->date = Carbon::parse($date);
+                $schedule->date = Carbon::createFromFormat('d/m/Y',$date);
                 $schedule->start_time = Carbon::createFromTimeString($start_times[$index].":00", 'Asia/Jakarta');
                 $schedule->end_time = Carbon::createFromTimeString($end_times[$index].":00", 'Asia/Jakarta');
                 $schedule->save();
+              }
             }
+          }
         }
 
         return redirect()->route('courses.index')->with('success', 'Course schedule updated successfully');

@@ -30,18 +30,18 @@ class AttendanceController extends Controller
      */
     public function create($id)
     {
-        $schedule = Schedule::find($id);
-        if($schedule == null) {
-            if (Auth::user()->institute->id == 1) {
-                $signers = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
-            } else {
-                $signers = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
-            }
-            return view('attendances.create', compact('schedule', 'signers'));
+      $schedule = Schedule::find($id);
+      if(count($schedule->attendances) == 0) {
+        if (Auth::user()->institution->id == 1) {
+            $signers = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
         } else {
-            $course_id = $schedule->course->id;
-            return redirect('courses/' . $course_id . '/schedules/' . $id . '/attendances');
+            $signers = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
         }
+        return view('attendances.create', compact('schedule', 'signers'));
+      } else {
+        $course_id = $schedule->course->id;
+        return redirect("courses/$course_id/schedules/$id/attendances");
+      }
     }
 
     /**
@@ -70,7 +70,7 @@ class AttendanceController extends Controller
             $attendance = new Attendance();
             $attendance->user_id = $student;
             $attendance->schedule_id = $request->schedule_id;
-            $attendance->status = $status[$index];
+            $attendance->status = (empty($status[$index]) ? '0' : '1');
             $attendance->save();
         }
         $attendance = new Attendance();
@@ -92,8 +92,8 @@ class AttendanceController extends Controller
      */
     public function show($course_id, $schedule_id)
     {
-        $schedule = Schedule::find($schedule_id);
-        return view('attendances.index', compact('schedule'));
+      $schedule = Schedule::find($schedule_id);
+      return view('attendances.show', compact('schedule'));
     }
 
     /**
