@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
@@ -14,8 +15,12 @@ class TeacherController extends Controller
      */
     public function index()
     {
-        $data = User::role(['senior teacher', 'teacher'])->get();
-        return view('users.index', compact('data'));
+      if(Auth::user()->institution->id == 1) {
+        $data = User::role(['senior teacher', 'teacher'])->orderBy('id', 'desc')->get();
+      } else {
+        $data = User::role(['senior teacher', 'teacher'])->where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
+      }
+      return view('users.index', compact('data'));
     }
 
     /**

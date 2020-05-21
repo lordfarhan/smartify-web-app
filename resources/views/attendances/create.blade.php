@@ -35,13 +35,13 @@
         </div>
         @endif
         <h3>Student of {{ $schedule->course->subject->subject . " - " . $schedule->course->grade->grade . " " . $schedule->course->grade->getEducationalStage() }}</h3>
-        <table id="table2" class="table table-bordered table-striped">
-          <thead>
-              <tr>
-                <th width="20px">No</th>
-                <th>Student Name</th>
-                <th>Attendance Status</th>
-              </tr>
+        <table id="table2" class="table table-borderless table-hover">
+          <thead class="thead-light">
+            <tr>
+              <th width="20px">No</th>
+              <th>Student Name</th>
+              <th>Attendance Status</th>
+            </tr>
           </thead>
           <tbody>
             @foreach ($schedule->course->enrollments as $key => $course_enrollment)
@@ -49,14 +49,14 @@
               <td>{{ $key + 1 }}</td>
               <td>{{ $course_enrollment->user->name }}</td>
               <td>
-                <div class="form-group">
+                <div class="p-0 m-0 form-group">
                   <input name="student[{{$key}}]" type="hidden" value="{{$course_enrollment->user->id}}">
                 </div>
-                <div class="form-group clearfix">
+                <div class="mb-0 form-group clearfix">
                   <div class="icheck-emerland d-inline">
                     <input name="status[{{$key}}]" type="checkbox" value="1" id="checkboxPresent-{{$key}}">
-                    <label for="checkboxPresent-{{$key}}">
-                        Present
+                    <label for="checkboxPresent-{{$key}}" style="font-weight: 500">
+                      Present
                     </label>
                   </div>
                 </div>
