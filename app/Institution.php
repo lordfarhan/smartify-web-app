@@ -10,10 +10,6 @@ class Institution extends Model
         'name', 'description', 'image'
     ];
 
-    public function users() {
-        return $this->hasMany(User::class);
-    }
-
     public function courses() {
         return $this->hasMany(Course::class);
     }

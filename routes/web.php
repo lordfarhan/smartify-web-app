@@ -21,11 +21,10 @@ Route::get('/home', function () {
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::get('/dashboard', 'HomeController@index')->name('dashboard');
-
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => ['auth', 'verified']], function () {
+    Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('institutions', 'InstitutionController');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
@@ -72,6 +71,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('forumPosts', 'ForumPostController');
     Route::resource('forumReplies', 'ForumReplyController');
 
+    Route::get('settings', 'SettingController@index')->name('settings.index');
 });
 
+Route::get('administratives/provinces/{id}/regencies', 'AdministrativeController@regencies');
+Route::get('administratives/regencies/{id}/districts', 'AdministrativeController@districts');
+Route::get('administratives/districts/{id}/villages', 'AdministrativeController@villages');
 Route::get('lang/{locale}', 'HomeController@lang');

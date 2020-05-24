@@ -8,6 +8,7 @@ use App\Institution;
 use App\Schedule;
 use App\Subject;
 use App\User;
+use App\UserInstitution;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,10 +26,10 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $grades = Grade::all();
-        if(Auth::user()->institution->id == 1) {
+        if(Auth::user()->hasRole('Master')) {
             $courses = Course::orderBy('id', 'desc')->get();
         } else {
-            $courses = Course::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
+            $courses = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->orderBy('id', 'desc')->get();
         }
         return view('courses.index', compact('grades', 'courses'));
     }
@@ -40,13 +41,13 @@ class CourseController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->institution->id != 1) {
-            $institutions = Institution::where('id', Auth::user()->institution->id)->pluck('name', 'id');
-            $authors = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        if(Auth::user()->hasRole('Master')) {
+          $authors = User::role(['Master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
         } else {
-            $institutions = Institution::pluck('name', 'id')->all();
-            $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+          $user_ids = UserInstitution::where('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('user_id');
+          $authors = User::whereIn('id', $user_ids)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
         }
+        $institutions = Institution::pluck('name', 'id')->all();
         $subjects = Subject::pluck('subject', 'id')->all();
         $grades = Grade::pluck('grade', 'id')->all();
         $days = array('0' => 'Ahad', '1' => 'Senin', '2' => 'Selasa', '3' => 'Rabo', '4' => 'Kamis', '5' => 'Jumat', '6' => 'Sabtu');
@@ -126,6 +127,10 @@ class CourseController extends Controller
             $input = array_except($input, array('attachment'));
         }
 
+        if(!Auth::user()->hasRole('Master')) {
+          $input['institution_id'] = UserInstitution::where('user_id', Auth::user()->id)->pluck('institution_id')->first();
+        }
+
         $course = Course::create($input);
 
         if($dates[0] != null || $start_times[0] != null || $end_times[0] != null) {
@@ -161,16 +166,16 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        if(Auth::user()->institution->id != 1) {
-            $institutions = Institution::where('id', Auth::user()->institution->id)->pluck('name', 'id');
-            $authors = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
-        } else {
-            $institutions = Institution::pluck('name', 'id')->all();
-            $authors = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
-        }
-        $subjects = Subject::pluck('subject', 'id')->all();
-        $grades = Grade::pluck('grade', 'id')->all();
-        return view('courses.edit', ['institutions' => $institutions, 'course' => $course, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
+      if(Auth::user()->hasRole('Master')) {
+        $authors = User::role(['Master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+      } else {
+        $user_ids = UserInstitution::where('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('user_id');
+        $authors = User::whereIn('id', $user_ids)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+      }
+      $institutions = Institution::pluck('name', 'id')->all();
+      $subjects = Subject::pluck('subject', 'id')->all();
+      $grades = Grade::pluck('grade', 'id')->all();
+      return view('courses.edit', ['institutions' => $institutions, 'course' => $course, 'authors' => $authors, 'subjects' => $subjects, 'grades' => $grades]);
     }
 
     /**
@@ -236,6 +241,10 @@ class CourseController extends Controller
             $attachmentName = 'courseAttachment'. Carbon::now()->format('YmdHis').'_'.$courseName . '.' . $attachment->getClientOriginalExtension();
             $attachment->move(storage_path('app/public/courses/attachments/'), $attachmentName);
             $input['attachment'] = 'courses/attachments/' . $attachmentName;
+        }
+
+        if(!Auth::user()->hasRole('Master')) {
+          $input['institution_id'] = UserInstitution::where('user_id', Auth::user()->id)->pluck('institution_id')->first();
         }
 
         $course->update($input);

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
+@section('title')
+  {{__('common.users.index.title')}}
+@endsection
+
 @section('head')
   <link rel="stylesheet" href="{{ asset("lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css") }}">
   <link rel="stylesheet" href="{{ asset("lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css") }}">
-@endsection
-
-@section('title')
-  {{__('common.users.index.title')}}
 @endsection
 
 @section('content')
@@ -43,7 +43,11 @@
         @foreach ($data as $key => $user)
           <tr>
             <td>{{ ++$key }}</td>
-            <td>{{ $user->institution->name }}</td>
+            <td>
+              @foreach($user->institutions as $institution)
+                <label class="badge badge-primary">{{ $institution->institution->name }}</label>
+              @endforeach
+            </td>
             <td>{{ $user->name }}</td>
             {{-- <td><img src="{{ asset("storage/". $user->image) }}" class="img-square elevation-2" alt="User Image" height="80" width="80"></td> --}}
             <td>{{ $user->email }}</td>

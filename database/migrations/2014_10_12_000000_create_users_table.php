@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('institution_id')->nullable()->references('id')->on('institutions')->onDelete('set null');
+            $table->char('village_id', 10)->nullable()->foreign->references('id')->on('villages')->onDelete('set null');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -26,7 +26,6 @@ class CreateUsersTable extends Migration
             $table->timestamp('date_of_birth', 0)->nullable($value = true);
             $table->enum('gender', ['0', '1'])->nullable();
             $table->text('image')->default("/users/default.png");
-            $table->enum('active', ['0', '1']);
             $table->timestamps();
         });
     }

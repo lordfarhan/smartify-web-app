@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Institution;
+use App\Province;
 use App\User;
+use App\UserInstitution;
+use App\Village;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +25,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->institution->id == 1) {
+        if(Auth::user()->hasRole('Master')) {
             $data = User::orderBy('id', 'desc')->get();
-        } else {
-            $data = User::where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
+          } else {
+            $user_ids = UserInstitution::where('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('user_id');
+            $data = User::whereIn('id', $user_ids)->orderBy('id', 'desc')->get();
         }
         return view('users.index', compact('data'));
     }
@@ -37,15 +41,14 @@ class UserController extends Controller
      */
     public function create()
     {
-        if(Auth::user()->roles('master')) {
+        if(Auth::user()->hasRole('Master')) {
             $roles = Role::pluck('name', 'name')->all();
-            $institutions = Institution::pluck('name', 'id')->all();
         } else {
-            $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
-            $institutions = Institution::whereNotIn('id', [1])->pluck('name', 'id')->all();
+            $roles = Role::whereNotIn('name', ['Master'])->pluck('name', 'name')->all();
         }
-        $institutions = Institution::pluck('name', 'id')->all();
-        return view('users.create', compact('institutions', 'roles'));
+        $institutions = Institution::all();
+        $provinces = Province::all();
+        return view('users.create', compact('institutions', 'roles', 'provinces'));
     }
 
     /**
@@ -61,13 +64,12 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
             'phone' => 'required|unique:users,phone',
-            'address' => 'required',
-            'institution_id' => 'required',
             'roles' => 'required',
             'image'=> 'mimes:jpg,png,jpeg,JPG',
         ]);
 
         $input = $request->all();
+        $input['name'] = ucwords(strtolower($input['name']));
 
         if (!empty($request->file('image'))) {
             $image = $request->file('image');
@@ -79,6 +81,17 @@ class UserController extends Controller
 
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
+
+        $institution_ids = $request->input('institution_id');
+
+        if($institution_ids != null) {
+          foreach($institution_ids as $index => $institution_id) {
+            $user_institution = new UserInstitution();
+            $user_institution->user_id = $user->id;
+            $user_institution->institution_id = $institution_id;
+            $user_institution->save();
+          }
+        }
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully');
@@ -105,15 +118,16 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        if(Auth::user()->roles('master')) {
-            $roles = Role::pluck('name', 'name')->all();
-            $institutions = Institution::pluck('name', 'id')->all();
+        if(Auth::user()->hasRole('Master')) {
+          $roles = Role::pluck('name', 'name')->all();
         } else {
-            $roles = Role::whereNotIn('name', ['master'])->pluck('name', 'name')->all();
-            $institutions = Institution::whereNotIn('id', [1])->pluck('name', 'id')->all();
+          $roles = Role::whereNotIn('name', ['Master'])->pluck('name', 'name')->all();
         }
+        $institutions = Institution::all();
         $userRole = $user->roles->pluck('name', 'name')->all();
-        return view('users.edit', compact('user', 'institutions', 'roles', 'userRole'));
+        $provinces = Province::all();
+        $village = Village::find($user->village_id);
+        return view('users.edit', compact('user', 'institutions', 'roles', 'userRole', 'provinces', 'village'));
     }
 
     /**
@@ -134,7 +148,6 @@ class UserController extends Controller
                 'password' => 'same:confirm-password',
                 'phone' => 'required',
                 'address' => 'required',
-                'institution_id' => 'required',
                 'roles' => 'required',
                 'image'=> 'mimes:jpg,png,jpeg,JPG',
             ]);
@@ -145,37 +158,70 @@ class UserController extends Controller
                 'password' => 'same:confirm-password',
                 'phone' => 'required',
                 'address' => 'required',
-                'institution_id' => 'required',
                 'roles' => 'required',
                 'image'=>'mimes:jpg,png,jpeg,JPG',
             ]);
         }
 
         $input = $request->all();
+        $input['name'] = ucwords(strtolower($input['name']));
 
         if (!empty($request->file('image'))) {
-            // Deleting existing image
-            if (File::exists(storage_path('app/public/' . $user->image))) {
-                File::delete(storage_path('app/public/' . $user->image));
-            }
-            $image = $request->file('image');
-            $imageName = 'userImage'. Carbon::now()->format('YmdHis'). '_' .preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-            Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
-            $input['image'] = 'users/' . $imageName;
+          // Deleting existing image
+          if (File::exists(storage_path('app/public/' . $user->image))) {
+              File::delete(storage_path('app/public/' . $user->image));
+          }
+          $image = $request->file('image');
+          $imageName = 'userImage'. Carbon::now()->format('YmdHis'). '_' .preg_replace('/\s+/', '', request('name')) . '.' . 'png';
+          Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
+          $input['image'] = 'users/' . $imageName;
         } else {
-            $input = array_except($input, array('image'));
+          $input = array_except($input, array('image'));
         }
 
         if(!empty($input['password'])){ 
-            $input['password'] = Hash::make($input['password']);
+          $input['password'] = Hash::make($input['password']);
         } else {
-            $input = array_except($input,array('password'));    
+          $input = array_except($input,array('password'));    
         }
 
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 
         $user->assignRole($request->input('roles'));
+
+        /**start user institution(s) data */
+        $old_institutions = $user->institutions;
+        $institution_ids = $request->input('institution_id');
+
+        $old_institution_ids = $old_institutions->pluck('institution_id');
+        $saved_institution_ids = array();
+
+        if($institution_ids != null) {
+          foreach($institution_ids as $i => $institution_id) {
+            foreach($old_institution_ids as $j => $old_institution_id) {
+              if($institution_id == $old_institution_id) {
+                array_push($saved_institution_ids, $institution_id);
+                unset($institution_ids[$i]);
+                break;
+              }
+            }
+          }
+        }
+
+        // Delete unselected institution
+        UserInstitution::where('user_id', $user->id)->whereNotIn('institution_id', $saved_institution_ids)->delete();
+
+        // Save new selected institution
+        if($institution_ids != null) {
+          foreach($institution_ids as $index => $institution_id) {
+            $user_institution = new UserInstitution();
+            $user_institution->user_id = $user->id;
+            $user_institution->institution_id = $institution_id;
+            $user_institution->save();
+          }
+        }
+        /**end of saving user institutions */
 
         return redirect()->route('users.index')
             ->with('success','User updated successfully');

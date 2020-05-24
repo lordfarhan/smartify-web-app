@@ -6,6 +6,7 @@ use App\Attendance;
 use App\Course;
 use App\Schedule;
 use App\User;
+use App\UserInstitution;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,10 +33,11 @@ class AttendanceController extends Controller
     {
       $schedule = Schedule::find($id);
       if(count($schedule->attendances) == 0) {
-        if (Auth::user()->institution->id == 1) {
-            $signers = User::role(['master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
+        if (Auth::user()->hasRole('Master')) {
+            $signers = User::role(['Master', 'senior teacher', 'teacher'])->pluck('name', 'id')->all();
         } else {
-            $signers = User::where('institution_id', Auth::user()->institution->id)->role(['senior teacher', 'teacher'])->pluck('name', 'id')->all();
+            $user_ids = UserInstitution::where('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('user_id');
+            $signers = User::whereIn('id', $user_ids)->role(['senior teacher', 'teacher'])->pluck('name', 'id');
         }
         return view('attendances.create', compact('schedule', 'signers'));
       } else {

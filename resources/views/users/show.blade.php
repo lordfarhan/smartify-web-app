@@ -25,7 +25,7 @@
         <p class="text-muted text-center">
 					@if(!empty($user->getRoleNames()))
 						@foreach($user->getRoleNames() as $v)
-								<label class="badge badge-success">{{ $v }}</label>
+              <label class="badge badge-success">{{ $v }}</label>
 						@endforeach
 					@endif
 				</p>
@@ -53,24 +53,54 @@
       <!-- /.card-header -->
       <div class="card-body">
         <strong><i class="fas fa-briefcase mr-1"></i> {{__('common.users.attributes.institution')}}</strong>
-        <p class="text-muted">{{$user->institution->name}}</p>
+        <p class="text-muted">
+        @if (count($user->institutions) == 0)
+          {{__('common.users.show.empty')}}
+        @else
+          @foreach ($user->institutions as $index => $institution)
+            <label class="badge badge-success">{{ $institution->institution->name }}</label>
+          @endforeach
+        @endif
+        </p>
         <hr>
 
 				<strong><i class="fas fa-envelope mr-1"></i> {{__('common.users.attributes.email')}}</strong>
-        <p class="text-muted">{{$user->email}}</p>
+        <p class="text-muted">
+          @if ($user->email == null)
+            {{__('common.users.show.empty')}}
+          @else
+            {{$user->email}}
+          @endif
+        </p>
         <hr>
 
         <strong><i class="fas fa-phone-alt mr-1"></i> {{__('common.users.attributes.phone')}}</strong>
-        <p class="text-muted">{{$user->phone}}</p>
+        <p class="text-muted">
+          @if ($user->phone == null)
+            {{__('common.users.show.empty')}}
+          @else
+            {{$user->phone}}
+          @endif
+        </p>
         <hr>
 
         <strong><i class="fas fa-map-marker-alt mr-1"></i> {{__('common.users.attributes.address')}}</strong>
-        <p class="text-muted">{{$user->address}}</p>
+        <p class="text-muted">
+          @if ($user->address == null)
+            {{__('common.users.show.empty')}}
+          @else
+            {{$user->address}}
+          @endif
+        </p>
         <hr>
 
         <strong><i class="fas fa-calendar-alt mr-1"></i> {{__('common.users.attributes.date_of_birth')}}</strong>
         <p class="text-muted">
-          {{\Carbon\Carbon::parse($user->date_of_birth)->format("M, d Y") . ' (' . \Carbon\Carbon::parse($user->date_of_birth)->age . ')'}}
+          @if ($user->date_of_birth == null)
+            {{__('common.users.show.empty')}}
+          @else
+            {{\Carbon\Carbon::parse($user->date_of_birth)->format("M, d Y") . ' (' . \Carbon\Carbon::parse($user->date_of_birth)->age . ')'}}
+          @endif
         </p>
         <hr>
 

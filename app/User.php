@@ -6,8 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject, MustVerifyEmail
 {
     use Notifiable;
     use HasRoles;
@@ -18,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'institution_id', 'name', 'email', 'password', 'phone', 'address', 'date_of_birth', 'gender', 'image'
+        'village_id', 'name', 'email', 'email_verified_at', 'password', 'phone', 'address', 'date_of_birth', 'gender', 'image', 'is_verified'
     ];
 
     /**
@@ -27,7 +28,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'village_id', 'password', 'remember_token',
     ];
 
     /**
@@ -45,12 +46,33 @@ class User extends Authenticatable
      * @var array
      */
     protected $attributes = [
-        'institution_id' => 2,
-        'active' => '0',
         'image' => 'users/default.png'
     ];
 
-    public function institution() {
-        return $this->belongsTo(Institution::class);
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    public function village() {
+      return $this->belongsTo(Village::class);
+    }
+
+    public function institutions() {
+      return $this->hasMany(UserInstitution::class);
     }
 }

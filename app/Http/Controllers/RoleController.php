@@ -25,10 +25,10 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
-        if(Auth::user()->institution->id == 1) {
+        if(Auth::user()->hasRole('Master')) {
             $roles = Role::orderBy('id', 'asc')->get();
         } else {
-            $roles = Role::whereNotIn('name', ['master'])->orderBy('id', 'asc')->get();
+            $roles = Role::whereNotIn('name', ['Master'])->orderBy('id', 'asc')->get();
         }
 
         return view('roles.index',compact('roles'));
@@ -119,7 +119,7 @@ class RoleController extends Controller
         $role->syncPermissions($request->input('permission'));
 
         return redirect()->route('roles.index')
-                        ->with('success','Role updated successfully');
+            ->with('success','Role updated successfully');
     }
 
     /**

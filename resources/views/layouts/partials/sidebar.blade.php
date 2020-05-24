@@ -138,7 +138,7 @@
 
         {{-- Settings --}}
 				<li class="nav-item">
-					<a href="#" class="nav-link {{ request()->is('settings') ? 'active' : '' }}">
+					<a href="{{route('settings.index')}}" class="nav-link {{ request()->is('settings') ? 'active' : '' }}">
 						<i class="nav-icon fas fa-cog"></i>
 						<p>
 							{{__('common.sidebar.settings')}}

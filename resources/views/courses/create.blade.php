@@ -26,6 +26,14 @@
 						</div>
 						@endif
 						<div class="row">
+              @if (Auth::user()->roles('master'))
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ Form::label('institution_id', __('common.courses.attributes.institution')) }}
+                    {{ Form::select('institution_id', $institutions, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.institution_placeholder'))) }}
+                  </div>
+                </div>
+              @endif
 							<div class="col-md-6">
 								<div class="form-group">
 									{{ Form::label('author_id', __('common.courses.attributes.author')) }}
@@ -38,13 +46,13 @@
 									{{ Form::select('subject_id', $subjects, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.subject_placeholder'))) }}
 								</div>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-6">
 								<div class="form-group">
 									{{ Form::label('grade_id', __('common.courses.attributes.grade')) }}
 									{{ Form::select('grade_id', $grades, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.grade_placeholder'))) }}
 								</div>
 							</div>
-							<div class="col-md-3">
+							<div class="col-md-6">
 								<div class="form-group">
 									{{ Form::label('section', __('common.courses.attributes.section')) }}
 									{{ Form::text('section', null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.section_placeholder'))) }}
@@ -70,18 +78,6 @@
 							</div>
 							<div class="col-md-6">
 								<div class="form-group">
-									{{ Form::label('institution_id', __('common.courses.attributes.institution')) }}
-									{{ Form::select('institution_id', $institutions, null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.institution_placeholder'))) }}
-								</div>
-							</div>
-							<div id="attachment-title-div" class="col-md-6">
-								<div class="form-group">
-									{{ Form::label('attachment_title', __('common.courses.attributes.attachment_title')) }}
-									{{ Form::text('attachment_title', null, array('placeholder' => __('common.courses.attributes.attachment_title_placeholder'), 'class' => 'form-control')) }}
-								</div>
-							</div>
-							<div class="col-md-6">
-								<div class="form-group">
 									{{ Form::label('image', __('common.courses.attributes.image')) }}
 									{{ Form::file('image', ['class'=>'form-control']) }}
 								</div>
@@ -90,6 +86,12 @@
 								<div class="form-group">
 									{{ Form::label('attachment', __('common.courses.attributes.attachment')) }}
 									{{ Form::file('attachment', ['id' => 'attachment', 'class'=>'form-control']) }}
+								</div>
+              </div>
+              <div id="attachment-title-div" class="col-md-6">
+								<div class="form-group">
+									{{ Form::label('attachment_title', __('common.courses.attributes.attachment_title')) }}
+									{{ Form::text('attachment_title', null, array('placeholder' => __('common.courses.attributes.attachment_title_placeholder'), 'class' => 'form-control')) }}
 								</div>
 							</div>
 						</div>

@@ -50,7 +50,7 @@
 						@foreach ($courses->where('grade_id', $grade->id) as $key => $course)
 						<tr>
 							<td>{{ ++$key}}</td>
-							<td>{{ $course->institution->name }}</td>
+							<td>{{ $course->institution == null ? '' : $course->institution->name }}</td>
 							<td>{{ $course->subject->subject }}</td>
 							<td>{{ $course->grade->grade }}</td>
 							<td>{{ $course->author->name }}</td>

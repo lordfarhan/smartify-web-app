@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\UserInstitution;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,10 +16,11 @@ class TeacherController extends Controller
      */
     public function index()
     {
-      if(Auth::user()->institution->id == 1) {
+      if(Auth::user()->hasRole('Master')) {
         $data = User::role(['senior teacher', 'teacher'])->orderBy('id', 'desc')->get();
       } else {
-        $data = User::role(['senior teacher', 'teacher'])->where('institution_id', Auth::user()->institution->id)->orderBy('id', 'desc')->get();
+        $user_ids = UserInstitution::where('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('user_id');
+        $data = User::whereIn('id', $user_ids)->role(['senior teacher', 'teacher'])->orderBy('id', 'desc')->get();
       }
       return view('users.index', compact('data'));
     }
