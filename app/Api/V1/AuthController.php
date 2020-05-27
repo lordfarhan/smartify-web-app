@@ -210,10 +210,10 @@ class AuthController extends Controller
 
       $user = Auth::user()->toArray();
       $user['image'] = url('storage/'.Auth::user()->image);
-      $user['village'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->first()->name)) : null;
-      $user['district'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->first()->district->name)) : null;
-      $user['regency'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->first()->district->regency->name)) : null;
-      $user['province'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->first()->district->regency->province->name)) : null;
+      $user['village'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->name)) : null;
+      $user['district'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->name)) : null;
+      $user['regency'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->name)) : null;
+      $user['province'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->province->name)) : null;
       $user['institutions'] = Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('name');
       
       try {

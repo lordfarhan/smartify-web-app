@@ -231,6 +231,6 @@
 			return $("#datepicker-date"+id).datetimepicker({ format: "D/MM/YYYY" })
 		}
 
-		$(function () { $("#datepicker-date").datetimepicker({ format: "LL" }) })
+		$(function () { $("#datepicker-date").datetimepicker({ format: "D/MM/YYYY" }) })
 	</script>
 @endsection
