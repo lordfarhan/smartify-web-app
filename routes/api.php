@@ -17,16 +17,20 @@ use Illuminate\Support\Facades\Route;
 // Route::middleware('auth:api')->get('/user', function (Request $request) {
 //     return $request->user();
 // });
-Route::post('register', '\\App\\Api\\V1\\AuthController@register');
-Route::post('login', '\\App\\Api\\V1\\AuthController@login');
-Route::post('recover', '\\App\\Api\\V1\\AuthController@recover');
-Route::get('verify/{verification_code}', '\\App\\Api\\V1\\AuthController@verify');
-// Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
-// Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
 
-Route::group(['middleware' => ['jwt.auth']], function() {
-    Route::get('logout', '\\App\\Api\\V1\\AuthController@logout');
-    Route::get('me', '\\App\\Api\\V1\\AuthController@me');
+Route::group(['prefix' => 'v1'], function() {
+  Route::group(['prefix' => 'auth'], function() {
+    Route::post('register', '\\App\\Api\\V1\\Controllers\\Auth\\RegisterController@register');
+    Route::post('login', '\\App\\Api\\V1\\Controllers\\Auth\\LoginController@login');
+    Route::post('recover', '\\App\\Api\\V1\\Controllers\\Auth\\ForgotPasswordController@recover');
+    Route::get('logout', '\\App\\Api\\V1\\Controllers\\Auth\\LogoutController@logout');
+    Route::get('verify/{verification_code}', '\\App\\Api\\V1\\Controllers\\Auth\\VerificationController@verify');
+    Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
+    Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
+    Route::get('me', '\\App\\Api\\V1\\Controllers\\UserController@me');
+  });
 
+  Route::group(['middleware' => ['jwt.auth']], function() {
     Route::get('courses', '\\App\\Api\\V1\\CourseController@get');
+  });
 });

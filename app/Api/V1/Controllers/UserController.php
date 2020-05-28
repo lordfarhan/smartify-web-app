@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Api\V1;
+namespace App\Api\V1\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Institution;
 use App\User;
 use Carbon\Carbon;
 use Exception;
@@ -12,7 +13,50 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 
-class UserController extends Controller {
+class UserController extends Controller 
+{
+  /**
+   * Create a new AuthController instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('jwt.auth', []);
+  }
+
+  /**
+   * API Recover Password
+   *
+   * @param Request $request
+   * @return \Illuminate\Http\JsonResponse
+   */
+  public function me(Request $request) {
+    // $this->validate($request, ['token' => 'required']);
+
+    $user = Auth::user()->toArray();
+    $user['image'] = url('storage/'.Auth::user()->image);
+    $user['role'] = Auth::user()->getRoleNames();
+    $user['village'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->name)) : null;
+    $user['district'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->name)) : null;
+    $user['regency'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->name)) : null;
+    $user['province'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->province->name)) : null;
+    $user['institutions'] = Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('name');
+    
+    try {
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched user data',
+        'user' => $user
+      ]);
+    } catch(Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'user' => null
+      ]);
+    }
+  }
 
   /**
    * Update name.

@@ -16,10 +16,6 @@ class InitialSeeding extends Seeder
     public function run()
     {
         Institution::create([
-            'name' => 'Codeiva',
-            'description' => 'This institution is only for codeiva member'
-        ]);
-        Institution::create([
             'name' => 'Smartify',
             'description' => 'This institution is for public and non-partnership users'
         ]);
