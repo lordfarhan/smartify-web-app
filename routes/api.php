@@ -23,6 +23,7 @@ Route::group(['prefix' => 'v1'], function() {
     Route::post('register', '\\App\\Api\\V1\\Controllers\\Auth\\RegisterController@register');
     Route::post('login', '\\App\\Api\\V1\\Controllers\\Auth\\LoginController@login');
     Route::post('recover', '\\App\\Api\\V1\\Controllers\\Auth\\ForgotPasswordController@recover');
+    Route::post('refresh', '\\App\\Api\\V1\\Controllers\\Auth\\RefreshController@refresh');
     Route::get('logout', '\\App\\Api\\V1\\Controllers\\Auth\\LogoutController@logout');
     Route::get('verify/{verification_code}', '\\App\\Api\\V1\\Controllers\\Auth\\VerificationController@verify');
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');

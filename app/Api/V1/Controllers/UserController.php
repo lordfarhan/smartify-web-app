@@ -35,13 +35,17 @@ class UserController extends Controller
     // $this->validate($request, ['token' => 'required']);
 
     $user = Auth::user()->toArray();
+    $user['email_verified_at'] = Carbon::parse(Auth::user()->email_verified_at)->format('d/m/Y');
+    $user['date_of_birth'] = Carbon::parse(Auth::user()->date_of_birth)->format('d/m/Y');
     $user['image'] = url('storage/'.Auth::user()->image);
-    $user['role'] = Auth::user()->getRoleNames();
     $user['village'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->name)) : null;
     $user['district'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->name)) : null;
     $user['regency'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->name)) : null;
     $user['province'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->province->name)) : null;
+    $user['roles'] = Auth::user()->getRoleNames();
     $user['institutions'] = Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('name');
+    $user['created_at'] = Carbon::parse(Auth::user()->created_at)->format('d/m/Y');
+    $user['updated_at'] = Carbon::parse(Auth::user()->updated_at)->format('d/m/Y');
     
     try {
       return response()->json([
