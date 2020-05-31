@@ -52,13 +52,13 @@ class UserController extends Controller
         'success' => true,
         'message' => 'Successfully fetched user data',
         'user' => $user
-      ]);
+      ], 200);
     } catch(Exception $e) {
       return response()->json([
         'success' => false,
         'message' => $e->getMessage(),
         'user' => null
-      ]);
+      ], 500);
     }
   }
 

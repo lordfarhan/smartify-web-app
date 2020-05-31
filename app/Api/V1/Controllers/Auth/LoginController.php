@@ -26,7 +26,8 @@ class LoginController extends Controller {
 
     $validator = Validator::make($credentials, $rules);
     if($validator->fails()) {
-        return response()->json(['success'=> false, 'message'=> $validator->messages()], 401);
+      $errorString = implode(",",$validator->messages()->all());
+      return response()->json(['success'=> false, 'message'=> $errorString], 401);
     }
     
     try {

@@ -33,7 +33,8 @@ class RegisterController extends Controller {
 
     $validator = Validator::make($credentials, $rules);
     if($validator->fails()) {
-        return response()->json(['success'=> false, 'message'=> $validator->messages()]);
+      $errorString = implode(", ",$validator->messages()->all());
+      return response()->json(['success'=> false, 'message'=> $errorString], 401);
     }
 
     $name = $request->name;
@@ -62,10 +63,10 @@ class RegisterController extends Controller {
       UserInstitution::create(['user_id' => $user->id, 'institution_id' => 1]);
       $user->assignRole('student');
       
-      return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.']);
+      return response()->json(['success'=> true, 'message'=> 'Thanks for signing up! Please check your email to complete your registration.'], 200);
     }
     catch (Exception $e){
-      return response()->json(['success' => false, 'message' => $e->getMessage()]);
+      return response()->json(['success' => false, 'message' => 'Failed to register, please try again.'], 500);
     }
     
   }
