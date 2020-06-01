@@ -39,6 +39,7 @@ class RegisterController extends Controller {
 
     $name = $request->name;
     $email = $request->email;
+    $phone = $request->phone;
     $password = $request->password;
 
     $verification_code = str_random(100); //Generate verification code
@@ -50,14 +51,14 @@ class RegisterController extends Controller {
           'Please click the button below to verify your email address.'
         ],
         'actionText' => 'Verify Email Address',
-        'actionUrl' => url("api/verify/$verification_code"),
+        'actionUrl' => url("api/v1/auth/verify/$verification_code"),
         'outroLines' => [
           'If you did not create an account, no further action is required.'
         ],
       ];
       Mail::to($email)->send(new VerifyEmailAddress($data));
 
-      $user = User::create(['name' => $name, 'email' => $email, 'password' => Hash::make($password)]);
+      $user = User::create(['name' => $name, 'email' => $email, 'phone' => $phone, 'password' => Hash::make($password)]);
       DB::table('user_verifications')->insert(['user_id' => $user->id, 'token' => $verification_code]);
 
       UserInstitution::create(['user_id' => $user->id, 'institution_id' => 1]);
