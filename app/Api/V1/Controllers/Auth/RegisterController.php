@@ -34,7 +34,7 @@ class RegisterController extends Controller {
     $validator = Validator::make($credentials, $rules);
     if($validator->fails()) {
       $errorString = implode(", ",$validator->messages()->all());
-      return response()->json(['success'=> false, 'message'=> $errorString], 401);
+      return response()->json(['success'=> false, 'message'=> $errorString], 428);
     }
 
     $name = $request->name;

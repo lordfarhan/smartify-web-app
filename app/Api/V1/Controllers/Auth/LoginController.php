@@ -27,7 +27,7 @@ class LoginController extends Controller {
     $validator = Validator::make($credentials, $rules);
     if($validator->fails()) {
       $errorString = implode(",",$validator->messages()->all());
-      return response()->json(['success'=> false, 'message'=> $errorString], 401);
+      return response()->json(['success'=> false, 'message'=> $errorString], 428);
     }
     
     try {
@@ -38,7 +38,7 @@ class LoginController extends Controller {
         //if you reached here then user has been authenticated
         if (empty(auth()->user()->email_verified_at))
         {
-            return response()->json(['success' => false, 'message' => 'Your have not verified your email.'], 401);
+            return response()->json(['success' => false, 'message' => 'Your have not verified your email.'], 428);
         }
     } catch (JWTException $e) {
         // something went wrong whilst attempting to encode the token
