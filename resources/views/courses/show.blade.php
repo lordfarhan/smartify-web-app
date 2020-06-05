@@ -20,7 +20,7 @@
             </div>                        
           @endif
       
-          <h3 class="profile-coursename text-center">{{ $course->subject->subject . ' - ' . $course->grade->grade . ' ' . $course->grade->getEducationalStage() . ' ' . $course->section }}</h3>
+          <h3 class="profile-coursename text-center">{{ $course->subject->subject . ' - ' . $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() . ' ' . $course->section }}</h3>
       
           <p class="text-muted text-center">
             @if ($course->status == '0')

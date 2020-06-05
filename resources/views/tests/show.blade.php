@@ -34,7 +34,7 @@
 						</li>
 						@if (!empty($test->description))
 						<li class="list-group-item">
-							<b>{{{{__('common.tests.attributes.description')}}}}</b> <a class="float-right">
+							<b>{{__('common.tests.attributes.description')}}</b> <a class="float-right">
 								{{$test->description}}
 							</a>
 						</li>
@@ -51,7 +51,7 @@
 					@endif
 					<div class="timeline">
 						<div class="time-label">
-							<span class="bg-green">{{{{__('common.tests.show.questions')}}}}</span>
+							<span class="bg-green">{{__('common.tests.show.questions')}}</span>
 						</div>
 						@can('question-list')
 							@foreach ($questions as $question)
@@ -66,12 +66,12 @@
 											@endif
 											<ul class="list-group list-group-unbordered mb-3">
 												<li class="list-group-item">
-													<b>{{{{__('common.tests.attributes.correct_answer')}}}}</b> <a class="text-success float-right">{{ $question->correct_answer }}</a>
+													<b>{{__('common.tests.attributes.correct_answer')}}</b> <a class="text-success float-right">{{ $question->correct_answer }}</a>
 												</li>
 												@foreach (explode("; ", ltrim($question->incorrect_answers)) as $index => $incorrect_answer)
 													<li class="list-group-item">
 														<b>@if ($index == 0)
-															{{{{__('common.tests.attributes.incorrect_answers')}}}}
+															{{__('common.tests.attributes.incorrect_answers')}}
 														@endif</b> <a class="text-danger float-right">{{ $incorrect_answer }}</a>
 													</li>
 												@endforeach
@@ -79,10 +79,10 @@
 										</div>
 										<div class="timeline-footer">
 											@can('question-edit')										
-												<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}">{{{{__('common.tests.actions.edit')}}}}</a>
+												<a class="btn btn-warning btn-sm" href="{{route('questions.edit', $question->id)}}">{{__('common.tests.actions.edit')}}</a>
 											@endcan
 											@can('question-delete')
-												<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">{{{{__('common.tests.actions.delete')}}}}</a>
+												<a class="delete-question-modal btn btn-danger btn-sm" data-id="{{$question->id}}">{{__('common.tests.actions.delete')}}</a>
 											@endcan
 										</div>
 									</div>
@@ -296,7 +296,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-success" data-dismiss="modal">{{__('common.tests.actions.cancel')}}</button>
-					<button type="submit" class="btn btn-danger btn-edit-chapter">{{{{__('common.tests.actions.delete')}}}}</button>
+					<button type="submit" class="btn btn-danger btn-edit-chapter">{{__('common.tests.actions.delete')}}</button>
 				</div>
 			</div>
 		</form>

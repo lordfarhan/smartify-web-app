@@ -52,7 +52,7 @@
 							<td>{{ ++$key}}</td>
 							<td>{{ $course->institution == null ? '' : $course->institution->name }}</td>
 							<td>{{ $course->subject->subject }}</td>
-							<td>{{ $course->grade->grade }}</td>
+							<td>{{ $course->grade->grade . ' ' . $course->section }}</td>
 							<td>{{ $course->author->name }}</td>
 							<td>
 								@if ($course->type == '0')

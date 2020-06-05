@@ -12,7 +12,7 @@ class Course extends Model
      * @var array
      */
     protected $fillable = [
-        'institution_id', 'author_id', 'subject_id', 'grade_id', 'type', 'enrollment_key', 'status', 'status', 'vendor', 'image', 'attachment_title', 'attachment'
+        'institution_id', 'author_id', 'subject_id', 'grade_id', 'section', 'type', 'enrollment_key', 'status', 'status', 'vendor', 'image', 'attachment_title', 'attachment'
     ];
 
     /**
@@ -30,7 +30,8 @@ class Course extends Model
      * @var array
      */
     protected $attributes = [
-        'institution_id' => 2,
+        'institution_id' => 1,
+        'image' => 'courses/default.png',
     ];
 
     public function institution() {
