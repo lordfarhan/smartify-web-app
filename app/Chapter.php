@@ -16,6 +16,6 @@ class Chapter extends Model
     ];
 
     public function sub_chapters() {
-        return $this->hasMany('App\SubChapter');
+        return $this->hasMany(SubChapter::class);
     }
 }

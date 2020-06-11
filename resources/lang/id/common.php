@@ -224,6 +224,8 @@ return [
       'grade_placeholder' => 'Pilih Kelas',
       'section' => 'Bagian (pilihan)',
       'section_placeholder' => 'Contoh: A, B, C, IPA A, IPS A, dsb',
+      'name' => 'Nama Kursus',
+      'name_placeholder' => 'Masukkan Nama Kursus, misal : Bahasa Indonesia Untuk Kelas 7 SMP',
       'type' => 'Tipe',
       'type_placeholder' => 'Pilih Tipe',
       'enrollment_key' => 'Kunci Pendaftaran (hanya untuk mode privat)',

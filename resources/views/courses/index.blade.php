@@ -39,6 +39,7 @@
 							<th>{{__('common.courses.attributes.institution')}}</th>
 							<th>{{__('common.courses.attributes.subject')}}</th>
 							<th>{{__('common.courses.attributes.grade')}}</th>
+							<th>{{__('common.courses.attributes.name')}}</th>
 							<th>{{__('common.courses.attributes.author')}}</th>
 							<th>{{__('common.courses.attributes.type')}}</th>
 							<th>{{__('common.courses.attributes.status')}}</th>
@@ -53,6 +54,7 @@
 							<td>{{ $course->institution == null ? '' : $course->institution->name }}</td>
 							<td>{{ $course->subject->subject }}</td>
 							<td>{{ $course->grade->grade . ' ' . $course->section }}</td>
+							<td>{{ $course->name }}</td>
 							<td>{{ $course->author->name }}</td>
 							<td>
 								@if ($course->type == '0')

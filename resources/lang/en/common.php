@@ -224,6 +224,8 @@ return [
       'grade_placeholder' => 'Select Grade',
       'section' => 'Section (optional)',
       'section_placeholder' => 'Ex: A, B, C, IPA A, IPS A, etc',
+      'name' => 'Course Name',
+      'name_placeholder' => 'Insert Course Name, ex: English for Beginner',
       'type' => 'Type',
       'type_placeholder' => 'Select Type',
       'enrollment_key' => 'Enrollment Key (only for private type)',

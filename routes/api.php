@@ -31,7 +31,12 @@ Route::group(['prefix' => 'v1'], function() {
     Route::get('me', '\\App\\Api\\V1\\Controllers\\UserController@me');
   });
 
-  Route::group(['middleware' => ['jwt.auth']], function() {
-    Route::get('courses', '\\App\\Api\\V1\\CourseController@get');
+  Route::group(['prefix' => 'courses'], function() {
+    Route::get('featured', '\\App\\Api\\V1\\Controllers\\CourseController@featured');
+    Route::get('owned', '\\App\\Api\\V1\\Controllers\\CourseController@owned');
+    Route::post('enroll/{id}', '\\App\\Api\\V1\\Controllers\\CourseController@enroll');
+    Route::get('/{id}', '\\App\\Api\\V1\\Controllers\\CourseController@getById');
+    Route::get('/{id}/chapters', '\\App\\Api\\V1\\Controllers\\ChapterController@getByCourseId');
+    Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters', '\\App\\Api\\V1\\Controllers\\SubChapterController@getByChapterId');
   });
 });

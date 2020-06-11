@@ -20,7 +20,7 @@
             </div>                        
           @endif
       
-          <h3 class="profile-coursename text-center">{{ $course->subject->subject . ' - ' . $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() . ' ' . $course->section }}</h3>
+          <h3 class="profile-coursename text-center">{{ $course->name }}</h3>
       
           <p class="text-muted text-center">
             @if ($course->status == '0')
@@ -36,6 +36,12 @@
             </li>
             <li class="list-group-item">
               <b>{{__('common.courses.attributes.institution')}}</b> <a class="float-right">{{ $course->institution->name }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>{{__('common.courses.attributes.subject')}}</b> <a class="float-right">{{ $course->subject->subject }}</a>
+            </li>
+            <li class="list-group-item">
+              <b>{{__('common.courses.attributes.grade')}}</b> <a class="float-right">{{ $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() . ' ' . $course->section }}</a>
             </li>
             @foreach ($course->schedules as $index => $schedule)
               <li class="list-group-item">

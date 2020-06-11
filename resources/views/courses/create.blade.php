@@ -57,7 +57,13 @@
 									{{ Form::label('section', __('common.courses.attributes.section')) }}
 									{{ Form::text('section', null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.section_placeholder'))) }}
 								</div>
-							</div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  {{Form::label('name', __('common.courses.attributes.name'))}}
+                  {{Form::text('name', null, array('placeholder' => __('common.courses.attributes.name_placeholder'), 'class' => 'form-control'))}}
+                </div>
+              </div>
 							<div class="col-md-6">
 								<div class="form-group">
 									{{ Form::label('type', __('common.courses.attributes.type')) }}
