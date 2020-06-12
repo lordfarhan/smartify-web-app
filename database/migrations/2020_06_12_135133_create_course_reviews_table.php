@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCourseEnrollmentsTable extends Migration
+class CreateCourseReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCourseEnrollmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_enrollments', function (Blueprint $table) {
+        Schema::create('course_reviews', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->enum('status', ['0', '1'])->default('0');
+            $table->tinyInteger('rating');
+            $table->text('review')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateCourseEnrollmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_enrollments');
+        Schema::dropIfExists('course_reviews');
     }
 }

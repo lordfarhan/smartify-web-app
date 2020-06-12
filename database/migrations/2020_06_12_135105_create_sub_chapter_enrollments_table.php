@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCourseEnrollmentsTable extends Migration
+class CreateSubChapterEnrollmentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCourseEnrollmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('course_enrollments', function (Blueprint $table) {
+        Schema::create('sub_chapter_enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade');
+            $table->foreignId('chapter_enrollment_id')->references('id')->on('chapter_enrollments')->onDelete('cascade');
+            $table->foreignId('sub_chapter_id')->references('id')->on('sub_chapters')->onDelete('cascade');
             $table->enum('status', ['0', '1'])->default('0');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateCourseEnrollmentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('course_enrollments');
+        Schema::dropIfExists('sub_chapter_enrollments');
     }
 }

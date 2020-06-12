@@ -4,6 +4,7 @@ namespace App\Api\V1\Controllers;
 
 use App\Course;
 use App\CourseEnrollment;
+use App\CourseReview;
 use App\Grade;
 use App\Http\Controllers\Controller;
 use App\Institution;
