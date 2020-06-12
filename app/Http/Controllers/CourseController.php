@@ -72,7 +72,7 @@ class CourseController extends Controller
       'status' => 'required',
       'image' => 'mimes:jpg,png,jpeg,JPG',
       'attachment_title' => 'required',
-      'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+      'attachment' => 'mimes:pdf'
     );
 
     // Schedule insertion
@@ -198,7 +198,7 @@ class CourseController extends Controller
       'status' => 'required',
       'image' => 'mimes:jpg,png,jpeg,JPG',
       'attachment_title' => 'required',
-      'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+      'attachment' => 'mimes:pdf'
     );
 
     if ($request->type == '0') {

@@ -33,7 +33,7 @@ class ChapterController extends Controller
             'chapter' => 'required',
             'title' => 'required',
             'attachment_title' => 'required',
-            'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+            'attachment' => 'mimes:pdf'
         );
 
         if (empty($request->file('attachment'))) {
@@ -78,7 +78,7 @@ class ChapterController extends Controller
             'chapter' => 'required',
             'title' => 'required',
             'attachment_title' => 'required',
-            'attachment' => 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx'
+            'attachment' => 'mimes:pdf'
         );
 
         if (empty($request->file('attachment'))) {
