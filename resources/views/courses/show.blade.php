@@ -41,7 +41,7 @@
               <b>{{__('common.courses.attributes.subject')}}</b> <a class="float-right">{{ $course->subject->subject }}</a>
             </li>
             <li class="list-group-item">
-              <b>{{__('common.courses.attributes.grade')}}</b> <a class="float-right">{{ $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() . ' ' . $course->section }}</a>
+              <b>{{__('common.courses.attributes.grade')}}</b> <a class="float-right">{{ $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() }}</a>
             </li>
             @foreach ($course->schedules as $index => $schedule)
               <li class="list-group-item">
