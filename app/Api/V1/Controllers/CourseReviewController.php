@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
-class ReviewController extends Controller
+class CourseReviewController extends Controller
 {
   /**
    * Create a new AuthController instance.
@@ -64,13 +66,12 @@ class ReviewController extends Controller
    * @param Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function review(Request $request) {
+  public function addReview(Request $request) {
     $credentials = $request->only('course_id', 'rating', 'review');
     
     $rules = [
         'course_id' => 'required',
         'rating' => 'required',
-        'review' => 'required'
     ];
 
     $validator = Validator::make($credentials, $rules);
@@ -83,10 +84,16 @@ class ReviewController extends Controller
         $existedReview->review = $request->review;
         $existedReview->update();
 
+        $existedReview['user'] = User::find($existedReview->user_id)->name;
+        $existedReview['email'] = User::find($existedReview->user_id)->email;
+        $existedReview['user_image'] = url('storage/'.User::find($existedReview->user_id)->image);
+
         return response()->json([
           'success' => true,
           'message' => 'Successfully edited review',
-          'result' => $existedReview
+          'result' => [
+            $existedReview
+          ]
         ], 200);
       } catch(Exception $e) {
         return response()->json([
@@ -103,16 +110,22 @@ class ReviewController extends Controller
         $review->rating = $request->rating;
         $review->review = $request->review;
         $review->save();
+
+        $review['user'] = User::find($review->user_id)->name;
+        $review['email'] = User::find($review->user_id)->email;
+        $review['user_image'] = url('storage/'.User::find($review->user_id)->image);
   
         return response()->json([
           'success' => true,
           'message' => 'Successfully added review',
-          'result' => $review
+          'result' => [
+            $review
+          ]
         ], 200);
       } catch(Exception $e) {
         return response()->json([
           'success' => false,
-          'message' => 'Failed to add review',
+          'message' => 'Failed to add review'.$e->getMessage(),
           'result' => null
         ], 500);
       } 
