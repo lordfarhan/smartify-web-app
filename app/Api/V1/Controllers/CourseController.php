@@ -52,7 +52,11 @@ class CourseController extends Controller
         $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
         $course['subject'] = Subject::find($course->subject_id)->subject;
         $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
-        $course['enrolled'] = in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray());
+        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+          $course['enrolled'] = 1;
+        } else {
+          $course['enrolled'] = 0;
+        }
       }
 
       if (count($courses) > 0) {
@@ -103,7 +107,11 @@ class CourseController extends Controller
         $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
         $course['subject'] = Subject::find($course->subject_id)->subject;
         $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
-        $course['enrolled'] = in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray());
+        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+          $course['enrolled'] = 1;
+        } else {
+          $course['enrolled'] = 0;
+        }
       }
 
       if (count($courses) > 0) {
@@ -203,7 +211,11 @@ class CourseController extends Controller
       $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
       $course['subject'] = Subject::find($course->subject_id)->subject;
       $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();      
-      $course['enrolled'] = in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray());
+      if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+        $course['enrolled'] = 1;
+      } else {
+        $course['enrolled'] = 0;
+      }
 
       if ($course != null) {
         return response()->json([
