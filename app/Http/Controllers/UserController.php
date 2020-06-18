@@ -141,27 +141,22 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
+        $rules = array(
+          'name' => 'required',
+          'email' => 'required|email|unique:users,email',
+          'password' => 'same:confirm-password',
+          'phone' => 'required|unique:users,phone',
+          'address' => 'required',
+          'roles' => 'required',
+          'image'=>'mimes:jpg,png,jpeg,JPG'
+        );
         if (request('email') == $user->email) {
-            $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required|email',
-                'password' => 'same:confirm-password',
-                'phone' => 'required',
-                'address' => 'required',
-                'roles' => 'required',
-                'image'=> 'mimes:jpg,png,jpeg,JPG',
-            ]);
-        } else {
-            $this->validate($request, [
-                'name' => 'required',
-                'email' => 'required|email|unique:users,email',
-                'password' => 'same:confirm-password',
-                'phone' => 'required',
-                'address' => 'required',
-                'roles' => 'required',
-                'image'=>'mimes:jpg,png,jpeg,JPG',
-            ]);
+            $rules['email'] = 'required|email';
         }
+        if (request('phone') == $user->phone) {
+          $rules['phone'] = 'required';
+        }
+        $this->validate($request, $rules);
 
         $input = $request->all();
         $input['name'] = ucwords(strtolower($input['name']));

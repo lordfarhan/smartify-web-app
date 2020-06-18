@@ -69,6 +69,10 @@ class InitialSeeding extends Seeder
             'attendance-create',
             'attendance-edit',
             'attendance-delete',
+            'material-list',
+            'material-create',
+            'material-edit',
+            'material-delete',
         ];
 
         foreach ($permissions as $permission) {

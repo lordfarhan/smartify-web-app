@@ -45,6 +45,11 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('courses/{course_id}/forum/{slug}/replies/{reply_id}/edit', 'ForumReplyController@edit');
     Route::get('courses/{course_id}/forum/{slug}/replies/{reply_id}/delete', 'ForumReplyController@delete');
 
+    Route::get('courses/{id}/{chapter_id}/{sub_chapter_id}', 'CourseController@showMaterials');
+
+    Route::post('courses/storeMaterial', 'MaterialController@store')->name('materials.store');
+    Route::post('courses/deleteMaterial', 'MaterialController@delete')->name('materials.delete');
+
     Route::resource('chapters', 'ChapterController');
     Route::post('chapters.edit', 'ChapterController@update');
     Route::post('chapters.delete', 'ChapterController@destroy');
@@ -72,6 +77,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('forumReplies', 'ForumReplyController');
 
     Route::get('settings', 'SettingController@index')->name('settings.index');
+
+    Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web']], function () {
+      \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
 });
 
 Route::get('administratives/provinces/{id}/regencies', 'AdministrativeController@regencies');

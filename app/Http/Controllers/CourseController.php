@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Grade;
 use App\Institution;
+use App\Material;
 use App\Schedule;
+use App\SubChapter;
 use App\Subject;
 use App\User;
 use App\UserInstitution;
@@ -378,5 +380,11 @@ class CourseController extends Controller
     }
 
     return redirect()->route('courses.index')->with('success', 'Course schedule updated successfully');
+  }
+
+  public function showMaterials($id, $chapter_id, $sub_chapter_id)
+  {
+    $sub_chapter = SubChapter::find($sub_chapter_id);
+    return view('courses.materials', compact('sub_chapter'));
   }
 }
