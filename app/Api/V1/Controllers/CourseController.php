@@ -142,15 +142,17 @@ class CourseController extends Controller
    * @param Request $request
    * @return \Illuminate\Http\JsonResponse
    */
-  public function enroll(Request $request, $id)
+  public function enroll(Request $request)
   {
-    $course = Course::find($id);
+    $input = $request->only('id', 'enrollment_key');
+
+    $course = Course::find($input['id']);
     if ($course->type == '1') {
       $rules = [
+        'id' => 'required',
         'enrollment_key' => 'required',
       ];
 
-      $input = $request->only('enrollment_key');
       $validator = Validator::make($input, $rules);
 
       if ($validator->fails() || $input['enrollment_key'] != $course->enrollment_key) {
@@ -160,16 +162,44 @@ class CourseController extends Controller
           'result' => null
         ], 402);
       }
+    } else {
+      $rules = [
+        'id' => 'required',
+      ];
+
+      $validator = Validator::make($input, $rules);
     }
 
     try {
-      $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $id)->pluck('id')->first();
+      $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $input['id'])->pluck('id')->first();
       if ($course_enrollment == null) {
-        CourseEnrollment::create(['user_id' => Auth::user()->id, 'course_id' => $id]);
+        CourseEnrollment::create(['user_id' => Auth::user()->id, 'course_id' => $input['id']]);
+
+        if ($course->image != null) {
+          $course['image'] = url('storage/' . $course->image);
+        }
+        if ($course->attachment != null) {
+          $course['attachment'] = url('storage/' . $course->attachment);
+        }
+        // $course['created_at'] = Carbon::parse($course->created_at)->format('d/m/Y');
+        // $course['updated_at'] = Carbon::parse($course->updated_at)->format('d/m/Y');
+        $course['institution'] = Institution::find($course->institution_id)->name;
+        $course['author'] = User::find($course->author_id)->name;
+        $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
+        $course['subject'] = Subject::find($course->subject_id)->subject;
+        $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();      
+        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+          $course['enrolled'] = 1;
+        } else {
+          $course['enrolled'] = 0;
+        }
+
         return response()->json([
           'success' => true,
           'message' => 'Successfully enrolled.',
-          'result' => null
+          'result' => [
+            $course
+          ]
         ], 200);
       } else {
         return response()->json([

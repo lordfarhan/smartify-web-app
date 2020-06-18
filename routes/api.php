@@ -34,7 +34,7 @@ Route::group(['prefix' => 'v1'], function() {
   Route::group(['prefix' => 'courses'], function() {
     Route::get('featured', '\\App\\Api\\V1\\Controllers\\CourseController@featured');
     Route::get('owned', '\\App\\Api\\V1\\Controllers\\CourseController@owned');
-    Route::post('enroll/{id}', '\\App\\Api\\V1\\Controllers\\CourseController@enroll');
+    Route::post('/enroll', '\\App\\Api\\V1\\Controllers\\CourseController@enroll');
     Route::get('/{id}', '\\App\\Api\\V1\\Controllers\\CourseController@getById');
 
     Route::get('/{id}/chapters', '\\App\\Api\\V1\\Controllers\\ChapterController@getByCourseId');
