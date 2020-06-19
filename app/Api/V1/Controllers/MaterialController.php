@@ -3,11 +3,11 @@
 namespace App\Api\V1\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Test;
+use App\Material;
 use Exception;
 use Illuminate\Http\Request;
 
-class TestController extends Controller
+class MaterialController extends Controller
 {
   /**
    * Create a new AuthController instance.
@@ -19,30 +19,21 @@ class TestController extends Controller
     $this->middleware('jwt.auth', []);
   }
 
-  /**
-   * API to get test by course id
-   */
-  public function getByCourseId(Request $request, $course_id)
+  public function getBySubChapterId(Request $request, $course_id, $chapter_id, $sub_chapter_id)
   {
     try {
-      $tests = Test::where('course_id', $course_id)->orderBy('order')->get();
+      $materials = Material::where('sub_chapter_id', $sub_chapter_id)->orderBy('order')->get();
 
-      foreach($tests as $key => $test) {
-        // if($test->attachment != null) {
-        //   $test['attachment'] = url('storage/'.$test->attachment);
-        // }
-      }
-
-      if (count($tests) > 0) {
+      if (count($materials) > 0) {
         return response()->json([
           'success' => true,
-          'message' => 'Successfully retrieved tests',
-          'result' => $tests
+          'message' => 'Successfully retrieved materials',
+          'result' => $materials
         ], 200);
       } else {
         return response()->json([
           'success' => true,
-          'message' => 'No test found',
+          'message' => 'No material found',
           'result' => null
         ], 204);
       }

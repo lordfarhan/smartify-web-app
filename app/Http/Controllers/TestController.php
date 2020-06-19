@@ -30,6 +30,7 @@ class TestController extends Controller
             'course_id' => 'required',
             'order' => 'required|numeric',
             'title' => 'required',
+            'description' => 'required',
             'type' => 'required',
             'assign' => 'required',
         );
@@ -71,6 +72,7 @@ class TestController extends Controller
             'course_id' => 'required',
             'order' => 'required|numeric',
             'title' => 'required',
+            'description' => 'required',
             'type' => 'required',
             'assign' => 'required',
         );
