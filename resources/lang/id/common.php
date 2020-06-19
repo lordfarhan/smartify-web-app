@@ -255,6 +255,7 @@ return [
       'sub_chapter_placeholder' => 'A',
       'sub_chapter_title_placeholder' => 'Judul Sub Bab',
       'material_order' => 'Urutan Materi',
+      'material_content' => 'Isi Materi',
       'test_order' => 'Urutan Ujian',
       'test_title' => 'Judul Ujian',
       'test_type' => 'Pilih Tipe',

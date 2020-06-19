@@ -75,9 +75,20 @@ class MaterialController extends Controller
    * @param  \App\Material  $material
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Material $material)
+  public function update(Request $request)
   {
-    //
+    $this->validate($request, [
+      'id' => 'required',
+      'order' => 'required',
+      'content' => 'required',
+    ]);
+
+    $material = Material::find($request->id);
+    $material->order = $request->order;
+    $material->content = $request->content;
+    $material->update();
+
+    return back()->with('success', 'Material updated successfully');
   }
 
   /**

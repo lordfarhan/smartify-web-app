@@ -130,7 +130,7 @@
                                     </div>
                                     <div class="timeline-footer">
                                       <a href="/courses/{{$course->id}}/{{$chapter->id}}/{{$sub_chapter->id}}/" class="btn btn-sm btn-primary">{{__('common.courses.actions.open')}}</a>
-                                      <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}" data-materials="{{$sub_chapter->materials}}">{{__('common.courses.actions.edit')}}</a>
+                                      <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}">{{__('common.courses.actions.edit')}}</a>
                                       <a class="delete-sub-chapter-modal btn btn-danger btn-sm" data-id="{{$sub_chapter->id}}">{{__('common.courses.actions.delete')}}</a>
                                     </div>
                                   </div>
@@ -724,12 +724,6 @@
                 <label class="control-label col-md-12" for="title">{{__('common.courses.attributes.title')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="title" class="form-control" id="title-edit-sub-chapter">
-                </div>
-              </div>
-              <div id="attachment-title-edit-chapter-div" class="form-group">
-                <label class="control-label col-md-2" for="materials">{{__('common.courses.attributes.materials')}}:</label>
-                <div class="col-md-12">
-                  <input value="" type="text" name="materials" class="form-control" id="materials-edit-sub-chapter">
                 </div>
               </div>
             </form>

@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
 
     Route::post('courses/storeMaterial', 'MaterialController@store')->name('materials.store');
     Route::post('courses/deleteMaterial', 'MaterialController@delete')->name('materials.delete');
+    Route::post('courses/updateMaterial', 'MaterialController@update')->name('materials.update');
 
     Route::resource('chapters', 'ChapterController');
     Route::post('chapters.edit', 'ChapterController@update');

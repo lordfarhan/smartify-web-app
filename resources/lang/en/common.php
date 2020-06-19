@@ -255,6 +255,7 @@ return [
       'sub_chapter_placeholder' => 'A',
       'sub_chapter_title_placeholder' => 'Sub Chapter Title',
       'material_order' => 'Material Order',
+      'material_content' => 'Material Content',
       'test_order' => 'Test Order',
       'test_title' => 'Test Title',
       'test_type' => 'Select Type',
