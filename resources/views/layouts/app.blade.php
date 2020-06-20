@@ -90,11 +90,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- /.content-wrapper -->
 
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+  <aside class="control-sidebar control-sidebar-light">
     <!-- Control sidebar content goes here -->
     <div class="p-3">
-      <h5>Title</h5>
-      <p>Sidebar content</p>
+      <a class="btn btn-primary btn-block text-white" href="/me">
+        Profile
+      </a>
+
+      <a class="mt-2 btn btn-danger btn-block text-white" href="{{ route('logout') }}"
+			  onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();">
+        {{ __('Logout') }}
+      </a>
+
+      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+      </form>
     </div>
   </aside>
   <!-- /.control-sidebar -->
@@ -115,8 +126,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset("lte/plugins/bootstrap/js/bootstrap.bundle.min.js") }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset("lte/dist/js/adminlte.min.js") }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('lte/dist/js/demo.js') }}"></script>
 
 @yield('scripts')
 </body>

@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('subjects', 'SubjectController');
     Route::resource('grades', 'GradeController');
     Route::resource('courses', 'CourseController');
+    Route::get('/me', 'UserController@me');
     Route::get('courses/{id}/schedule', 'CourseController@editSchedule');
     Route::post('courses/schedule', 'CourseController@updateSchedule')->name('courses.updateSchedule');
     Route::get('courses.delete-file/{id}/{type}', 'CourseController@deleteFile');
