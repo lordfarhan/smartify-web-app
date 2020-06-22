@@ -15,6 +15,8 @@ class SubChapter extends Model
     'chapter_id', 'sub_chapter', 'title'
   ];
 
+  protected $appends = ['finished'];
+
   public function chapter()
   {
     return $this->belongsTo(Chapter::class);
@@ -23,5 +25,19 @@ class SubChapter extends Model
   public function materials()
   {
     return $this->hasMany(Material::class);
+  }
+
+  public function subChapterEnrollment()
+  {
+    return $this->hasOne(SubChapterEnrollment::class);
+  }
+
+  public function getFinishedAttribute()
+  {
+    if ($this->subChapterEnrollment == null) {
+      return 0;
+    } else {
+      return 1;
+    }
   }
 }

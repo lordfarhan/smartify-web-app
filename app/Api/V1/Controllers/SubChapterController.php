@@ -2,10 +2,15 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\ChapterEnrollment;
+use App\CourseEnrollment;
 use App\Http\Controllers\Controller;
 use App\SubChapter;
+use App\SubChapterEnrollment;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class SubChapterController extends Controller
 {
@@ -51,6 +56,76 @@ class SubChapterController extends Controller
         'message' => "Process error, please try again later.",
         'result' => null
       ], 500);
+    }
+  }
+
+  /**
+   * API to finish the sub chapter 
+   * 
+   * @param int $sub_chapter_id as $id
+   */
+  public function finish(Request $request, $course_id, $chapter_id, $sub_chapter_id)
+  {
+    $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)
+      ->where('course_id', $course_id)->first();
+    if ($course_enrollment == null) {
+      return response()->json([
+        'success' => false,
+        'message' => "Error",
+        'result' => null
+      ], 500);
+    }
+
+    $chapter_enrollment = ChapterEnrollment::where('course_enrollment_id', $course_enrollment->id)
+      ->where('chapter_id', $chapter_id)->first();
+
+    if ($chapter_enrollment == null) {
+      try {
+        $data = array(
+          'course_enrollment_id' => $course_enrollment->id,
+          'chapter_id' => $chapter_id
+        );
+        $chapter_enrollment = ChapterEnrollment::create($data);
+      } catch (Exception $e) {
+        return response()->json([
+          'success' => false,
+          'message' => $e->getMessage(),
+          'result' => null
+        ], 500);
+      }
+    }
+    $sub_chapter_enrollment = SubChapterEnrollment::where('chapter_enrollment_id', $chapter_enrollment->id)
+      ->where('sub_chapter_id', $sub_chapter_id)->first();
+
+    if ($sub_chapter_enrollment == null) {
+      try {
+        $data = array(
+          'chapter_enrollment_id' => $chapter_enrollment->id,
+          'sub_chapter_id' => $sub_chapter_id,
+          'status' => '1'
+        );
+        $sub_chapter_enrollment = SubChapterEnrollment::create($data);
+
+        return response()->json([
+          'success' => true,
+          'message' => 'Successfully finish sub chapter.',
+          'result' => [
+            $sub_chapter_enrollment->subChapter
+          ]
+        ], 200);
+      } catch (Exception $e) {
+        return response()->json([
+          'success' => false,
+          'message' => $e->getMessage(),
+          'result' => null
+        ], 500);
+      }
+    } else {
+      return response()->json([
+        'success' => false,
+        'message' => 'You have finished this chapter.',
+        'result' => null
+      ], 403);
     }
   }
 }

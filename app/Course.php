@@ -34,7 +34,7 @@ class Course extends Model
     'image' => 'courses/default.png',
   ];
 
-  protected $appends = ['rating_average', 'reviewer_amount'];
+  protected $appends = ['rating_average', 'reviewer_count'];
 
   public function institution()
   {
@@ -91,7 +91,7 @@ class Course extends Model
     return $this->reviews()->average('rating') / 10;
   }
 
-  public function getReviewerAmountAttribute()
+  public function getReviewerCountAttribute()
   {
     return $this->reviews()->count('id');
   }

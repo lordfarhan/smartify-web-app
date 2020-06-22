@@ -3,7 +3,9 @@
 namespace App\Api\V1\Controllers;
 
 use App\Chapter;
+use App\ChapterEnrollment;
 use App\Http\Controllers\Controller;
+use App\SubChapterEnrollment;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -31,11 +33,17 @@ class ChapterController extends Controller
     try {
       $chapters = Chapter::where('course_id', $course_id)->get();
 
-      foreach($chapters as $key => $chapter) {
-        if($chapter->attachment != null) {
-          $chapter['attachment'] = url('storage/'.$chapter->attachment);
+      foreach ($chapters as $key => $chapter) {
+        if ($chapter->attachment != null) {
+          $chapter['attachment'] = url('storage/' . $chapter->attachment);
         }
-        $chapter['sub_chapters'] = $chapter->sub_chapters;
+        $chapter_enrollment = $chapter->chapterEnrollment;
+        if ($chapter_enrollment != null) {
+          $chapter['finished_count'] = SubChapterEnrollment::where('chapter_enrollment_id', $chapter->chapterEnrollment->id)->count();
+        } else {
+          $chapter['finished_count'] = 0;
+        }
+        $chapter['sub_chapters'] = $chapter->subChapters;
       }
 
       if (count($chapters) > 0) {
@@ -54,7 +62,7 @@ class ChapterController extends Controller
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
-        'message' => "Process error, please try again later.",
+        'message' => $e->getMessage(),
         'result' => null
       ], 500);
     }
