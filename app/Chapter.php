@@ -15,13 +15,18 @@ class Chapter extends Model
     'course_id', 'chapter', 'title', 'attachment_title', 'attachment'
   ];
 
+  public function course()
+  {
+    return $this->belongsTo(Course::class);
+  }
+
   public function subChapters()
   {
     return $this->hasMany(SubChapter::class);
   }
 
-  public function chapterEnrollment()
+  public function lessonCount()
   {
-    return $this->hasOne(ChapterEnrollment::class);
+    return $this->subChapters->count('id');
   }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\ChapterEnrollment;
 use App\Course;
 use App\CourseEnrollment;
 use App\CourseReview;
 use App\Grade;
 use App\Http\Controllers\Controller;
 use App\Institution;
+use App\SubChapter;
+use App\SubChapterEnrollment;
 use App\Subject;
 use App\User;
 use Carbon\Carbon;
@@ -52,10 +55,19 @@ class CourseController extends Controller
         $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
         $course['subject'] = Subject::find($course->subject_id)->subject;
         $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
-        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+        if (in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
           $course['enrolled'] = 1;
+          $subChaptersCount = SubChapter::whereIn('chapter_id', $course->chapters->pluck('id'))->count();
+
+          $courseEnrollmentId = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $course->id)->pluck('id')->first();
+          $chapterEnrollmentIds = ChapterEnrollment::where('course_enrollment_id', $courseEnrollmentId)->pluck('id');
+          $subChapterFinishedCount = SubChapterEnrollment::whereIn('chapter_enrollment_id', $chapterEnrollmentIds)->count();
+          $course['lesson_count'] = $subChaptersCount;
+          $course['finished_count'] = $subChapterFinishedCount;
         } else {
           $course['enrolled'] = 0;
+          $course['lesson_count'] = 0;
+          $course['finished_count'] = 0;
         }
       }
 
@@ -107,10 +119,19 @@ class CourseController extends Controller
         $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
         $course['subject'] = Subject::find($course->subject_id)->subject;
         $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
-        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+        if (in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
           $course['enrolled'] = 1;
+          $subChaptersCount = SubChapter::whereIn('chapter_id', $course->chapters->pluck('id'))->count();
+
+          $courseEnrollmentId = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $course->id)->pluck('id')->first();
+          $chapterEnrollmentIds = ChapterEnrollment::where('course_enrollment_id', $courseEnrollmentId)->pluck('id');
+          $subChapterFinishedCount = SubChapterEnrollment::whereIn('chapter_enrollment_id', $chapterEnrollmentIds)->count();
+          $course['lesson_count'] = $subChaptersCount;
+          $course['finished_count'] = $subChapterFinishedCount;
         } else {
           $course['enrolled'] = 0;
+          $course['lesson_count'] = 0;
+          $course['finished_count'] = 0;
         }
       }
 
@@ -187,8 +208,8 @@ class CourseController extends Controller
         $course['author'] = User::find($course->author_id)->name;
         $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
         $course['subject'] = Subject::find($course->subject_id)->subject;
-        $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();      
-        if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+        $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
+        if (in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
           $course['enrolled'] = 1;
         } else {
           $course['enrolled'] = 0;
@@ -240,11 +261,20 @@ class CourseController extends Controller
       $course['author'] = User::find($course->author_id)->name;
       $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
       $course['subject'] = Subject::find($course->subject_id)->subject;
-      $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();      
-      if(in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+      $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
+      if (in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
         $course['enrolled'] = 1;
+        $subChaptersCount = SubChapter::whereIn('chapter_id', $course->chapters->pluck('id'))->count();
+
+        $courseEnrollmentId = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $course->id)->pluck('id')->first();
+        $chapterEnrollmentIds = ChapterEnrollment::where('course_enrollment_id', $courseEnrollmentId)->pluck('id');
+        $subChapterFinishedCount = SubChapterEnrollment::whereIn('chapter_enrollment_id', $chapterEnrollmentIds)->count();
+        $course['lesson_count'] = $subChaptersCount;
+        $course['finished_count'] = $subChapterFinishedCount;
       } else {
         $course['enrolled'] = 0;
+        $course['lesson_count'] = 0;
+        $course['finished_count'] = 0;
       }
 
       if ($course != null) {
@@ -265,7 +295,7 @@ class CourseController extends Controller
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
-        'message' => "Process error, please try again later.".$e->getMessage(),
+        'message' => "Process error, please try again later." . $e->getMessage(),
         'result' => null
       ], 500);
     }

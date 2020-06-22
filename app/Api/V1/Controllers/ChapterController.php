@@ -4,10 +4,12 @@ namespace App\Api\V1\Controllers;
 
 use App\Chapter;
 use App\ChapterEnrollment;
+use App\CourseEnrollment;
 use App\Http\Controllers\Controller;
 use App\SubChapterEnrollment;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ChapterController extends Controller
 {
@@ -37,13 +39,16 @@ class ChapterController extends Controller
         if ($chapter->attachment != null) {
           $chapter['attachment'] = url('storage/' . $chapter->attachment);
         }
-        $chapter_enrollment = $chapter->chapterEnrollment;
+
+        $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $chapter->course->id)->first();
+        $chapter_enrollment = ChapterEnrollment::where('course_enrollment_id', $course_enrollment->id)->where('chapter_id', $chapter->id)->first();
         if ($chapter_enrollment != null) {
-          $chapter['finished_count'] = SubChapterEnrollment::where('chapter_enrollment_id', $chapter->chapterEnrollment->id)->count();
+          $chapter['finished_count'] = SubChapterEnrollment::where('chapter_enrollment_id', $chapter_enrollment->id)->count();
         } else {
           $chapter['finished_count'] = 0;
         }
         $chapter['sub_chapters'] = $chapter->subChapters;
+        array_except($chapter, 'course');
       }
 
       if (count($chapters) > 0) {
