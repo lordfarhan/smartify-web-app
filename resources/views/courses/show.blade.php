@@ -114,7 +114,7 @@
                             </div>
                             @can('sub-chapter-list')
                               {{-- Populating sub chapters --}}
-                              @foreach ($chapter->sub_chapters as $sub_chapter)
+                              @foreach ($chapter->subChapters as $sub_chapter)
                                 <div>
                                   <i class="fas bg-blue">{{ $sub_chapter->sub_chapter }}</i>
                                   <div class="timeline-item">
