@@ -138,11 +138,11 @@
 											<div class="col-sm-6">
 												<div class="form-group">
 													<div class="custom-control custom-radio">
-														<input class="custom-control-input" type="radio" id="multiple" name="type" value="0" onclick="checkType()" checked>
+														<input class="custom-control-input" type="radio" id="multiple" name="type" value="multiple" onclick="checkType()" checked>
 														<label for="multiple" class="custom-control-label">{{__('common.tests.attributes.multiple_choice')}}</label>
 													</div>
 													<div class="custom-control custom-radio">
-														<input class="custom-control-input" type="radio" id="boolean" name="type" value="1" onclick="checkType()">
+														<input class="custom-control-input" type="radio" id="boolean" name="type" value="boolean" onclick="checkType()">
 														<label for="boolean" class="custom-control-label">{{__('common.tests.attributes.true_or_false')}}</label>
 													</div>
 												</div>
