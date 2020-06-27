@@ -272,7 +272,7 @@
                           <h3 class="card-title text-bold">{{ $test->title }}</h3>
                           <div class="card-tools">
                             @can('test-edit')
-                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $test->id }}" data-order="{{$test->order}}" data-title="{{ $test->title }}" data-type="{{ $test->type }}" data-assign="{{ $test->assign }}" data-description="{{ $test->description }}" class="edit-test-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
+                              <button type="button" data-course_id="{{ $course->id }}" data-id="{{ $test->id }}" data-order="{{$test->order}}" data-title="{{ $test->title }}" data-type="{{ $test->type }}" data-assign="{{ $test->assign }}" data-duration="{{$test->duration}}" data-description="{{ $test->description }}" class="edit-test-modal btn btn-tool"><i class="fas fa-pen-alt"></i></button>
                             @endcan
                             @can('test-delete')
                               <button type="button" data-id="{{ $test->id }}" class="delete-test-modal btn btn-tool"><i class="fas fa-trash-alt"></i></button>
@@ -300,6 +300,11 @@
                                 @else
                                   <label class="badge badge-success">{{__('common.courses.attributes.test_assigned')}}</label>
                                 @endif
+                              </a>
+                            </li>
+                            <li class="list-group-item">
+                              <b>{{__('common.courses.attributes.duration')}}</b> <a class="float-right">
+                                {{$test->duration}}
                               </a>
                             </li>
                             @if (!empty($test->description))
@@ -336,24 +341,29 @@
                       {{ Form::open(array('route' => 'tests.store', 'method'=>'POST')) }}
                       {{ Form::hidden('course_id', $course->id) }}
                       <div class="row">
-                        <div class="col-md-2">
+                        <div class="col-md-4">
                           <div class="form-group">
                             {{ Form::number('order', null, array('placeholder' => __('common.courses.attributes.test_order'), 'class' => 'form-control')) }}
                           </div>
                         </div>
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                           <div class="form-group">
                             {{ Form::text('title', null, array('placeholder' => __('common.courses.attributes.test_title'), 'class' => 'form-control')) }}
                           </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <div class="form-group">
                             {{ Form::select('type', ['0' => __('common.courses.attributes.test_type_chapter'), '1' => __('common.courses.attributes.test_type_middle'), '2' => __('common.courses.attributes.test_type_final')], null, array('class' => 'form-control', 'placeholder' => __('common.courses.attributes.test_type'))) }}
                           </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                           <div class="form-group">
                             {{ Form::select('assign', ['0' => __('common.courses.attributes.test_not_assigned'), '1' => __('common.courses.attributes.test_assigned')], null, array('class' => 'form-control')) }}
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group">
+                            {{ Form::number('duration', null, array('placeholder' => __('common.courses.attributes.duration_placeholder'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-10">
@@ -651,6 +661,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="control-label col-md-12" for="assign">{{__('common.courses.attributes.duration')}}:</label>
+                <div class="col-md-12">
+                  {{ Form::number('duration', null, array('placeholder' => __('common.courses.attributes.duration_placeholder'), 'class' => 'form-control', 'id' => 'duration-edit-test')) }}
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="control-label col-md-12" for="description">{{__('common.courses.attributes.description')}}:</label>
                 <div class="col-md-12">
                   <input value="" type="text" name="description" class="form-control" id="description-edit-test">
@@ -813,6 +829,7 @@
       $('#title-edit-test').val($(this).data('title'));
       $('#type-edit-test').val($(this).data('type'));
       $('#assign-edit-test').val($(this).data('assign'));
+      $('#duration-edit-test').val($(this).data('duration'));
       $('#description-edit-test').val($(this).data('description'));
       $('#test-edit-modal').modal('show');
     });

@@ -3,9 +3,12 @@
 namespace App\Api\V1\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mark;
 use App\Test;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TestController extends Controller
 {
@@ -27,10 +30,13 @@ class TestController extends Controller
     try {
       $tests = Test::where('course_id', $course_id)->orderBy('order')->get();
 
-      foreach($tests as $key => $test) {
-        // if($test->attachment != null) {
-        //   $test['attachment'] = url('storage/'.$test->attachment);
-        // }
+      foreach ($tests as $key => $test) {
+        $attempted = Mark::where('user_id', Auth::user()->id)->where('test_id', $test->id)->first();
+        if ($attempted == null) {
+          $test['attempted'] = '0';
+        } else {
+          $test['attempted'] = '1';
+        }
       }
 
       if (count($tests) > 0) {
@@ -50,6 +56,83 @@ class TestController extends Controller
       return response()->json([
         'success' => false,
         'message' => "Process error, please try again later.",
+        'result' => null
+      ], 500);
+    }
+  }
+
+  /**
+   * API to attempt the test
+   */
+  public function attempt(Request $request, $course_id, $test_id)
+  {
+    try {
+      $existed = Mark::where('user_id', Auth::user()->id)->where('test_id', $test_id)->first();
+      if ($existed == null) {
+        $mark = Mark::create([
+          'attempted' => '0',
+          'user_id' => Auth::user()->id,
+          'test_id' => $test_id,
+          'score' => 0
+        ]);
+        return response()->json([
+          'success' => true,
+          'message' => 'Successfully attempted',
+          'result' => $mark
+        ], 200);
+      } else {
+        return response()->json([
+          'success' => false,
+          'message' => 'Test has been attempted',
+          'result' => null
+        ], 403);
+      }
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'result' => null
+      ], 500);
+    }
+  }
+
+  /**
+   * API to mark the test
+   */
+  public function mark(Request $request, $course_id, $test_id)
+  {
+    $input = $request->only('score');
+    $rules = [
+      'score' => 'required'
+    ];
+    $validator = Validator::make($input, $rules);
+    if ($validator->fails()) {
+      $errorString = implode(",", $validator->messages()->all());
+      return response()->json(['success' => false, 'message' => $errorString], 428);
+    }
+
+    try {
+      $mark = Mark::where('user_id', Auth::user()->id)->where('test_id', $test_id)->first();
+      if ($mark->attempted == '0') {
+        $mark->attempted = '1';
+        $mark->score = $request->score;
+        $mark->update();
+        return response()->json([
+          'success' => true,
+          'message' => 'Successfully marked',
+          'result' => $mark
+        ], 200);
+      } else {
+        return response()->json([
+          'success' => false,
+          'message' => 'Test has been marked',
+          'result' => null
+        ], 403);
+      }
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
         'result' => null
       ], 500);
     }

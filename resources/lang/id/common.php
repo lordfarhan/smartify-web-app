@@ -6,13 +6,13 @@ return [
     'login' => 'Masuk',
     'register' => 'Daftar',
   ],
-  
+
   // Header
   'header' => [
     'home' => 'Beranda',
     'contact' => 'Kontak',
   ],
-  
+
   // Sidebar
   'sidebar' => [
     'dashboard' => 'Dasbor',
@@ -63,7 +63,7 @@ return [
     ],
     'edit' => [
       'title' => 'Sunting Institusi',
-    ]    
+    ]
   ],
 
   // Users
@@ -265,6 +265,8 @@ return [
       'test_assign' => 'Penugasan',
       'test_assigned' => 'Ditugaskan',
       'test_not_assigned' => 'Tidak Ditugaskan',
+      'duration' => 'Durasi',
+      'duration_placeholder' => 'Durasi (dalam menit)',
       'description' => 'Deskripsi',
       'signer' => 'Penandatangan',
       'not_yet_reported' => 'Belum dilaportkan',
@@ -354,7 +356,7 @@ return [
       'replies' => 'Balasan',
     ],
   ],
-  
+
   // Schedules
   'schedules' => [
     'index' => [

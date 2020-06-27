@@ -17,7 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->foreignId('test_id')->references('id')->on('tests')->onDelete('cascade');
             $table->tinyInteger('order');
-            $table->enum('type', ['0', '1']);
+            $table->enum('type', ['multiple', 'boolean']);
             $table->text('question');
             $table->text('question_image')->nullable();
             $table->text('question_audio')->nullable();

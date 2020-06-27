@@ -20,6 +20,7 @@ class CreateTestsTable extends Migration
             $table->string('title', 60);
             $table->enum('type', ['0', '1', '2']);
             $table->enum('assign', ['0', '1']);
+            $table->integer('duration');
             $table->text('description')->nullable();
             $table->timestamps();
         });

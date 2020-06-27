@@ -18,8 +18,8 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::group(['prefix' => 'v1'], function() {
-  Route::group(['prefix' => 'auth'], function() {
+Route::group(['prefix' => 'v1'], function () {
+  Route::group(['prefix' => 'auth'], function () {
     Route::post('register', '\\App\\Api\\V1\\Controllers\\Auth\\RegisterController@register');
     Route::post('login', '\\App\\Api\\V1\\Controllers\\Auth\\LoginController@login');
     Route::post('recover', '\\App\\Api\\V1\\Controllers\\Auth\\ForgotPasswordController@recover');
@@ -31,16 +31,20 @@ Route::group(['prefix' => 'v1'], function() {
     Route::get('me', '\\App\\Api\\V1\\Controllers\\UserController@me');
   });
 
-  Route::group(['prefix' => 'courses'], function() {
+  Route::group(['prefix' => 'courses'], function () {
     Route::get('featured', '\\App\\Api\\V1\\Controllers\\CourseController@featured');
     Route::get('owned', '\\App\\Api\\V1\\Controllers\\CourseController@owned');
     Route::post('/enroll', '\\App\\Api\\V1\\Controllers\\CourseController@enroll');
     Route::get('/{id}', '\\App\\Api\\V1\\Controllers\\CourseController@getById');
 
     Route::get('/{id}/chapters', '\\App\\Api\\V1\\Controllers\\ChapterController@getByCourseId');
-    
+
     Route::get('/{id}/tests', '\\App\\Api\\V1\\Controllers\\TestController@getByCourseId');
+    Route::post('/{id}/tests/{test_id}/attempt', '\\App\\Api\\V1\\Controllers\\TestController@attempt');
+    Route::post('/{id}/tests/{test_id}/mark', '\\App\\Api\\V1\\Controllers\\TestController@mark');
     
+    Route::get('/{id}/tests/{test_id}/questions', '\\App\\Api\\V1\\Controllers\\QuestionController@getByTestId');
+
     Route::get('/{id}/reviews', '\\App\\Api\\V1\\Controllers\\CourseReviewController@getByCourseId');
     Route::post('/review', '\\App\\Api\\V1\\Controllers\\CourseReviewController@addReview');
 

@@ -8,94 +8,96 @@ use Illuminate\Http\Request;
 
 class TestController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return redirect()->route('courses.index');
-    }
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index()
+  {
+    return redirect()->route('courses.index');
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $validation = array(
-            'course_id' => 'required',
-            'order' => 'required|numeric',
-            'title' => 'required',
-            'description' => 'required',
-            'type' => 'required',
-            'assign' => 'required',
-        );
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
+    $validation = array(
+      'course_id' => 'required',
+      'order' => 'required|numeric',
+      'title' => 'required',
+      'description' => 'required',
+      'type' => 'required',
+      'assign' => 'required',
+      'duration' => 'required|numeric|min:1'
+    );
 
-        $this->validate($request, $validation);
-        
-        Test::create($request->all());
+    $this->validate($request, $validation);
 
-        return back()->with('success', 'Test added successfully');
-    }
+    Test::create($request->all());
 
-    public function show($course_id, $id)
-    {
-        $test = Test::find($id);
-        $questions = Question::where('test_id', $id)->orderBy('order')->get();
-        return view('tests.show', compact('course_id', 'test', 'questions'));
-    }
+    return back()->with('success', 'Test added successfully');
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Test  $test
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Test $test)
-    {
-        //
-    }
+  public function show($course_id, $id)
+  {
+    $test = Test::find($id);
+    $questions = Question::where('test_id', $id)->orderBy('order')->get();
+    return view('tests.show', compact('course_id', 'test', 'questions'));
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request)
-    {
-        $validation = array(
-            'course_id' => 'required',
-            'order' => 'required|numeric',
-            'title' => 'required',
-            'description' => 'required',
-            'type' => 'required',
-            'assign' => 'required',
-        );
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  \App\Test  $test
+   * @return \Illuminate\Http\Response
+   */
+  public function edit(Test $test)
+  {
+    //
+  }
 
-        $this->validate($request, $validation);
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request)
+  {
+    $validation = array(
+      'course_id' => 'required',
+      'order' => 'required|numeric',
+      'title' => 'required',
+      'description' => 'required',
+      'type' => 'required',
+      'assign' => 'required',
+      'duration' => 'required|numeric|min:1'
+    );
 
-        $test = Test::find($request->id);
-        
-        $test->update($request->all());
+    $this->validate($request, $validation);
 
-        return back()->with('success', 'Test updated successfully');
-    }
+    $test = Test::find($request->id);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Test  $test
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request)
-    {
-        $test = Test::find($request->id);
-        $test->delete();
-        return back()->with('success', 'Test deleted successfully');
-    }
+    $test->update($request->all());
+
+    return back()->with('success', 'Test updated successfully');
+  }
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  \App\Test  $test
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy(Request $request)
+  {
+    $test = Test::find($request->id);
+    $test->delete();
+    return back()->with('success', 'Test deleted successfully');
+  }
 }
