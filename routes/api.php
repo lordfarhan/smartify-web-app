@@ -41,8 +41,8 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/{id}/tests', '\\App\\Api\\V1\\Controllers\\TestController@getByCourseId');
     Route::post('/{id}/tests/{test_id}/attempt', '\\App\\Api\\V1\\Controllers\\TestController@attempt');
-    Route::post('/{id}/tests/{test_id}/mark', '\\App\\Api\\V1\\Controllers\\TestController@mark');
-    
+    Route::post('/{id}/tests/{test_id}/submit', '\\App\\Api\\V1\\Controllers\\TestController@submit');
+
     Route::get('/{id}/tests/{test_id}/questions', '\\App\\Api\\V1\\Controllers\\QuestionController@getByTestId');
 
     Route::get('/{id}/reviews', '\\App\\Api\\V1\\Controllers\\CourseReviewController@getByCourseId');

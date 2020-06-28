@@ -78,7 +78,9 @@ class TestController extends Controller
         return response()->json([
           'success' => true,
           'message' => 'Successfully attempted',
-          'result' => $mark
+          'result' => [
+            $mark
+          ]
         ], 200);
       } else {
         return response()->json([
@@ -97,9 +99,9 @@ class TestController extends Controller
   }
 
   /**
-   * API to mark the test
+   * API to submit the test
    */
-  public function mark(Request $request, $course_id, $test_id)
+  public function submit(Request $request, $course_id, $test_id)
   {
     $input = $request->only('score');
     $rules = [
@@ -120,7 +122,9 @@ class TestController extends Controller
         return response()->json([
           'success' => true,
           'message' => 'Successfully marked',
-          'result' => $mark
+          'result' => [
+            $mark
+          ]
         ], 200);
       } else {
         return response()->json([
