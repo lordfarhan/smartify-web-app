@@ -22,7 +22,7 @@ class MaterialController extends Controller
   public function getBySubChapterId(Request $request, $course_id, $chapter_id, $sub_chapter_id)
   {
     try {
-      $materials = Material::where('sub_chapter_id', $sub_chapter_id)->orderBy('order')->get();
+      $materials = Material::where('sub_chapter_id', $sub_chapter_id)->orderBy('order', 'asc')->get();
 
       if (count($materials) > 0) {
         return response()->json([

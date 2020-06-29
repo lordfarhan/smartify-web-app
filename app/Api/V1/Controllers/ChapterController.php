@@ -33,7 +33,7 @@ class ChapterController extends Controller
   public function getByCourseId(Request $request, $course_id)
   {
     try {
-      $chapters = Chapter::where('course_id', $course_id)->get();
+      $chapters = Chapter::where('course_id', $course_id)->orderBy('chapter', 'asc')->get();
 
       foreach ($chapters as $key => $chapter) {
         if ($chapter->attachment != null) {
@@ -47,7 +47,7 @@ class ChapterController extends Controller
         } else {
           $chapter['finished_count'] = 0;
         }
-        $chapter['sub_chapters'] = $chapter->subChapters;
+        $chapter['sub_chapters'] = $chapter->subChapters->sortBy('sub_chapter');
         array_except($chapter, 'course');
       }
 

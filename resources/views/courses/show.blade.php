@@ -222,7 +222,7 @@
                       <div class="row">
                         <div class="col-md-2">
                           <div class="form-group">
-                            {{ Form::text('chapter', null, array('placeholder' => __('common.courses.attributes.chapter_placeholder'), 'class' => 'form-control')) }}
+                            {{ Form::number('chapter', null, array('placeholder' => __('common.courses.attributes.chapter_placeholder'), 'class' => 'form-control')) }}
                           </div>
                         </div>
                         <div class="col-md-10">
@@ -522,7 +522,7 @@
               <div class="form-group">
                 <label class="control-label col-md-12" for="chapter">{{__('common.courses.attributes.chapter')}}:</label>
                 <div class="col-md-12">
-                  <input value="" type="text" name="chapter" class="form-control" id="chapter-edit-chapter">
+                  <input value="" type="number" name="chapter" class="form-control" id="chapter-edit-chapter">
                 </div>
               </div>
               <div class="form-group">

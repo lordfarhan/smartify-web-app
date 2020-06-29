@@ -26,7 +26,7 @@ class QuestionController extends Controller
   public function getByTestId($id, $test_id)
   {
     try {
-      $questions = Question::where('test_id', $test_id)->orderBy('order')->get();
+      $questions = Question::where('test_id', $test_id)->orderBy('order', 'asc')->get();
 
       // foreach ($questions as $question) {
       //   $question['incorrect_answers'] = explode('; ', $question['incorrect_answers']);

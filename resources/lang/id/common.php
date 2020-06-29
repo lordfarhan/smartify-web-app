@@ -249,7 +249,7 @@ return [
       'end_course_placeholder' => 'Ambil Waktu',
       'title' => 'Judul',
       'chapter' => 'Bab',
-      'chapter_placeholder' => 'IX (Romawi)',
+      'chapter_placeholder' => 'Urutan BAB',
       'chapter_title_placeholder' => 'Judul Bab',
       'sub_chapter' => 'Sub Bab',
       'sub_chapter_placeholder' => 'A',

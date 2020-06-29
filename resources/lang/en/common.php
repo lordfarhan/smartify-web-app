@@ -249,7 +249,7 @@ return [
       'end_course_placeholder' => 'Pick Time',
       'title' => 'Title',
       'chapter' => 'Chapter',
-      'chapter_placeholder' => 'IX (Roman numerals)',
+      'chapter_placeholder' => 'Chapter order',
       'chapter_title_placeholder' => 'Chapter Title',
       'sub_chapter' => 'Sub Chapter',
       'sub_chapter_placeholder' => 'A',
