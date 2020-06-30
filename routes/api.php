@@ -29,6 +29,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
     Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
     Route::get('me', '\\App\\Api\\V1\\Controllers\\UserController@me');
+    Route::post('update/{field}', '\\App\\Api\\V1\\Controllers\\UserController@update');
   });
 
   Route::group(['prefix' => 'courses'], function () {
