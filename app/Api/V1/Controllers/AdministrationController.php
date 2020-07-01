@@ -24,11 +24,11 @@ class AdministrationController extends Controller
   public function getProvinces(Request $request)
   {
     try {
-      $provinces = Province::all();
+      $provinces = Province::orderBy('name')->get();
       return response()->json([
         'success' => true,
         'message' => 'Successfully retrieved data.',
-        'result' => $provinces->sortBy('name')
+        'result' => $provinces
       ], 200);
     } catch (Exception $e) {
       return response()->json([
@@ -47,7 +47,7 @@ class AdministrationController extends Controller
       return response()->json([
         'success' => true,
         'message' => 'Successfully retrieved data.',
-        'result' => $regencies->sortBy('name')
+        'result' => $regencies
       ], 200);
     } catch (Exception $e) {
       return response()->json([
@@ -66,7 +66,7 @@ class AdministrationController extends Controller
       return response()->json([
         'success' => true,
         'message' => 'Successfully retrieved data.',
-        'result' => $districts->sortBy('name')
+        'result' => $districts
       ], 200);
     } catch (Exception $e) {
       return response()->json([
@@ -85,7 +85,7 @@ class AdministrationController extends Controller
       return response()->json([
         'success' => true,
         'message' => 'Successfully retrieved data.',
-        'result' => $villages->sortBy('name')
+        'result' => $villages
       ], 200);
     } catch (Exception $e) {
       return response()->json([

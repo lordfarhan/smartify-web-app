@@ -6,21 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Province extends Model
 {
-    /**
-     * The "type" of the auto-incrementing ID.
-     *
-     * @var string
-     */
-    protected $keyType = 'string';
+  /**
+   * The "type" of the auto-incrementing ID.
+   *
+   * @var string
+   */
+  protected $keyType = 'string';
 
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
-    public $timestamps = false;
+  /**
+   * Indicates if the model should be timestamped.
+   *
+   * @var bool
+   */
+  public $timestamps = false;
 
-    public function regencies() {
-      return $this->hasMany(Regency::class);
-    }
+  public function regencies()
+  {
+    return $this->hasMany(Regency::class)->orderBy('name');
+  }
 }
