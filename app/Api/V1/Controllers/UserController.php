@@ -173,53 +173,14 @@ class UserController extends Controller
       return response()->json([
         'success' => true,
         'message' => "You have successfully updated your data.",
-        'result' => $userArray
+        'user' => $userArray
       ], 200);
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
         'message' => $e->getMessage(),
-        'result' => null
+        'user' => null
       ]);
-    }
-  }
-
-  /**
-   * Update image.
-   *
-   * @param  Request $request, 
-   * @return \Illuminate\Http\JsonResponse
-   */
-  public function updateImage(Request $request)
-  {
-    $user = User::find(Auth::user()->id);
-
-    $rules = [
-      'image' => 'mimes:jpg,JPEG,PNG,png,jpeg,JPG',
-    ];
-
-    $validator = Validator::make($request->only('image'), $rules);
-
-    if ($validator->fails()) {
-      return response()->json(['success' => false, 'message' => $validator->messages()]);
-    }
-
-    $input = $request->only('image');
-
-    // Deleting existing image
-    if (File::exists(storage_path('app/public/' . $user->image))) {
-      File::delete(storage_path('app/public/' . $user->image));
-    }
-    $image = $request->file('image');
-    $imageName = 'userImage' . Carbon::now()->format('YmdHis') . '_' . preg_replace('/\s+/', '', request('name')) . '.' . 'png';
-    Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
-    $input['image'] = 'users/' . $imageName;
-
-    try {
-      $user->update($input);
-      return response()->json(['success' => true, 'message' => "You have successfully updated image."]);
-    } catch (Exception $e) {
-      return response()->json(['success' => false, 'message' => $e->getMessage()]);
     }
   }
 }

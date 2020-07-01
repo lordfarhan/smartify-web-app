@@ -54,4 +54,11 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters/{sub_chapter_id}/materials', '\\App\\Api\\V1\\Controllers\\MaterialController@getBySubChapterId');
   });
+
+  Route::group(['prefix' => 'administrations'], function () {
+    Route::get('provinces', '\\App\\Api\\V1\\Controllers\\AdministrationController@getProvinces');
+    Route::get('provinces/{id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getRegencies');
+    Route::get('provinces/{id}/{regency_id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getDistricts');
+    Route::get('provinces/{id}/{regency_id}/{district_id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getVillages');
+  });
 });
