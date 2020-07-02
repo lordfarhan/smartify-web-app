@@ -31,11 +31,13 @@ class TestController extends Controller
       $tests = Test::where('course_id', $course_id)->orderBy('order')->get();
 
       foreach ($tests as $key => $test) {
-        $attempted = Mark::where('user_id', Auth::user()->id)->where('test_id', $test->id)->first();
-        if ($attempted == null) {
+        $mark = Mark::where('user_id', Auth::user()->id)->where('test_id', $test->id)->first();
+        if ($mark == null) {
           $test['attempted'] = '0';
+          $test['mark'] = 0;
         } else {
           $test['attempted'] = '1';
+          $test['mark'] = $mark->score;
         }
       }
 
