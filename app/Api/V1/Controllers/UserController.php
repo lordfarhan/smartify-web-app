@@ -5,6 +5,7 @@ namespace App\Api\V1\Controllers;
 use App\Http\Controllers\Controller;
 use App\Institution;
 use App\User;
+use App\UserInstitution;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -181,6 +182,28 @@ class UserController extends Controller
         'message' => $e->getMessage(),
         'user' => null
       ]);
+    }
+  }
+
+  public function institutions(Request $request)
+  {
+    try {
+      $institution_ids = UserInstitution::where('user_id', Auth::user()->id)->pluck('institution_id');
+      $institutions = Institution::whereIn('id', $institution_ids)->get();
+      foreach ($institutions as $institution) {
+        $institution['enrolled'] = 1;
+      }
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched user institutions',
+        'result' => $institutions
+      ], 200);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'result' => null
+      ], 500);
     }
   }
 }

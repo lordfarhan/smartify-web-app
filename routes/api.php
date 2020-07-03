@@ -28,8 +28,14 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('verify/{verification_code}', '\\App\\Api\\V1\\Controllers\\Auth\\VerificationController@verify');
     Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
     Route::post('password/reset', 'Auth\ResetPasswordController@postReset')->name('password.reset');
+  });
+
+  Route::group(['prefix' => 'user'], function () {
     Route::get('me', '\\App\\Api\\V1\\Controllers\\UserController@me');
     Route::post('update/{field}', '\\App\\Api\\V1\\Controllers\\UserController@update');
+    Route::get('institutions', '\\App\\Api\\V1\\Controllers\\UserController@institutions');
+    Route::get('institutions/browse', '\\App\\Api\\V1\\Controllers\\InstitutionController@browse');
+    Route::post('institutions/enroll', '\\App\\Api\\V1\\Controllers\\InstitutionController@enroll');
   });
 
   Route::group(['prefix' => 'courses'], function () {
