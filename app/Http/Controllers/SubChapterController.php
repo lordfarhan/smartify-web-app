@@ -8,6 +8,13 @@ use Illuminate\Http\Request;
 
 class SubChapterController extends Controller
 {
+  function __construct()
+  {
+    $this->middleware('permission:sub-chapter-list|sub-chapter-create|sub-chapter-edit|sub-chapter-delete', ['only' => ['index', 'store']]);
+    $this->middleware('permission:sub-chapter-create', ['only' => ['create', 'store']]);
+    $this->middleware('permission:sub-chapter-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:sub-chapter-delete', ['only' => ['destroy']]);
+  }
   /**
    * Display a listing of the resource.
    *

@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class MaterialController extends Controller
 {
+  function __construct()
+  {
+    $this->middleware('permission:material-list|material-create|material-edit|material-delete', ['only' => ['index', 'store']]);
+    $this->middleware('permission:material-create', ['only' => ['create', 'store']]);
+    $this->middleware('permission:material-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:material-delete', ['only' => ['destroy']]);
+  }
   /**
    * Display a listing of the resource.
    *

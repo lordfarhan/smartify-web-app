@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\File;
 
 class ChapterController extends Controller
 {
+  function __construct()
+  {
+    $this->middleware('permission:chapter-list|chapter-create|chapter-edit|chapter-delete', ['only' => ['index', 'store']]);
+    $this->middleware('permission:chapter-create', ['only' => ['create', 'store']]);
+    $this->middleware('permission:chapter-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:chapter-delete', ['only' => ['destroy']]);
+  }
+
   /**
    * Display a listing of the resource.
    *

@@ -18,6 +18,14 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class UserController extends Controller
 {
+  function __construct()
+  {
+    $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'store']]);
+    $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
+    $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:user-delete', ['only' => ['destroy']]);
+  }
+
   /**
    * Display a listing of the resource.
    *

@@ -7,95 +7,102 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(Request $request)
-    {
-        $subjects = Subject::orderBy('subject', 'desc')->get();
-        
-        return view('subjects.index', compact('subjects'));
-    }
+  function __construct()
+  {
+    $this->middleware('permission:subject-list|subject-create|subject-edit|subject-delete', ['only' => ['index', 'store']]);
+    $this->middleware('permission:subject-create', ['only' => ['create', 'store']]);
+    $this->middleware('permission:subject-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:subject-delete', ['only' => ['destroy']]);
+  }
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index(Request $request)
+  {
+    $subjects = Subject::orderBy('subject', 'desc')->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('subjects.create');
-    }
+    return view('subjects.index', compact('subjects'));
+  }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'subject' => 'required|unique:subjects,subject'
-        ]);
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function create()
+  {
+    return view('subjects.create');
+  }
 
-        Subject::create($request->all());
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @return \Illuminate\Http\Response
+   */
+  public function store(Request $request)
+  {
+    $this->validate($request, [
+      'subject' => 'required|unique:subjects,subject'
+    ]);
 
-        return redirect()->route('subjects.index')->with('success', 'Subject created successfully');
-    }
+    Subject::create($request->all());
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Subject $subject)
-    {
-        return view('subjects.show', compact('subject'));
-    }
+    return redirect()->route('subjects.index')->with('success', 'Subject created successfully');
+  }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Subject $subject)
-    {
-        return view('subjects.edit', compact('subject'));
-    }
+  /**
+   * Display the specified resource.
+   *
+   * @param  \App\Subject  $subject
+   * @return \Illuminate\Http\Response
+   */
+  public function show(Subject $subject)
+  {
+    return view('subjects.show', compact('subject'));
+  }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Subject $subject)
-    {
-        $this->validate($request, [
-            'subject' => 'required|unique:subjects,subject'
-        ]);
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  \App\Subject  $subject
+   * @return \Illuminate\Http\Response
+   */
+  public function edit(Subject $subject)
+  {
+    return view('subjects.edit', compact('subject'));
+  }
 
-        $subject->update($request->all());
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \App\Subject  $subject
+   * @return \Illuminate\Http\Response
+   */
+  public function update(Request $request, Subject $subject)
+  {
+    $this->validate($request, [
+      'subject' => 'required|unique:subjects,subject'
+    ]);
 
-        return redirect()->route('subjects.index')->with('success', 'Subject updated successfully');
-    }
+    $subject->update($request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Subject  $subject
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Subject $subject)
-    {
-        $subject->delete();
+    return redirect()->route('subjects.index')->with('success', 'Subject updated successfully');
+  }
 
-        return redirect()->route('subjects.index')->with('success', 'Subject deleted successfully');
-    }
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  \App\Subject  $subject
+   * @return \Illuminate\Http\Response
+   */
+  public function destroy(Subject $subject)
+  {
+    $subject->delete();
+
+    return redirect()->route('subjects.index')->with('success', 'Subject deleted successfully');
+  }
 }
