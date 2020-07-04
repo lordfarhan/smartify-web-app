@@ -29,6 +29,7 @@ class InstitutionController extends Controller
       $institution_ids = UserInstitution::where('user_id', Auth::user()->id)->pluck('institution_id');
       $institutions = Institution::whereNotIn('id', $institution_ids)->get();
       foreach ($institutions as $institution) {
+        $institution['image'] = url('storage/' . $institution->image);
         $institution['enrolled'] = 0;
       }
       return response()->json([

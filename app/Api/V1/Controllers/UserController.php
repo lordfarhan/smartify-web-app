@@ -191,6 +191,7 @@ class UserController extends Controller
       $institution_ids = UserInstitution::where('user_id', Auth::user()->id)->pluck('institution_id');
       $institutions = Institution::whereIn('id', $institution_ids)->get();
       foreach ($institutions as $institution) {
+        $institution['image'] = url('storage/' . $institution->image);
         $institution['enrolled'] = 1;
       }
       return response()->json([
