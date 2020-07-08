@@ -35,20 +35,31 @@ class ChapterController extends Controller
     try {
       $chapters = Chapter::where('course_id', $course_id)->orderBy('chapter', 'asc')->get();
 
-      foreach ($chapters as $key => $chapter) {
-        if ($chapter->attachment != null) {
-          $chapter['attachment'] = url('storage/' . $chapter->attachment);
-        }
+      if (count($chapters) > 0) {
+        foreach ($chapters as $key => $chapter) {
+          if ($chapter->attachment != null) {
+            $chapter['attachment'] = url('storage/' . $chapter->attachment);
+          }
 
-        $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $chapter->course->id)->first();
-        $chapter_enrollment = ChapterEnrollment::where('course_enrollment_id', $course_enrollment->id)->where('chapter_id', $chapter->id)->first();
-        if ($chapter_enrollment != null) {
-          $chapter['finished_count'] = SubChapterEnrollment::where('chapter_enrollment_id', $chapter_enrollment->id)->count();
-        } else {
-          $chapter['finished_count'] = 0;
+          $course_enrollment = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $chapter->course->id)->first();
+          if ($course_enrollment != null) {
+            $chapter_enrollment = ChapterEnrollment::where('course_enrollment_id', $course_enrollment->id)->where('chapter_id', $chapter->id)->first();
+            if ($chapter_enrollment != null) {
+              $chapter['finished_count'] = SubChapterEnrollment::where('chapter_enrollment_id', $chapter_enrollment->id)->count();
+            } else {
+              $chapter['finished_count'] = 0;
+            }
+            if ($chapter->subChapters != null) {
+              $chapter['sub_chapters'] = $chapter->subChapters->sortBy('sub_chapter');
+            } else {
+              $chapter['sub_chapters'] = array();
+            }
+          } else {
+            $chapter['finished_count'] = 0;
+            $chapter['sub_chapters'] = array();
+          }
+          array_except($chapter, 'course');
         }
-        $chapter['sub_chapters'] = $chapter->subChapters->sortBy('sub_chapter');
-        array_except($chapter, 'course');
       }
 
       if (count($chapters) > 0) {
