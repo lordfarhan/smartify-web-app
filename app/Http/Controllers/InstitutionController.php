@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\InstitutionActivationCodesImport;
 use App\Institution;
+use App\InstitutionActivationCode;
+use App\UserInstitution;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class InstitutionController extends Controller
@@ -75,7 +80,9 @@ class InstitutionController extends Controller
    */
   public function show(Institution $institution)
   {
-    return view('institutions.show', compact('institution'));
+    $activation_codes = $institution->activationCodes;
+    // dd($activation_codes);
+    return view('institutions.show', compact('institution', 'activation_codes'));
   }
 
   /**
@@ -136,5 +143,28 @@ class InstitutionController extends Controller
 
     $institution->delete();
     return redirect()->route('institutions.index')->with('success', 'Deleted institutions successfully');
+  }
+
+  /**
+   * @return \Illuminate\Support\Collection
+   */
+  public function importKeys()
+  {
+    Excel::import(new InstitutionActivationCodesImport, request()->file('file'));
+    return back()->with('success', 'Successfully imported');
+  }
+
+  public function deleteKey(Request $request)
+  {
+    $this->validate($request, ['id' => 'required']);
+
+    try {
+      $key = InstitutionActivationCode::find($request->id);
+      UserInstitution::where('user_id', $key->user_id)->where('institution_id', $key->institution_id)->first()->delete();
+      $key->delete();
+      return back()->with('success', 'Successfully deleted.');
+    } catch (Exception $e) {
+      return back()->with('error', $e->getMessage());
+    }
   }
 }

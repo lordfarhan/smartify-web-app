@@ -26,6 +26,8 @@ Auth::routes(['verify' => true]);
 Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
     Route::resource('institutions', 'InstitutionController');
+    Route::post('institutions/add-activation-code', 'InstitutionController@importKeys');
+    Route::post('institutions/remove-activation-code', 'InstitutionController@deleteKey');
     Route::resource('users', 'UserController');
     Route::resource('roles', 'RoleController');
     Route::resource('teachers', 'TeacherController');

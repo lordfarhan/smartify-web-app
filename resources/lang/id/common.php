@@ -49,11 +49,18 @@ return [
       'description' => 'Deskripsi',
       'description_placeholder' => 'Informasi tambahan tentang institusi',
       'action' => 'Aksi',
+      'code' => 'Kode',
+      'is_activated' => 'Teraktivasi',
+      'activated_by' => 'Diaktivasikan oleh'
     ],
     'actions' => [
+      'browse' => 'Cari',
+      'add' => 'Tambah',
+      'import' => 'Import',
       'back' => 'Kembali',
       'process' => 'Proses',
-      'create' => 'Tambah Institusi Baru',
+      'create' => 'Tambah Baru',
+      'cancel' => 'Batal',
     ],
     'index' => [
       'title' => 'Pengelolaan Institusi',
@@ -63,6 +70,10 @@ return [
     ],
     'edit' => [
       'title' => 'Sunting Institusi',
+    ],
+    'show' => [
+      'title' => 'Kode Aktivasi',
+      'add_from_file' => 'Jika berkenan mengimport, klik cari'
     ]
   ],
 

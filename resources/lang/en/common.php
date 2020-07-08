@@ -49,21 +49,32 @@ return [
       'description' => 'Description',
       'description_placeholder' => 'Optional information about institution',
       'action' => 'Action',
+      'code' => 'Code',
+      'is_activated' => 'Is Activated',
+      'activated_by' => 'Activated By'
     ],
     'actions' => [
+      'browse' => 'Browse',
+      'add' => 'Add',
+      'import' => 'Import',
       'back' => 'Back',
       'process' => 'Process',
-      'create' => 'Add New Institution',
+      'create' => 'Add New',
+      'cancel' => 'Cancel',
     ],
     'index' => [
       'title' => 'Institution Management',
     ],
     'create' => [
-      'title' => 'Add Institution',      
+      'title' => 'Add Institution',
     ],
     'edit' => [
       'title' => 'Edit Institution',
-    ]    
+    ],
+    'show' => [
+      'title' => 'Activation Codes',
+      'add_from_file' => 'If you want to add from file, click browse'
+    ]
   ],
 
   // Users
@@ -356,7 +367,7 @@ return [
       'replies' => 'Replies',
     ],
   ],
-  
+
   // Schedules
   'schedules' => [
     'index' => [

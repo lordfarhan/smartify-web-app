@@ -64,6 +64,14 @@ class InstitutionController extends Controller
       ]);
     }
 
+    if (UserInstitution::where('institution_id', $input['institution_id'])->where('user_id', Auth::user()->id)->first() != null) {
+      return response()->json([
+        'success' => false,
+        'message' => 'User has been enrolled',
+        'result' => null
+      ], 428);
+    }
+
     try {
       $activation_code = InstitutionActivationCode::where('institution_id', $input['institution_id'])->where('code', $input['code'])->first();
       if ($activation_code == null) {
@@ -77,6 +85,8 @@ class InstitutionController extends Controller
           'user_id' => Auth::user()->id,
           'institution_id' => $input['institution_id']
         ]);
+        $activation_code->user_id = Auth::user()->id;
+        $activation_code->update();
         return response()->json([
           'success' => true,
           'message' => 'Successfully enrolled to institution.',

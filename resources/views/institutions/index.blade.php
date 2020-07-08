@@ -29,7 +29,7 @@
             <th>{{__('common.institutions.attributes.image')}}</th>
             <th>{{__('common.institutions.attributes.name')}}</th>
             <th>{{__('common.institutions.attributes.description')}}</th>
-            <th width="48px">{{__('common.institutions.attributes.action')}}</th>
+            <th width="87px">{{__('common.institutions.attributes.action')}}</th>
           </tr>
         </thead>
         <tbody>
@@ -40,7 +40,7 @@
               <td>{{$institution->name}}</td>
               <td>{{$institution->description}}</td>
               <td>
-                {{-- <a class="btn btn-primary" href="{{ route('institutions.show', $institution->id) }}"><i class="fa fa-eye"></i></a> --}}
+                <a class="btn btn-sm btn-primary" href="{{ route('institutions.show', $institution->id) }}"><i class="fa fa-key"></i></a>
                 @can('grade-edit')
                     <a class="btn btn-sm btn-warning elevation-2 text-white" href="{{ route('institutions.edit', $institution->id) }}"><i class="fa fa-pen-alt"></i></a>
                 @endcan
