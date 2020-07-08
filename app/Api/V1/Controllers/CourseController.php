@@ -40,8 +40,10 @@ class CourseController extends Controller
   public function featured(Request $request)
   {
     try {
-      $courses = Course::where('type', '0')->where('institution_id', 1)->get();
-      foreach ($courses as $index => $course) {
+      $public_courses = Course::where('type', '0')->where('institution_id', 1)->get();
+      $institution_courses = Course::whereNotIn('id', Course::where('type', '0')->where('institution_id', 1)->pluck('id'))->whereIn('institution_id', Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('id'))->get();
+
+      foreach ($public_courses as $index => $course) {
         if ($course->image != null) {
           $course['image'] = url('storage/' . $course->image);
         }
@@ -69,7 +71,40 @@ class CourseController extends Controller
           $course['lesson_count'] = 0;
           $course['finished_count'] = 0;
         }
+        array_except($course, 'chapters');
       }
+      foreach ($institution_courses as $index => $course) {
+        if ($course->image != null) {
+          $course['image'] = url('storage/' . $course->image);
+        }
+        if ($course->attachment != null) {
+          $course['attachment'] = url('storage/' . $course->attachment);
+        }
+        // $course['created_at'] = Carbon::parse($course->created_at)->format('d/m/Y');
+        // $course['updated_at'] = Carbon::parse($course->updated_at)->format('d/m/Y');
+        $course['institution'] = Institution::find($course->institution_id)->name;
+        $course['author'] = User::find($course->author_id)->name;
+        $course['author_image'] = url('storage/' . User::find($course->author_id)->image);
+        $course['subject'] = Subject::find($course->subject_id)->subject;
+        $course['grade'] = Grade::find($course->grade_id)->grade . " " . Grade::find($course->grade_id)->getEducationalStage();
+        if (in_array(Auth::user()->id, $course->enrollments->pluck('user_id')->toArray())) {
+          $course['enrolled'] = 1;
+          $subChaptersCount = SubChapter::whereIn('chapter_id', $course->chapters->pluck('id'))->count();
+
+          $courseEnrollmentId = CourseEnrollment::where('user_id', Auth::user()->id)->where('course_id', $course->id)->pluck('id')->first();
+          $chapterEnrollmentIds = ChapterEnrollment::where('course_enrollment_id', $courseEnrollmentId)->pluck('id');
+          $subChapterFinishedCount = SubChapterEnrollment::whereIn('chapter_enrollment_id', $chapterEnrollmentIds)->count();
+          $course['lesson_count'] = $subChaptersCount;
+          $course['finished_count'] = $subChapterFinishedCount;
+        } else {
+          $course['enrolled'] = 0;
+          $course['lesson_count'] = 0;
+          $course['finished_count'] = 0;
+        }
+        array_except($course, 'chapters');
+      }
+
+      $courses = array_merge($public_courses->toArray(), $institution_courses->toArray());
 
       if (count($courses) > 0) {
         return response()->json([
@@ -87,7 +122,7 @@ class CourseController extends Controller
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
-        'message' => "Process error, please try again later.",
+        'message' => $e->getMessage(),
         'result' => null
       ], 500);
     }
