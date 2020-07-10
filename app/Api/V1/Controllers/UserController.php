@@ -2,6 +2,8 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\CourseEnrollment;
+use App\Experience;
 use App\Http\Controllers\Controller;
 use App\Institution;
 use App\User;
@@ -206,5 +208,21 @@ class UserController extends Controller
         'result' => null
       ], 500);
     }
+  }
+
+  public function profile(Request $request)
+  {
+    $courses = CourseEnrollment::where('user_id', Auth::user()->id)->count('id');
+    $experiences = Experience::where('user_id', Auth::user()->id)->sum('amount');
+    $friends = 0;
+    return response()->json([
+      'success' => true,
+      'message' => 'Successfully fetched data.',
+      'result' => [
+        $courses,
+        $experiences,
+        $friends
+      ]
+    ]);
   }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\Experience;
 use App\Http\Controllers\Controller;
 use App\Mark;
 use App\Test;
@@ -121,6 +122,13 @@ class TestController extends Controller
         $mark->attempted = '1';
         $mark->score = $request->score;
         $mark->update();
+
+        // Add experience
+        Experience::create([
+          'user_id' => Auth::user()->id,
+          'reference' => 1, // 1 is reference code for finishing test
+          'amount' => intval($request->score / 10)
+        ]);
         return response()->json([
           'success' => true,
           'message' => 'Successfully marked',

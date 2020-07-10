@@ -36,6 +36,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('institutions', '\\App\\Api\\V1\\Controllers\\UserController@institutions');
     Route::get('institutions/browse', '\\App\\Api\\V1\\Controllers\\InstitutionController@browse');
     Route::post('institutions/enroll', '\\App\\Api\\V1\\Controllers\\InstitutionController@enroll');
+    Route::get('profile', '\\App\\Api\\V1\\Controllers\\UserController@profile');
   });
 
   Route::group(['prefix' => 'courses'], function () {
