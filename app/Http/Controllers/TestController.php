@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mark;
 use App\Question;
 use App\Test;
 use Illuminate\Http\Request;
@@ -55,6 +56,19 @@ class TestController extends Controller
     $test = Test::find($id);
     $questions = Question::where('test_id', $id)->orderBy('order')->get();
     return view('tests.show', compact('course_id', 'test', 'questions'));
+  }
+
+  public function openSubmissions($course_id, $id)
+  {
+    $test = Test::find($id);
+    $marks = Mark::where('test_id', $test->id)->get();
+    return view('tests.submissions', compact('test', 'marks'));
+  }
+
+  public function deleteMark($course_id, $id, $mark_id)
+  {
+    Mark::find($mark_id)->delete();
+    return back()->with('success', 'Successfully deleted mark');
   }
 
   /**

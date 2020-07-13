@@ -276,6 +276,8 @@ return [
       'test_assign' => 'Penugasan',
       'test_assigned' => 'Ditugaskan',
       'test_not_assigned' => 'Tidak Ditugaskan',
+      'test_submissions' => 'Penilaian',
+      'test_mark' => 'Nilai',
       'duration' => 'Durasi',
       'duration_placeholder' => 'Durasi (dalam menit)',
       'description' => 'Deskripsi',

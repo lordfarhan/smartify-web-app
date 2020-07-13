@@ -276,6 +276,8 @@ return [
       'test_assign' => 'Assign',
       'test_assigned' => 'Assigned',
       'test_not_assigned' => 'Not Assigned',
+      'test_submissions' => 'Submissions',
+      'test_mark' => 'Mark',
       'duration' => 'Duration',
       'duration_placeholder' => 'Duration (in minute)',
       'description' => 'Description',

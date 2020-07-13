@@ -318,6 +318,7 @@
                         </div>
                         <div class="card-footer">
                           <a class="btn btn-primary" href="/courses/{{$course->id}}/tests/{{$test->id}}">{{__('common.courses.actions.open')}}</a>
+                          <a class="btn btn-success" href="/courses/{{$course->id}}/tests/{{$test->id}}/submissions">{{__('common.courses.attributes.test_submissions')}}</a>
                         </div>
                       </div>
                     </div>
