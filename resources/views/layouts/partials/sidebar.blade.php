@@ -133,8 +133,19 @@
 				</li>
         @endcan
         
-        {{-- Academic --}}
+        {{-- Utilisites --}}
         <li class="nav-header">{{__('common.sidebar.utilities')}}</li>
+
+        @can('music-list')          
+        <li class="nav-item">
+					<a href="{{route('musics.index')}}" class="nav-link {{ request()->is('musics') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-music"></i>
+						<p>
+							{{__('common.sidebar.musics')}}
+						</p>
+					</a>
+        </li>
+        @endcan
 
         {{-- Settings --}}
 				<li class="nav-item">

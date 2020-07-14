@@ -27,6 +27,7 @@ return [
     'courses' => 'Courses',
     'schedules' => 'Schedules',
     'utilities' => 'Utilities',
+    'musics' => 'Musics',
     'settings' => 'Settings',
   ],
 

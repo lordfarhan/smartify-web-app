@@ -6,7 +6,7 @@
 @endsection
 
 @section('title')
-  {{__('common.institutions.index.title')}}
+  Musics
 @endsection
 
 @section('content')
@@ -17,35 +17,37 @@
   @endif
   <div class="card">
     <div class="card-header">
-      @can('institution-create')
-      <a class="btn btn-success" href="{{ route('institutions.create') }}"> {{__('common.institutions.actions.create')}}</a>
+      @can('music-create')
+      <a class="btn btn-success" href="{{ route('musics.create') }}"> Create</a>
       @endcan
     </div>
     <div class="card-body">
       <table id="table" class="table table-borderless table-hover">
         <thead class="thead-light" >
           <tr>
-            <th width="20px">{{__('common.institutions.attributes.no')}}</th>
-            <th>{{__('common.institutions.attributes.image')}}</th>
-            <th>{{__('common.institutions.attributes.name')}}</th>
-            <th>{{__('common.institutions.attributes.description')}}</th>
-            <th width="87px">{{__('common.institutions.attributes.action')}}</th>
+            <th width="20px">#</th>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Year</th>
+            <th width="87px">Action</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($institutions as $key => $institution)
+          @foreach ($musics as $key => $music)
             <tr>
               <td>{{ ++$key }}</td>
-              <td><img src="{{ asset("storage/". $institution->image) }}" class="img-square elevation-2" alt="Institution Image" height="80" width="80"></td>
-              <td>{{$institution->name}}</td>
-              <td>{{$institution->description}}</td>
+              <td><img src="{{ asset("storage/". $music->cover) }}" class="img-square elevation-2" alt="music cover" height="80" width="80"></td>
+              <td>{{$music->title}}</td>
+              <td>{{$music->artist}}</td>
+              <td>{{$music->year}}</td>
               <td>
-                <a class="btn btn-sm btn-primary" href="{{ route('institutions.show', $institution->id) }}"><i class="fa fa-key"></i></a>
-                @can('institution-edit')
-                    <a class="btn btn-sm btn-warning elevation-2 text-white" href="{{ route('institutions.edit', $institution->id) }}"><i class="fa fa-pen-alt"></i></a>
+                {{-- <a class="btn btn-sm btn-primary" href="{{ route('musics.show', $music->id) }}"><i class="fa fa-key"></i></a> --}}
+                @can('music-edit')
+                    <a class="btn btn-sm btn-warning elevation-2 text-white" href="{{ route('musics.edit', $music->id) }}"><i class="fa fa-pen-alt"></i></a>
                 @endcan
-                @can('institution-delete')
-                    {!! Form::open(['method' => 'DELETE','route' => ['institutions.destroy', $institution->id],'style'=>'display:inline']) !!}
+                @can('music-delete')
+                    {!! Form::open(['method' => 'DELETE','route' => ['musics.destroy', $music->id],'style'=>'display:inline']) !!}
                         <button class="btn btn-sm btn-danger elevation-2" type="submit"><i class="fa fa-trash-alt"></i></button>
                     {!! Form::close() !!}
                 @endcan

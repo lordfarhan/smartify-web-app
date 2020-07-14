@@ -27,6 +27,7 @@ return [
     'courses' => 'Kursus',
     'schedules' => 'Jadwal',
     'utilities' => 'Utilitas',
+    'musics' => 'Musik',
     'settings' => 'Pengaturan',
   ],
 

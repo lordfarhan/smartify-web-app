@@ -68,4 +68,6 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('provinces/{id}/{regency_id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getDistricts');
     Route::get('provinces/{id}/{regency_id}/{district_id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getVillages');
   });
+
+  Route::get('musics', '\\App\\Api\\V1\\Controllers\\MusicController@get');
 });
