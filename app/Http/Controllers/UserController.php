@@ -258,4 +258,19 @@ class UserController extends Controller
     $user = User::find(Auth::user()->id);
     return view('users.show', compact('user'));
   }
+
+  public function editMe(Request $request)
+  {
+    $user = User::find(Auth::user()->id);
+    if (Auth::user()->hasRole('Master')) {
+      $roles = Role::pluck('name', 'name')->all();
+    } else {
+      $roles = Role::whereNotIn('name', ['Master'])->pluck('name', 'name')->all();
+    }
+    $institutions = Institution::all();
+    $userRole = $user->roles->pluck('name', 'name')->all();
+    $provinces = Province::all();
+    $village = Village::find($user->village_id);
+    return view('users.edit', compact('user', 'institutions', 'roles', 'userRole', 'provinces', 'village'));
+  }
 }

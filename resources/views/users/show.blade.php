@@ -39,7 +39,7 @@
           </li>
         </ul>
 
-        {{-- <a href="#" class="btn btn-primary btn-block"><b>Cheer</b></a> --}}
+        <a href="{{ route('me.edit') }}" class="btn btn-primary btn-block"><b>Edit</b></a>
       </div>
       <!-- /.card-body -->
     </div>
