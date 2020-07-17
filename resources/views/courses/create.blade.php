@@ -145,11 +145,13 @@
 						<div id="new-schedule-row"></div>
 						<div id="new-schedule-script"></div>
 					</div>
-					<div class="card-footer text-right">
-						{{ Form::submit(__('common.courses.actions.process'), ['class' => 'btn btn-primary pull-right']) }}
-					</div>
 				</div>
 				@endcan
+        <div class="card">
+          <div class="card-footer text-right">
+						{{ Form::submit(__('common.courses.actions.process'), ['class' => 'btn btn-block btn-primary pull-right']) }}
+					</div>
+        </div>
 			{{ Form::close() }}
 		</div>
 	</div>

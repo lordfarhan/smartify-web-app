@@ -38,7 +38,8 @@ class CourseController extends Controller
     if (Auth::user()->hasRole('Master')) {
       $courses = Course::orderBy('id', 'desc')->get();
     } else {
-      $courses = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->orderBy('id', 'desc')->get();
+      // $courses = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->orderBy('id', 'desc')->get();
+      $courses = Course::where('author_id', Auth::user()->id)->orderBy('id', 'desc')->get();
     }
     return view('courses.index', compact('grades', 'courses'));
   }
