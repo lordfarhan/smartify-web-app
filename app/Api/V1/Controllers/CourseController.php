@@ -106,19 +106,11 @@ class CourseController extends Controller
 
       $courses = array_merge($public_courses->toArray(), $institution_courses->toArray());
 
-      if (count($courses) > 0) {
-        return response()->json([
-          'success' => true,
-          'message' => 'Successfully retrieved courses',
-          'result' => $courses
-        ], 200);
-      } else {
-        return response()->json([
-          'success' => true,
-          'message' => 'No course found',
-          'result' => null
-        ], 204);
-      }
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully retrieved courses',
+        'result' => $courses
+      ], 200);
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
