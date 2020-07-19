@@ -40,8 +40,8 @@ class CourseController extends Controller
   public function featured(Request $request)
   {
     try {
-      $public_courses = Course::where('type', '0')->where('institution_id', 1)->get();
-      $institution_courses = Course::whereNotIn('id', Course::where('type', '0')->where('institution_id', 1)->pluck('id'))->whereIn('institution_id', Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('id'))->get();
+      $public_courses = Course::where('type', '0')->where('status', '1')->where('institution_id', 1)->get();
+      $institution_courses = Course::whereNotIn('id', Course::where('type', '0')->where('institution_id', 1)->pluck('id'))->where('status', '1')->whereIn('institution_id', Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('id'))->get();
 
       foreach ($public_courses as $index => $course) {
         if ($course->image != null) {
@@ -330,7 +330,45 @@ class CourseController extends Controller
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
-        'message' => "Process error, please try again later." . $e->getMessage(),
+        'message' => $e->getMessage(),
+        'result' => null
+      ], 500);
+    }
+  }
+
+  public function members(Request $request, $id)
+  {
+    try {
+      $course = Course::find($id);
+      $enrollments = $course->enrollments;
+
+      foreach ($enrollments as $enrollment) {
+        $enrollment['name'] = $enrollment->user->name;
+        $enrollment['email'] = $enrollment->user->email;
+        $enrollment['phone'] = $enrollment->user->phone;
+        $enrollment['image'] = url('storage/' . $enrollment->user->image);
+        $enrollment['email_verified_at'] = $enrollment->user->email_verified_at;
+        $enrollment['date_of_birth'] = $enrollment->user->date_of_birth;
+        $enrollment['image'] = url('storage/' . $enrollment->user->image);
+        $enrollment['village'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->name)) : null;
+        $enrollment['district'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->name)) : null;
+        $enrollment['regency'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->regency->name)) : null;
+        $enrollment['province'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->regency->province->name)) : null;
+        $enrollment['role'] = $enrollment->user->getRoleNames()[0];
+        $enrollment['created_at'] = $enrollment->user->created_at;
+        $enrollment['updated_at'] = $enrollment->user->updated_at;
+        array_except($enrollment, 'user');
+      }
+
+      return response()->json([
+        'success' => false,
+        'message' => 'Successfully fetched members.',
+        'result' => $enrollments
+      ], 200);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
         'result' => null
       ], 500);
     }
