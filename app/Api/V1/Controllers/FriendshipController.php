@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class FriendshipController extends Controller
 {
@@ -28,36 +29,42 @@ class FriendshipController extends Controller
   {
     $user_id = Auth::user()->id;
 
-    $result = DB::table('friendships as f1')->select('users.id', 'users.name', 'users.avatar', 'users.email')
-      ->where('f1.user_id', $user_id)
-      ->join('friendships as f2', function ($join) {
-        $join->on('f1.user_id', '=', 'f2.friend_id');
-        $join->on('f1.friend_id', '=', 'f2.user_id');
-      })
-      ->join('users', 'users.id', '=', 'f2.user_id')
-      ->get();
+    try {
+      $result = DB::table('friendships as f1')
+        ->select('users.id')
+        ->where('f1.user_id', $user_id)
+        ->join('friendships as f2', function ($join) {
+          $join->on('f1.user_id', '=', 'f2.friend_id');
+          $join->on('f1.friend_id', '=', 'f2.user_id');
+        })
+        ->join('users', 'users.id', '=', 'f2.user_id')
+        ->get();
 
-    return response()->json([
-      'success' => true,
-      'message' => 'Successfully fetched friends.',
-      'result' => $result
-    ]);
-  }
+      $friends = array();
+      foreach ($result as $friend_result) {
+        $friend = User::find($friend_result->id);
+        $friend['image'] = url('storage/' . $friend->image);
+        $friend['village'] = $friend->village != null ? ucwords(strtolower($friend->village->name)) : null;
+        $friend['district'] = $friend->village != null ? ucwords(strtolower($friend->village->district->name)) : null;
+        $friend['regency'] = $friend->village != null ? ucwords(strtolower($friend->village->district->regency->name)) : null;
+        $friend['province'] = $friend->village != null ? ucwords(strtolower($friend->village->district->regency->province->name)) : null;
+        $friend['role'] = $friend->getRoleNames()[0];
+        array_except($friend, 'roles');
+        array_push($friends, $friend);
+      }
 
-  /**
-   * API to get friend ids
-   */
-  public static function getFriendIds(Request $request)
-  {
-    $user_id = Auth::user()->id;
-    return DB::table('friendships as f1')
-      ->where('f1.user_id', $user_id)
-      ->join('friendships as f2', function ($join) {
-        $join->on('f1.user_id', '=', 'f2.friend_id');
-        $join->on('f1.friend_id', '=', 'f2.user_id');
-      })
-      ->join('users', 'users.id', '=', 'f2.user_id')
-      ->pluck('users.id');
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched friends.',
+        'result' => $friends
+      ], 200);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'result' => null
+      ], 500);
+    }
   }
 
   /**
@@ -65,6 +72,18 @@ class FriendshipController extends Controller
    */
   public function add(Request $request)
   {
+    $credentials = $request->only('friend_id');
+
+    $rules = [
+      'friend_id' => 'required',
+    ];
+
+    $validator = Validator::make($credentials, $rules);
+    if ($validator->fails()) {
+      $errorString = implode(",", $validator->messages()->all());
+      return response()->json(['success' => false, 'message' => $errorString, 'result' => null], 428);
+    }
+
     $user_id = Auth::user()->id;
     $friend_id = $request->input('friend_id');
 
@@ -84,6 +103,12 @@ class FriendshipController extends Controller
             'message' => 'Successfully added.',
             'result' => $friendship
           ], 200);
+        } else {
+          return response()->json([
+            'success' => false,
+            'message' => 'You have been requested it.',
+            'result' => null
+          ], 428);
         }
       } catch (Exception $e) {
         return response()->json([
@@ -100,6 +125,18 @@ class FriendshipController extends Controller
    */
   public function accept(Request $request)
   {
+    $credentials = $request->only('friend_id');
+
+    $rules = [
+      'friend_id' => 'required',
+    ];
+
+    $validator = Validator::make($credentials, $rules);
+    if ($validator->fails()) {
+      $errorString = implode(",", $validator->messages()->all());
+      return response()->json(['success' => false, 'message' => $errorString, 'result' => null], 428);
+    }
+
     $user_id = Auth::user()->id;
     $friend_id = $request->input('friend_id');
 
@@ -114,7 +151,19 @@ class FriendshipController extends Controller
             'message' => 'Successfully accepted.',
             'id' => $friendship
           ], 200);
+        } else {
+          return response()->json([
+            'success' => false,
+            'message' => 'Already accepted.',
+            'id' => null
+          ], 428);
         }
+      } else {
+        return response()->json([
+          'success' => false,
+          'message' => 'Error.',
+          'id' => null
+        ], 428);
       }
     } catch (Exception $e) {
       return response()->json([
@@ -126,40 +175,22 @@ class FriendshipController extends Controller
   }
 
   /**
-   * API to reject a friendship request
-   */
-  public function reject(Request $request)
-  {
-    $user_id = Auth::user()->id;
-    $friend_id = $request->input('friend_id');
-    try {
-      Friendship::where(['user_id' => $friend_id, 'friend_id' => $user_id])->delete();
-      return response()->json([
-        'success' => true,
-        'message' => 'Successfully rejected request.',
-        'id' => null
-      ], 200);
-    } catch (Exception $e) {
-      return response()->json([
-        'success' => false,
-        'message' => 'Failed to reject request.',
-        'id' => null
-      ], 500);
-    }
-  }
-
-  /**
    * API to get friendship requests
    */
   public function requests(Request $request)
   {
     $user_id = Auth::user()->id;
+
     try {
-      $result = Friendship::select('users.id', 'users.name', 'users.avatar', 'users.email')
+      $result = Friendship::select('users.id', 'users.name', 'users.email', 'users.image')
         ->where('friend_id', $user_id)
-        ->leftJoin('user_details', 'user_details.user_id', '=', 'friendships.user_id')
         ->leftJoin('users', 'users.id', '=', 'friendships.user_id')
         ->get();
+
+      foreach ($result as $res) {
+        $image = $res['image'];
+        $res['image'] = url('storage/' . $image);
+      }
 
       return response()->json([
         'success' => true,
@@ -169,48 +200,17 @@ class FriendshipController extends Controller
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
-        'message' => 'Failed to fetch friend requests.',
+        'message' => $e->getMessage(),
         'result' => null
       ], 500);
     }
   }
 
   /**
-   * API to search student
-   */
-  public function search(Request $request)
-  {
-    // $serial_id = $request->input('serial_id');
-    // $name = $request->input('name');
-
-    // if ($serial_id != null) {
-    //   return UserDetail::where('serial_id', $serial_id)
-    //     ->select('users.id', 'users.name', 'users.avatar', 'users.email')
-    //     ->rightJoin('users', 'users.id', '=', 'user_details.user_id')
-    //     ->get();
-    // } else {
-    //   return User::where('name', 'like', '%' . $name . '%')
-    //     ->where('role_id', 4)
-    //     ->select('users.id', 'users.name', 'users.avatar', 'users.email')
-    //     ->leftJoin('user_details', 'user_details.user_id', '=', 'users.id')
-    //     ->get();
-    // }
-  }
-
-  /**
-   * API to get all students
-   */
-  public function browse(Request $request)
-  {
-  }
-
-  /**
    * API to get friend detail
    */
-  public function detail(Request $request)
+  public function detail($friend_id)
   {
-    $friend_id = $request->input('friend_id');
-
     $user = User::find($friend_id)->toArray();
     $user['email_verified_at'] = Carbon::parse(User::find($friend_id)->email_verified_at)->format('d/m/Y');
     $user['date_of_birth'] = Carbon::parse(User::find($friend_id)->date_of_birth)->format('d/m/Y');
@@ -239,10 +239,9 @@ class FriendshipController extends Controller
     }
   }
 
-  public function status(Request $request)
+  public function status($friend_id)
   {
     $user_id = Auth::user()->id;
-    $friend_id = $request->input('friend_id');
 
     $friend = DB::table('friendships as f1')
       ->where(['f1.user_id' => $user_id, 'f1.friend_id' => $friend_id])
@@ -252,25 +251,35 @@ class FriendshipController extends Controller
       })
       ->first();
 
-    if ($user_id == $friend_id) {
+    if ($user_id == $friend_id) { // If itself
       return response()->json([
-        'status' => 'yourself'
+        'success' => true,
+        'message' => 'This is yourself',
+        'result' => 0
       ]);
-    } else if ($friend != null) {
+    } else if ($friend != null) { // If friend
       return response()->json([
-        'status' => 'friend'
+        'success' => true,
+        'message' => 'Friend',
+        'result' => 1
       ]);
-    } else if (Friendship::where(['user_id' => $user_id, 'friend_id' => $friend_id])->pluck('id')->first() != null) {
+    } else if (Friendship::where(['user_id' => $user_id, 'friend_id' => $friend_id])->pluck('id')->first() != null) { // If user requested to friend
       return response()->json([
-        'status' => 'requesting'
+        'success' => true,
+        'message' => 'Requested.',
+        'result' => 2
       ]);
-    } else if (Friendship::where(['user_id' => $friend_id, 'friend_id' => $user_id])->pluck('id')->first() != null) {
+    } else if (Friendship::where(['user_id' => $friend_id, 'friend_id' => $user_id])->pluck('id')->first() != null) { // If friend is requested to user
       return response()->json([
-        'status' => 'requested'
+        'success' => true,
+        'message' => 'Requesting',
+        'result' => 3
       ]);
-    } else {
+    } else { // If not at all
       return response()->json([
-        'status' => 'not_requested'
+        'success' => true,
+        'message' => 'Not at all.',
+        'result' => 4
       ]);
     }
   }

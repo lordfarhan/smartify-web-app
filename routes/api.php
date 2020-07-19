@@ -37,6 +37,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('institutions/browse', '\\App\\Api\\V1\\Controllers\\InstitutionController@browse');
     Route::post('institutions/enroll', '\\App\\Api\\V1\\Controllers\\InstitutionController@enroll');
     Route::get('profile', '\\App\\Api\\V1\\Controllers\\UserController@profile');
+    Route::get('friends', '\\App\\Api\\V1\\Controllers\\FriendshipController@get');
+    Route::get('friends/{id}', '\\App\\Api\\V1\\Controllers\\FriendshipController@detail');
+    Route::post('friends/add', '\\App\\Api\\V1\\Controllers\\FriendshipController@add');
+    Route::post('friends/accept', '\\App\\Api\\V1\\Controllers\\FriendshipController@accept');
+    Route::get('friends/requests', '\\App\\Api\\V1\\Controllers\\FriendshipController@requests');
+    Route::get('friends/{id}/status', '\\App\\Api\\V1\\Controllers\\FriendshipController@status');
   });
 
   Route::group(['prefix' => 'courses'], function () {
@@ -54,6 +60,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/{id}/tests/{test_id}/questions', '\\App\\Api\\V1\\Controllers\\QuestionController@getByTestId');
 
     Route::get('/{id}/reviews', '\\App\\Api\\V1\\Controllers\\CourseReviewController@getByCourseId');
+    Route::get('/{id}/members', '\\App\\Api\\V1\\Controllers\\CourseController@members');
     Route::post('/review', '\\App\\Api\\V1\\Controllers\\CourseReviewController@addReview');
 
     Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters', '\\App\\Api\\V1\\Controllers\\SubChapterController@getByChapterId');
