@@ -349,7 +349,6 @@ class CourseController extends Controller
         $enrollment['image'] = url('storage/' . $enrollment->user->image);
         $enrollment['email_verified_at'] = $enrollment->user->email_verified_at;
         $enrollment['date_of_birth'] = $enrollment->user->date_of_birth;
-        $enrollment['image'] = url('storage/' . $enrollment->user->image);
         $enrollment['village'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->name)) : null;
         $enrollment['district'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->name)) : null;
         $enrollment['regency'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->regency->name)) : null;
