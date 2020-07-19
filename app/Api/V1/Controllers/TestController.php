@@ -41,20 +41,11 @@ class TestController extends Controller
           $test['mark'] = $mark->score;
         }
       }
-
-      if (count($tests) > 0) {
-        return response()->json([
-          'success' => true,
-          'message' => 'Successfully retrieved tests',
-          'result' => $tests
-        ], 200);
-      } else {
-        return response()->json([
-          'success' => true,
-          'message' => 'No test found',
-          'result' => null
-        ], 204);
-      }
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully retrieved tests',
+        'result' => $tests
+      ], 200);
     } catch (Exception $e) {
       return response()->json([
         'success' => false,

@@ -62,19 +62,11 @@ class ChapterController extends Controller
         }
       }
 
-      if (count($chapters) > 0) {
-        return response()->json([
-          'success' => true,
-          'message' => 'Successfully retrieved chapters',
-          'result' => $chapters
-        ], 200);
-      } else {
-        return response()->json([
-          'success' => true,
-          'message' => 'No chapter found',
-          'result' => null
-        ], 204);
-      }
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully retrieved chapters',
+        'result' => $chapters
+      ], 200);
     } catch (Exception $e) {
       return response()->json([
         'success' => false,
