@@ -364,4 +364,33 @@ class CourseController extends Controller
       ], 500);
     }
   }
+
+  public function author(Request $request, $id)
+  {
+    try {
+      $course = Course::find($id);
+      $author = $course->author;
+
+      $authorArray = $author->toArray();
+
+      $authorArray['image'] = url('storage/' . $author->image);
+      $authorArray['village'] = $author->village != null ? ucwords(strtolower($author->village->name)) : null;
+      $authorArray['district'] = $author->village != null ? ucwords(strtolower($author->village->district->name)) : null;
+      $authorArray['regency'] = $author->village != null ? ucwords(strtolower($author->village->district->regency->name)) : null;
+      $authorArray['province'] = $author->village != null ? ucwords(strtolower($author->village->district->regency->province->name)) : null;
+      $authorArray['role'] = 'teacher';
+
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched author data.',
+        'result' => $authorArray
+      ], 200);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => 'Failed to fetch author data.',
+        'result' => null
+      ], 500);
+    }
+  }
 }

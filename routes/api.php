@@ -61,6 +61,7 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('/{id}/reviews', '\\App\\Api\\V1\\Controllers\\CourseReviewController@getByCourseId');
     Route::get('/{id}/members', '\\App\\Api\\V1\\Controllers\\CourseController@members');
+    Route::get('/{id}/author', '\\App\\Api\\V1\\Controllers\\CourseController@author');
     Route::post('/review', '\\App\\Api\\V1\\Controllers\\CourseReviewController@addReview');
 
     Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters', '\\App\\Api\\V1\\Controllers\\SubChapterController@getByChapterId');
