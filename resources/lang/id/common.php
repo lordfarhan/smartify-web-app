@@ -2,6 +2,7 @@
 return [
   // Welcome
   'welcome' => [
+    'privacy' => 'Kebijakan Privasi',
     'dashboard' => 'Dasbor',
     'login' => 'Masuk',
     'register' => 'Daftar',

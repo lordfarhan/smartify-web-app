@@ -82,8 +82,10 @@
             @if (Route::has('login'))
                 <div id="header-links" class="top-right links">
                     @auth
+                        <a href="{{ url('/privacy') }}">{{__('common.welcome.privacy')}}</a>
                         <a href="{{ url('/dashboard') }}">{{__('common.welcome.dashboard')}}</a>
                     @else
+                        <a href="{{ url('/privacy') }}">{{__('common.welcome.privacy')}}</a>
                         <a href="{{ route('login') }}">{{__('common.welcome.login')}}</a>
 
                         @if (Route::has('register'))

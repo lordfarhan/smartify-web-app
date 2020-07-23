@@ -20,6 +20,9 @@ Route::get('/', function () {
 Route::get('/home', function () {
   return view('welcome');
 });
+Route::get('/privacy', function () {
+  return view('home.privacy');
+});
 
 Auth::routes(['verify' => true]);
 

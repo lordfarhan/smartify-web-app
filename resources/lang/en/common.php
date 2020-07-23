@@ -2,6 +2,7 @@
 return [
   // Welcome
   'welcome' => [
+    'privacy' => 'Privacy and Policy',
     'dashboard' => 'Dashboard',
     'login' => 'Login',
     'register' => 'Register',
