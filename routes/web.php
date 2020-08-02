@@ -38,7 +38,6 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::resource('subjects', 'SubjectController');
   Route::resource('grades', 'GradeController');
   Route::resource('courses', 'CourseController');
-  Route::resource('musics', 'MusicController');
   Route::get('/me', 'UserController@me');
   Route::get('/me/edit', 'UserController@editMe')->name('me.edit');
   Route::get('courses/{id}/schedule', 'CourseController@editSchedule');
