@@ -51,8 +51,8 @@ class ScheduleController extends Controller
       $e = array();
       $e['id'] = $schedule->id;
       $e['title'] = $schedule->course->subject->subject . " - " . $schedule->course->grade->grade . ' ' . $schedule->course->grade->getEducationalStage();
-      $e['start'] = Carbon::parse($schedule->date)->format('Y-m-d') . " " . Carbon::parse($schedule->start_time)->format('H:i:s');
-      $e['end'] = Carbon::parse($schedule->date)->format('Y-m-d') . " " . Carbon::parse($schedule->end_time)->format('H:i:s');
+      $e['start'] = Carbon::parse($schedule->start)->format('Y-m-d H:i:s');
+      $e['end'] = Carbon::parse($schedule->end)->format('Y-m-d H:i:s');
       // $e['url'] = route('courses.show', $schedule->course->id);
       $e['color'] = 'green';
 

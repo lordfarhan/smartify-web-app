@@ -68,7 +68,7 @@ class Course extends Model
 
   public function schedules()
   {
-    return $this->hasMany(Schedule::class)->orderBy('date');
+    return $this->hasMany(Schedule::class)->orderBy('start');
   }
 
   public function enrollments()

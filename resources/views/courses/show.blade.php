@@ -6,10 +6,10 @@
 
 @section('content')
   <div class="row">
-    <div class="col-3">
+    <div class="col-12">
       <div class="card card-primary card-outline">
         <div class="card-header">
-            <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
+          <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
         </div>
         <div class="card-body box-profile">
           @if (!empty($course->image))
@@ -47,7 +47,7 @@
               <li class="list-group-item">
                 <b>@if ($index == 0)
                     {{__('common.courses.attributes.schedule')}}
-                @endif</b> <a class="float-right">{{ \Carbon\Carbon::parse($schedule->date)->format('M, d Y') . ' (' .\Carbon\Carbon::parse($schedule->start_time)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end_time)->format('H:i') . ')' }}</a>
+                @endif</b> <a class="float-right">{{ \Carbon\Carbon::parse($schedule->start)->format('M, d Y') . ' (' .\Carbon\Carbon::parse($schedule->start)->format('H:i') .' - '.\Carbon\Carbon::parse($schedule->end)->format('H:i') . ')' }}</a>
               </li>
             @endforeach
             <li class="list-group-item">
@@ -58,14 +58,16 @@
             </li>
           </ul>
       
-          <a href="#" class="btn btn-primary btn-block"><b>{{__('common.courses.actions.open')}}</b></a>
+          @can('course-edit')
+            <a href="/courses/{{$course->id}}/edit" class="btn btn-warning text-white btn-block"><b>{{__('common.courses.actions.edit')}}</b></a>
+          @endcan
         </div>
         <!-- /.card-body -->
       </div>
     </div>
 
     {{-- Course contents --}}
-    <div class="col-9">
+    <div class="col-12">
       <div class="card card">
         <div class="card-header">
           <ul class="nav nav-pills">

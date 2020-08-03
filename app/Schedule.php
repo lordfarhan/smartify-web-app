@@ -13,7 +13,7 @@ class Schedule extends Model
      * @var array
      */
     protected $fillable = [
-        'course_id', 'date', 'start_time', 'end_time',
+        'course_id', 'start', 'end',
     ];
 
     /**

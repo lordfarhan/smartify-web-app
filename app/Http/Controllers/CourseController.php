@@ -148,9 +148,8 @@ class CourseController extends Controller
       foreach ($dates as $index => $date) {
         $schedule = new Schedule();
         $schedule->course_id = $course->id;
-        $schedule->date = Carbon::createFromFormat("d/m/Y", $date);
-        $schedule->start_time = Carbon::createFromTimeString($start_times[$index] . ":00", 'Asia/Jakarta');
-        $schedule->end_time = Carbon::createFromTimeString($end_times[$index] . ":00", 'Asia/Jakarta');
+        $schedule->start = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $start_times[$index]);
+        $schedule->end = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $end_times[$index]);
         $schedule->save();
       }
     }
@@ -345,9 +344,8 @@ class CourseController extends Controller
         foreach ($dates as $index => $date) {
           $schedule = $old_schedule[$index];
           $schedule->course_id = $request->id;
-          $schedule->date = Carbon::createFromFormat('d/m/Y', $date);
-          $schedule->start_time = Carbon::createFromTimeString($start_times[$index] . ":00", 'Asia/Jakarta');
-          $schedule->end_time = Carbon::createFromTimeString($end_times[$index] . ":00", 'Asia/Jakarta');
+          $schedule->start = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $start_times[$index]);
+          $schedule->end = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $end_times[$index]);
           $schedule->update();
         }
       }
@@ -356,9 +354,8 @@ class CourseController extends Controller
         foreach ($old_schedule as $index => $schedule) {
           if ($index < count($dates)) {
             $schedule->course_id = $request->id;
-            $schedule->date = Carbon::createFromFormat('d/m/Y', $date);
-            $schedule->start_time = Carbon::createFromTimeString($start_times[$index] . ":00", 'Asia/Jakarta');
-            $schedule->end_time = Carbon::createFromTimeString($end_times[$index] . ":00", 'Asia/Jakarta');
+            $schedule->start = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $start_times[$index]);
+            $schedule->end = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $end_times[$index]);
             $schedule->update();
           } else {
             $schedule->delete();
@@ -371,16 +368,14 @@ class CourseController extends Controller
           if ($index < count($old_schedule)) {
             $schedule = $old_schedule[$index];
             $schedule->course_id = $request->id;
-            $schedule->date = Carbon::createFromFormat('d/m/Y', $date);
-            $schedule->start_time = Carbon::createFromTimeString($start_times[$index] . ":00", 'Asia/Jakarta');
-            $schedule->end_time = Carbon::createFromTimeString($end_times[$index] . ":00", 'Asia/Jakarta');
+            $schedule->start = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $start_times[$index]);
+            $schedule->end = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $end_times[$index]);
             $schedule->update();
           } else {
             $schedule = new Schedule();
             $schedule->course_id = $request->id;
-            $schedule->date = Carbon::createFromFormat('d/m/Y', $date);
-            $schedule->start_time = Carbon::createFromTimeString($start_times[$index] . ":00", 'Asia/Jakarta');
-            $schedule->end_time = Carbon::createFromTimeString($end_times[$index] . ":00", 'Asia/Jakarta');
+            $schedule->start = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $start_times[$index]);
+            $schedule->end = Carbon::createFromFormat("d/m/Y H:i", $date . " " . $end_times[$index]);
             $schedule->save();
           }
         }

@@ -17,8 +17,8 @@
             {{ Form::open(array('route' => 'courses.updateSchedule','method'=>'POST')) }}
 			<div class="card">
 				<div class="card-header">
-                    <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
-                </div>
+          <a href="{{ route('courses.index') }}" class="btn btn-outline-info">{{__('common.courses.actions.back')}}</a>
+        </div>
 				<div class="card-body">
 					@if(!empty($errors->all()))
             <div class="alert alert-danger">
@@ -42,7 +42,7 @@
 						@foreach ($course->schedules as $index => $schedule)
 						<div class="col-md-6 mb-3">
 							<div class="input-group date" id="datepicker-date{{$index}}" data-target-input="nearest">
-								<input value="{{\Carbon\Carbon::parse($schedule->date)->format('d/m/Y')}}" name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date{{$index}}"/>
+								<input value="{{\Carbon\Carbon::parse($schedule->start)->format('d/m/Y')}}" name="date[]" type="text" class="form-control datetimepicker-input" placeholder="Date" data-target="#datepicker-date{{$index}}"/>
 								<div class="input-group-append" data-target="#datepicker-date{{$index}}" data-toggle="datetimepicker">
 									<div onclick="setCalendarFormat({{$index}});" class="input-group-text"><i class="far fa-calendar-alt"></i></div>
 								</div>
@@ -50,7 +50,7 @@
 						</div>
 						<div class="col-md-2">
 							<div class="input-group date" id="timepicker-start{{$index}}" data-target-input="nearest">
-								<input value="{{\Carbon\Carbon::parse($schedule->start_time)->format('H:i')}}" name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start{{$index}}"/>
+								<input value="{{\Carbon\Carbon::parse($schedule->start)->format('H:i')}}" name="start_time[]" type="text" class="form-control datetimepicker-input" placeholder="Start" data-target="#timepicker-start{{$index}}"/>
 								<div class="input-group-append" data-target="#timepicker-start{{$index}}" data-toggle="datetimepicker">
 									<div class="input-group-text"><i class="far fa-clock"></i></div>
 								</div>
@@ -58,7 +58,7 @@
 						</div>
 						<div class="col-md-2">
 							<div class="input-group date" id="timepicker-end{{$index}}" data-target-input="nearest">
-								<input value="{{\Carbon\Carbon::parse($schedule->end_time)->format('H:i')}}" name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end{{$index}}"/>
+								<input value="{{\Carbon\Carbon::parse($schedule->end)->format('H:i')}}" name="end_time[]" type="text" class="form-control datetimepicker-input" placeholder="End" data-target="#timepicker-end{{$index}}"/>
 								<div class="input-group-append" data-target="#timepicker-end{{$index}}" data-toggle="datetimepicker">
 									<div class="input-group-text"><i class="far fa-clock"></i></div>
 								</div>
@@ -92,11 +92,11 @@
 	<script src="{{asset('lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js')}}"></script>
 	
 	<script type="text/javascript">
-        window.onload = function() {
+    window.onload = function() {
 			$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
 				format: "HH:mm"
 			});
-        };
+    };
 
 		function setDefaultTimepicker() {
 			$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
@@ -141,9 +141,9 @@
 			i++;
 		});
 
-    	// remove row
-    	$(document).on('click', '#remove-schedule-row', function () {
-        	$(this).closest('#schedule-row').remove();
+    // remove row
+    $(document).on('click', '#remove-schedule-row', function () {
+      $(this).closest('#schedule-row').remove();
 		});
 
 		function setCalendarFormat(id){

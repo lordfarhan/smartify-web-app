@@ -16,9 +16,8 @@ class CreateSchedulesTable extends Migration
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
             $table->foreignId('course_id')->references('id')->on('courses')->onDelete('cascade');
-            $table->timestamp('date')->nullable();
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->timestamp('start')->nullable();
+            $table->timestamp('end')->nullable();
             $table->timestamps();
         });
     }
