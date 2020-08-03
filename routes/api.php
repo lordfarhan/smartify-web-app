@@ -43,6 +43,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('friends/accept', '\\App\\Api\\V1\\Controllers\\FriendshipController@accept');
     Route::get('friends/requests', '\\App\\Api\\V1\\Controllers\\FriendshipController@requests');
     Route::get('friends/{id}/status', '\\App\\Api\\V1\\Controllers\\FriendshipController@status');
+    Route::get('schedules/events', '\\App\\Api\\V1\\Controllers\\ScheduleEventController@get');
   });
 
   Route::group(['prefix' => 'courses'], function () {
