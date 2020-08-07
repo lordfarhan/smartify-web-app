@@ -38,6 +38,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::resource('subjects', 'SubjectController');
   Route::resource('grades', 'GradeController');
   Route::resource('courses', 'CourseController');
+  Route::resource('quotes', 'QuoteController');
+  Route::get('quotes/categories/create', 'QuoteCategoryController@create')->name('quote-categories.create');
+  Route::post('quotes/categories/store', 'QuoteCategoryController@store')->name('quote-categories.store');
+  Route::get('quotes/categories/{id}/edit', 'QuoteCategoryController@edit')->name('quote-categories.edit');
+  Route::post('quotes/categories/update', 'QuoteCategoryController@update')->name('quote-categories.update');
+  Route::get('quotes/categories/{id}/delete', 'QuoteCategoryController@destroy')->name('quote-categories.destroy');
   Route::get('/me', 'UserController@me');
   Route::get('/me/edit', 'UserController@editMe')->name('me.edit');
   Route::get('courses/{id}/schedule', 'CourseController@editSchedule');

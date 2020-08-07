@@ -40,8 +40,8 @@
 			<div class="small-box bg-success">
 				<div class="inner">
 					{{-- <h3>53<sup style="font-size: 20px">%</sup></h3> --}}
-          {{-- <h3>{{\Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Schedule::count() : \App\Schedule::whereIn('course_id', \App\Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id')))->count()}}</h3> --}}
-          <h3>N/a</h3>
+          <h3>{{\Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Schedule::count() : \App\Schedule::whereIn('course_id', \App\Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id')))->count()}}</h3>
+          {{-- <h3>N/a</h3> --}}
           
 					<p>{{__('common.dashboard.schedules')}}</p>
 				</div>

@@ -73,6 +73,10 @@ class InitialSeeding extends Seeder
             'material-create',
             'material-edit',
             'material-delete',
+            'quote-list',
+            'quote-create',
+            'quote-edit',
+            'quote-delete',
         ];
 
         foreach ($permissions as $permission) {

@@ -106,7 +106,7 @@
 				@can('grade-list')
 					<li class="nav-item">
 						<a href="{{ route('grades.index') }}" class="nav-link {{ request()->is('grades') ? 'active' : '' }}">
-							<i class="nav-icon fas fa-chalkboard"></i>
+							<i class="nav-icon fas fa-columns"></i>
 							<p>{{__('common.sidebar.grades')}}</p>
 						</a>
 					</li>
@@ -135,6 +135,16 @@
         
         {{-- Utilisites --}}
         <li class="nav-header">{{__('common.sidebar.utilities')}}</li>
+
+        {{-- Quotes --}}
+        <li class="nav-item">
+					<a href="{{route('quotes.index')}}" class="nav-link {{ request()->is('quotes') ? 'active' : '' }}">
+						<i class="nav-icon fas fa-quote-right"></i>
+						<p>
+							{{__('common.sidebar.quotes')}}
+						</p>
+					</a>
+				</li>
 
         {{-- Settings --}}
 				<li class="nav-item">

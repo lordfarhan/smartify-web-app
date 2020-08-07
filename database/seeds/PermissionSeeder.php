@@ -13,10 +13,10 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $permissions = [
-          'music-list',
-          'music-create',
-          'music-edit',
-          'music-delete',
+          'quote-list',
+          'quote-create',
+          'quote-edit',
+          'quote-delete',
         ];
 
         foreach ($permissions as $permission) {

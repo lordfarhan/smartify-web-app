@@ -29,6 +29,7 @@ return [
     'schedules' => 'Jadwal',
     'utilities' => 'Utilitas',
     'musics' => 'Musik',
+    'quotes' => 'Kutipan',
     'settings' => 'Pengaturan',
   ],
 
@@ -451,10 +452,38 @@ return [
     ]
   ],
 
+  // Quotes
+  'quotes' => [
+    'attributes' => [
+      'name' => 'Nama',
+      'category' => 'Kategori',
+      'quote' => 'Kutipan',
+      'author' => 'Author',
+      'image' => 'Gambar'
+    ],
+    'index' => [
+      'title' => 'Kutipan'
+    ],
+    'create' => [
+      'title' => 'Buat Kutipan',
+    ],
+    'edit' => [
+      'title' => 'Perbarui Kutipan'
+    ]
+  ],
+
   // Settings
   'settings' => [
     'index' => [
-      'title' => 'Settings'
+      'title' => 'Pengaturan'
     ],
   ],
+
+  // Action
+  'actions' => [
+    'action' => 'Aksi',
+    'process' => 'Proses',
+    'back' => 'Kembali',
+    'create' => 'Buat'
+  ]
 ];

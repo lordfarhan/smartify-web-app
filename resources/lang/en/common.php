@@ -29,6 +29,7 @@ return [
     'schedules' => 'Schedules',
     'utilities' => 'Utilities',
     'musics' => 'Musics',
+    'quotes' => 'Quotes',
     'settings' => 'Settings',
   ],
 
@@ -451,10 +452,38 @@ return [
     ]
   ],
 
+  // Quotes
+  'quotes' => [
+    'attributes' => [
+      'name' => 'Name',
+      'category' => 'Category',
+      'quote' => 'Quote',
+      'author' => 'Author',
+      'image' => 'Image'
+    ],
+    'index' => [
+      'title' => 'Quotes'
+    ],
+    'create' => [
+      'title' => 'Create Quote',
+    ],
+    'edit' => [
+      'title' => 'Edit Quote'
+    ]
+  ],
+
   // Settings
   'settings' => [
     'index' => [
       'title' => 'Settings'
     ],
   ],
+
+  // Action
+  'actions' => [
+    'action' => 'Action',
+    'process' => 'Process',
+    'back' => 'Back',
+    'create' => 'Create'
+  ]
 ];
