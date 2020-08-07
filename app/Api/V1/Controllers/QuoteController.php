@@ -23,6 +23,11 @@ class QuoteController extends Controller
   {
     try {
       $categories = QuoteCategory::all();
+      foreach ($categories as $category) {
+        if (!filter_var($category->image, FILTER_VALIDATE_URL)) {
+          $category['image'] = url('storage/' . $category->image);
+        }
+      }
       return response()->json([
         'success' => true,
         'message' => 'Successfully get categories.',
@@ -41,16 +46,21 @@ class QuoteController extends Controller
   {
     try {
       $quote = Quote::all();
-      $random_quote = array();
+      $random_quotes = array();
       if ($quote->count() >= 10) {
-        $random_quote =  $quote->random(10)->all();
+        $random_quotes =  $quote->random(10)->all();
       } else {
-        $random_quote =  $quote->random($quote->count())->all();
+        $random_quotes =  $quote->random($quote->count())->all();
+      }
+      foreach ($random_quotes as $quote) {
+        if (!filter_var($quote->image, FILTER_VALIDATE_URL)) {
+          $quote['image'] = url('storage/' . $quote->image);
+        }
       }
       return response()->json([
         'success' => true,
         'message' => 'Successfully get random quotes.',
-        'result' => $random_quote
+        'result' => $random_quotes
       ], 200);
     } catch (Exception $e) {
       return response()->json([
@@ -65,16 +75,21 @@ class QuoteController extends Controller
   {
     try {
       $quote = Quote::where('quote_category_id', $id)->get();
-      $random_quote = array();
+      $random_quotes = array();
       if ($quote->count() >= 10) {
-        $random_quote =  $quote->random(10)->all();
+        $random_quotes =  $quote->random(10)->all();
       } else {
-        $random_quote =  $quote->random($quote->count())->all();
+        $random_quotes =  $quote->random($quote->count())->all();
+      }
+      foreach ($random_quotes as $quote) {
+        if (!filter_var($quote->image, FILTER_VALIDATE_URL)) {
+          $quote['image'] = url('storage/' . $quote->image);
+        }
       }
       return response()->json([
         'success' => true,
         'message' => 'Successfully get random quotes by category.',
-        'result' => $random_quote
+        'result' => $random_quotes
       ], 200);
     } catch (Exception $e) {
       return response()->json([
