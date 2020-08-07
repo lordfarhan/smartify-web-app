@@ -78,5 +78,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('provinces/{id}/{regency_id}/{district_id}', '\\App\\Api\\V1\\Controllers\\AdministrationController@getVillages');
   });
 
-  Route::get('musics', '\\App\\Api\\V1\\Controllers\\MusicController@get');
+  Route::get('quotes/categories', '\\App\\Api\\V1\\Controllers\\QuoteController@getCategories');
+  Route::get('quotes/random', '\\App\\Api\\V1\\Controllers\\QuoteController@getRandomQuotes');
+  Route::get('quotes/categories/{id}', '\\App\\Api\\V1\\Controllers\\QuoteController@getByCategoryId');
 });
