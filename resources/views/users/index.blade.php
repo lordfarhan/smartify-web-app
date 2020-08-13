@@ -7,6 +7,8 @@
 @section('head')
   <link rel="stylesheet" href="{{ asset("lte/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css") }}">
   <link rel="stylesheet" href="{{ asset("lte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css") }}">
+  <!-- iCheck for checkboxes and radio inputs -->
+  <link rel="stylesheet" href="{{ asset("lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css") }}">
 @endsection
 
 @section('content')
@@ -28,12 +30,13 @@
       <thead class="thead-light">
         <tr>
           <th width="20px">{{__('common.users.attributes.no')}}</th>
+          <th>{{__('common.users.attributes.verified')}}</th>
           <th>{{__('common.users.attributes.institution')}}</th>
           <th>{{__('common.users.attributes.name')}}</th>
           {{-- <th>{{__('common.users.attributes.image')}}</th> --}}
           <th>{{__('common.users.attributes.email')}}</th>
           <th>{{__('common.users.attributes.phone')}}</th>
-          <th>{{__('common.users.attributes.address')}}</th>
+          {{-- <th>{{__('common.users.attributes.address')}}</th> --}}
           <th>{{__('common.users.attributes.roles')}}</th>
           <th width="87px">{{__('common.users.attributes.action')}}</th>
         </tr>
@@ -44,6 +47,15 @@
           <tr>
             <td>{{ ++$key }}</td>
             <td>
+              @if ($user->email_verified_at != null)                  
+              <div class="icheck-success d-inline">
+                <input type="checkbox" id="checkboxVerified" checked disabled>
+                <label for="checkboxVerified">
+                </label>
+              </div>
+              @endif
+            </td>
+            <td>
               @foreach($user->institutions as $institution)
                 <label class="badge badge-primary">{{ $institution->institution->name }}</label>
               @endforeach
@@ -52,7 +64,7 @@
             {{-- <td><img src="{{ asset("storage/". $user->image) }}" class="img-square elevation-2" alt="User Image" height="80" width="80"></td> --}}
             <td>{{ $user->email }}</td>
             <td>{{ $user->phone }}</td>
-            <td>{{ $user->address }}</td>
+            {{-- <td>{{ $user->address }}</td> --}}
             <td>
               @if(!empty($user->getRoleNames()))
                 @foreach($user->getRoleNames() as $v)

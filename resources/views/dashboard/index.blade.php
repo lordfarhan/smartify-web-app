@@ -25,7 +25,7 @@
 			<!-- small box -->
 			<div class="small-box bg-info">
 				<div class="inner">
-					<h3>{{ \Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Course::count() : \App\Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->count() }}</h3>
+					<h3>{{ \Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Course::count() : \App\Course::where('author_id', Auth::user()->id)->count() }}</h3>
 					<p>{{__('common.dashboard.courses')}}</p>
 				</div>
 				<div class="icon">
@@ -40,7 +40,7 @@
 			<div class="small-box bg-success">
 				<div class="inner">
 					{{-- <h3>53<sup style="font-size: 20px">%</sup></h3> --}}
-          <h3>{{\Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Schedule::count() : \App\Schedule::whereIn('course_id', \App\Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id')))->count()}}</h3>
+          <h3>{{\Illuminate\Support\Facades\Auth::user()->hasRole('Master') ? \App\Schedule::count() : \App\Schedule::whereIn('course_id', \App\Course::where('author_id', Auth::user()->id)->pluck('id'))->count()}}</h3>
           {{-- <h3>N/a</h3> --}}
           
 					<p>{{__('common.dashboard.schedules')}}</p>

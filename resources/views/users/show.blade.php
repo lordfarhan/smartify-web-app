@@ -35,6 +35,9 @@
             <b>{{__('common.users.show.joined_at')}}</b> <a class="float-right">{{ \Carbon\Carbon::parse($user->created_at)->format("M, d Y H:i:s") }}</a>
           </li>
           <li class="list-group-item">
+            <b>{{__('common.users.show.verified_at')}}</b> <a class="float-right">{{ \Carbon\Carbon::parse($user->email_verified_at)->format("M, d Y H:i:s") }}</a>
+          </li>
+          <li class="list-group-item">
             <b>{{__('common.users.show.last_update')}}</b> <a class="float-right">{{ \Carbon\Carbon::parse($user->updated_at)->format("M, d Y H:i:s") }}</a>
           </li>
         </ul>

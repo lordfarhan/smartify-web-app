@@ -84,6 +84,7 @@ return [
   'users' => [
     'attributes' => [
       'no' => 'No',
+      'verified' => 'Verified',
       'name' => 'Name',
       'name_placeholder' => 'User Name',
       'email' => 'Email',
@@ -129,6 +130,7 @@ return [
     'show' => [
       'title' => 'User Detail',
       'joined_at' => 'Joined at',
+      'verified_at' => 'Verified at',
       'last_update' => 'Last Update',
       'about' => 'About',
       'empty' => 'Empty',

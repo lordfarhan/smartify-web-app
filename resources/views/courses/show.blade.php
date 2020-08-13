@@ -93,7 +93,7 @@
                 </div>
                 @endif
                 @can('chapter-list')
-                  @foreach ($course->chapters as $chapter)
+                  @foreach ($course->chapters->sortBy('chapter') as $chapter)
                     <div class="col-md-12">
                       <div class="card card-success">
                         <div class="card-header">
@@ -116,19 +116,14 @@
                             </div>
                             @can('sub-chapter-list')
                               {{-- Populating sub chapters --}}
-                              @foreach ($chapter->subChapters as $sub_chapter)
+                              @foreach ($chapter->subChapters->sortBy('sub_chapter') as $sub_chapter)
                                 <div>
                                   <i class="fas bg-blue">{{ $sub_chapter->sub_chapter }}</i>
                                   <div class="timeline-item">
                                     {{-- <span class="time"><i class="fas fa-clock"></i> 12:05</span> --}}
-                                    <h3 class="timeline-header"><a href="#">{{ $sub_chapter->title }}</a></h3>
+                                    <h3 class="timeline-header"><a href="/courses/{{$course->id}}/{{$chapter->id}}/{{$sub_chapter->id}}/">{{ $sub_chapter->title }}</a></h3>
                   
                                     <div class="timeline-body">
-                                      {{-- @if (!empty($sub_chapter->materials))
-                                        <div class="embed-responsive embed-responsive-16by9">
-                                          <iframe class="embed-responsive-item" src="{{$sub_chapter->materials}}" frameborder="0" allowfullscreen=""></iframe>
-                                        </div>
-                                      @endif --}}
                                     </div>
                                     <div class="timeline-footer">
                                       <a href="/courses/{{$course->id}}/{{$chapter->id}}/{{$sub_chapter->id}}/" class="btn btn-sm btn-primary">{{__('common.courses.actions.open')}}</a>
@@ -160,11 +155,6 @@
                                           {{ Form::text('title', null, array('placeholder' => __('common.courses.attributes.sub_chapter_title_placeholder'), 'class' => 'form-control')) }}
                                         </div>
                                       </div>
-                                      {{-- <div class="col-md-12">
-                                        <div class="form-group">
-                                          {{ Form::text('materials', null, array('placeholder' => __('common.courses.attributes.materials_placeholder'), 'class' => 'form-control')) }}
-                                        </div>
-                                      </div> --}}
                                     </div>
                                     {{-- Add sub chapter --}}
                                     <button class="btn btn-sm btn-primary col-12" type="submit"></i>{{__('common.courses.actions.process')}}</button>

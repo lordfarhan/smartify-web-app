@@ -84,6 +84,7 @@ return [
   'users' => [
     'attributes' => [
       'no' => 'No',
+      'verified' => 'Terverifikasi',
       'name' => 'Nama',
       'name_placeholder' => 'Nama Pengguna',
       'email' => 'Surel(E-mail)',
@@ -129,6 +130,7 @@ return [
     'show' => [
       'title' => 'Detail Pengguna',
       'joined_at' => 'Bergabung pada',
+      'verified_at' => 'Diverifikasi pada',
       'last_update' => 'Terakhir Diperbarui',
       'about' => 'Tentang',
       'empty' => 'Kosong',
