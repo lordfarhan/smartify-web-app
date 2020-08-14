@@ -58,7 +58,7 @@
 								<div>
 									<i class="fas bg-blue">{{ $question->order }}</i>
 									<div class="timeline-item">
-										<h3 class="timeline-header"><a href="#">{{ $question->question }}</a></h3>
+										<h3 class="timeline-header"><a href="">{!! $question->question !!}</a></h3>
 	
 										<div class="timeline-body">
 											@if (!empty($question->question_image))
@@ -100,14 +100,14 @@
 										{{ Form::open(array('route' => 'questions.store', 'method'=>'POST', 'files' => true)) }}
 										{{ Form::hidden('test_id', $test->id) }}
 										<div class="row">
-											<div class="col-md-2">
+											<div class="col-md-12">
 												<div class="form-group">
 													{{ Form::number('order', null, array('placeholder' => __('common.tests.attributes.order_placeholder'), 'class' => 'form-control')) }}
 												</div>
 											</div>
-											<div class="col-md-10">
+											<div class="col-md-12">
 												<div class="form-group">
-													{{ Form::text('question', null, array('placeholder' => __('common.tests.attributes.question_placeholder'), 'class' => 'form-control')) }}
+													{{ Form::textarea('question', null, array('placeholder' => __('common.tests.attributes.question_placeholder'), 'class' => 'form-control')) }}
 												</div>
 											</div>
 											<div class="col-md-6">
@@ -305,6 +305,7 @@
 @endsection
 
 @section('scripts')
+  <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
 	<script type="text/javascript">
 		function checkType() {
 			var multiple = document.getElementById("multiple");
@@ -316,6 +317,14 @@
 			thirdIncorrectAnswer.style.display = boolean.checked ? "none" : "block";
 			fourthIncorrectAnswer.style.display = boolean.checked ? "none" : "block";
 		}
+
+    var options = {
+      filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+      filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+      filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+      filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+    };
+    CKEDITOR.replace( 'question', options );
 
 		// Delete question modal
     $(document).on('click', '.delete-question-modal', function() {
