@@ -57,7 +57,6 @@ class QuestionController extends Controller
       'incorrect_answer_1' => 'required',
       'incorrect_answer_2' => 'required',
       'incorrect_answer_3' => 'required',
-      'incorrect_answer_4' => 'required',
     ];
 
     $testName = $request->test_id . '_' . $request->order . '_' . Str::random();
@@ -72,7 +71,11 @@ class QuestionController extends Controller
       unset($request['incorrect_answer_4']);
       $input['incorrect_answers'] = "$request->incorrect_answer_1";
     } else {
-      $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
+      if($request->incorrect_answer_4 != null) {
+        $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
+      } else {
+        $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3";
+      }
     }
 
     $this->validate($request, $validation);
@@ -144,7 +147,6 @@ class QuestionController extends Controller
       'incorrect_answer_1' => 'required',
       'incorrect_answer_2' => 'required',
       'incorrect_answer_3' => 'required',
-      'incorrect_answer_4' => 'required',
     ];
 
     $testName = $request->test_id . '_' . $request->order . '_' . Str::random();
@@ -159,7 +161,11 @@ class QuestionController extends Controller
       unset($request['incorrect_answer_4']);
       $input['incorrect_answers'] = "$request->incorrect_answer_1";
     } else {
-      $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
+      if($request->incorrect_answer_4 != null) {
+        $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3; $request->incorrect_answer_4";
+      } else {
+        $input['incorrect_answers'] = "$request->incorrect_answer_1; $request->incorrect_answer_2; $request->incorrect_answer_3";
+      }
     }
 
     $this->validate($request, $validation);

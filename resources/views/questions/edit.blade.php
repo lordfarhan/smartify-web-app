@@ -114,11 +114,19 @@
               </div>
             </div>
             {{-- 4th incorrect answer --}}
+            @if (count(explode('; ', $question->incorrect_answers)) == 4)       
             <div class="col-md-12">
               <div class="form-group">
                 {{ Form::text('incorrect_answer_4', $question->type == 'multiple' ? explode('; ', $question->incorrect_answers)[3] : null, array('id' => 'incorrect_answer_4', 'placeholder' => 'This form is for fourth incorrect answer', 'class' => 'form-control')) }}
               </div>
             </div>
+            @else
+            <div class="col-md-12">
+              <div class="form-group">
+                {{ Form::text('incorrect_answer_4', null, array('id' => 'incorrect_answer_4', 'placeholder' => 'This form is for fourth incorrect answer', 'class' => 'form-control')) }}
+              </div>
+            </div>
+            @endif
             {{-- <div class="col-md-3">
               <div class="form-group">
                 <div class="custom-file">
