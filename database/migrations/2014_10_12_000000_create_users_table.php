@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('phone', 14)->unique()->nullable();
             $table->text('address')->nullable();
             $table->timestamp('date_of_birth', 0)->nullable($value = true);
-            $table->enum('gender', ['0', '1'])->nullable();
+            $table->enum('gender', ['0', '1'])->default('0')->nullable();
             $table->text('image')->default("/users/default.png");
             $table->timestamps();
         });

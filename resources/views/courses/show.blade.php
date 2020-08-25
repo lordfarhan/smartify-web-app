@@ -43,6 +43,9 @@
             <li class="list-group-item">
               <b>{{__('common.courses.attributes.grade')}}</b> <a class="float-right">{{ $course->grade->grade . ' ' . $course->section . ' ' . $course->grade->getEducationalStage() }}</a>
             </li>
+            <li class="list-group-item">
+              <b>{{__('common.courses.attributes.enrollment_key')}}</b> <a class="float-right">{{ $course->enrollment_key }}</a>
+            </li>
             @foreach ($course->schedules as $index => $schedule)
               <li class="list-group-item">
                 <b>@if ($index == 0)

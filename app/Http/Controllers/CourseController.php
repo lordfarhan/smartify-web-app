@@ -390,4 +390,79 @@ class CourseController extends Controller
     $sub_chapter = SubChapter::find($sub_chapter_id);
     return view('courses.materials', compact('sub_chapter'));
   }
+
+  public function replicate(Request $request)
+  {
+    $this->validate($request, [
+      'id' => 'required'
+    ]);
+
+    $course = Course::find($request->id);
+
+    // Duplicate course
+    $newCourse = $course->replicate()->fill([
+      'name' => $course->name . ' (Copy)',
+      'enrollment_key' => $this->generateEnrollmentKey(),
+      'status' => '0',
+      'attachment' => '',
+      'attachment_title' => '',
+      'image' => ''
+    ]);
+    $newCourse->save();
+
+    // Duplicate chapters
+    $chapters = $course->chapters;
+    foreach ($chapters as $index => $chapter) {
+      $newChapter = $chapter->replicate();
+      $newChapter->course_id = $newCourse->id;
+      $newChapter->save();
+
+      // Duplicate subchapters
+      $subChapters = $chapter->subChapters;
+      foreach ($subChapters as $subChapter) {
+        $newSubChapter = $subChapter->replicate();
+        $newSubChapter->chapter_id = $newChapter->id;
+        $newSubChapter->save();
+
+        // Duplicate materials
+        $materials = $subChapter->materials;
+        foreach ($materials as $material) {
+          $newMaterial = $material->replicate();
+          $newMaterial->sub_chapter_id = $newSubChapter->id;
+          $newMaterial->save();
+        }
+      }
+    }
+
+    // Duplicate tests
+    $tests = $course->tests;
+    foreach ($tests as $test) {
+      $newTest = $test->replicate()->fill([
+        'course_id' => $newCourse->id
+      ]);
+      $newTest->save();
+
+      // Duplicate questions
+      $questions = $test->questions;
+      foreach ($questions as $question) {
+        $newQuestion = $question->replicate()->fill([
+          'test_id' => $newTest->id
+        ]);
+        $newQuestion->save();
+      }
+    }
+
+    return back()->with('success', 'Successfully replicated course');
+  }
+
+  function generateEnrollmentKey($length = 6)
+  {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+      $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return $randomString;
+  }
 }

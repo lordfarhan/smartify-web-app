@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::get('courses/{id}/schedule', 'CourseController@editSchedule');
   Route::post('courses/schedule', 'CourseController@updateSchedule')->name('courses.updateSchedule');
   Route::get('courses.delete-file/{id}/{type}', 'CourseController@deleteFile');
+  Route::post('courses/replicate', 'CourseController@replicate')->name('courses.replicate');
   Route::get('courses/{course_id}/tests/{id}', 'TestController@show');
   Route::get('courses/{course_id}/tests/{id}/submissions', 'TestController@openSubmissions');
   Route::get('courses/{course_id}/tests/{id}/submissions/{mark_id}/delete', 'TestController@deleteMark');

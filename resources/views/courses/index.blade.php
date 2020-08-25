@@ -15,6 +15,11 @@
 		<p>{{ $message }}</p>
 	</div>
 @endif
+@if(!empty($errors->all()))
+  <div class="alert alert-danger">
+    {{ Html::ul($errors->all())}}
+  </div>
+@endif
 <div class="card">
 	<div class="card-header">
 		@can('course-create')
@@ -34,7 +39,7 @@
           <th>{{__('common.courses.attributes.type')}}</th>
           <th>{{__('common.courses.attributes.status')}}</th>
           {{-- <th>{{__('common.courses.attributes.image')}}</th> --}}
-          <th width="122px">{{__('common.courses.attributes.action')}}</th>
+          <th width="154px">{{__('common.courses.attributes.action')}}</th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +68,12 @@
           {{-- <td><img src="{{ asset("storage/". $course->image) }}" class="img-fluid elevation-2" alt="Course Image" height="80" width="80"></td> --}}
           <td>
             <a class="btn btn-primary btn-sm elevation-2" href="{{ route('courses.show', $course->id) }}"><i class="fa fa-eye"></i></a>
+            @can('course-create')
+            {{Form::open(array('route' => 'courses.replicate', 'method'=>'POST', 'style'=>'display:inline'))}}
+              <input name="id" type="hidden" value="{{$course->id}}">
+              <button class="btn btn-primary btn-sm elevation-2" type="submit"><i class="fa fa-clone"></i></button>
+            {{Form::close()}}
+            @endcan
             @can('course-edit')
               <a class="btn btn-warning text-white btn-sm elevation-2" href="{{ route('courses.edit', $course->id) }}"><i class="fa fa-pen-alt"></i></a>
             @endcan

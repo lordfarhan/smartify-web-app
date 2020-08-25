@@ -15,8 +15,13 @@ class Test extends Model
     return $this->belongsTo(Course::class, 'course_id');
   }
 
+  public function questions()
+  {
+    return $this->hasMany(Question::class);
+  }
+
   public function marks()
   {
-    $this->hasMany(Mark::class);
+    return $this->hasMany(Mark::class);
   }
 }
