@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Chapter;
 use App\Course;
 use App\Grade;
 use App\Institution;
@@ -165,7 +166,13 @@ class CourseController extends Controller
    */
   public function show(Course $course)
   {
-    return view('courses.show', compact('course'));
+    if (Auth::user()->hasRole('Master')) {
+      $courses = Course::orderBy('id', 'desc')->get();
+    } else {
+      // $courses = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->orderBy('id', 'desc')->get();
+      $courses = Course::where('author_id', Auth::user()->id)->orderBy('id', 'desc')->get();
+    }
+    return view('courses.show', compact('course', 'courses'));
   }
 
   /**
@@ -464,5 +471,46 @@ class CourseController extends Controller
       $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
+  }
+
+  public function replicateMaterials(Request $request)
+  {
+    $this->validate($request, [
+      'source_id' => 'required',
+      'destination_id' => 'required'
+    ]);
+    $source = SubChapter::find($request->source_id);
+    $destination = SubChapter::find($request->destination_id);
+
+    $materials = $source->materials;
+    foreach ($materials as $material) {
+      $newMaterial = $material->replicate();
+      $newMaterial->sub_chapter_id = $destination->id;
+      $newMaterial->save();
+    }
+
+    return back()->with('success', 'Successfully replicated materials');
+  }
+
+  public function chapterList(Request $request, $id)
+  {
+    $html = '';
+    $course = Course::find($id);
+    $chapters = $course->chapters;
+    foreach ($chapters as $chapter) {
+      $html .= '<option value="' . $chapter->id . '">' . $chapter->chapter . ' ' . $chapter->title . '</option>';
+    }
+    return response()->json(['html' => $html]);
+  }
+
+  public function subChapterList(Request $request, $id)
+  {
+    $html = '';
+    $chapter = Chapter::find($id);
+    $subChapters = $chapter->subChapters;
+    foreach ($subChapters as $subChapter) {
+      $html .= '<option value="' . $subChapter->id . '">' . $subChapter->sub_chapter . ' ' . $subChapter->title . '</option>';
+    }
+    return response()->json(['html' => $html]);
   }
 }

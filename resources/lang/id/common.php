@@ -307,6 +307,7 @@ return [
       'add' => 'Tambah',
       'remove' => 'Hapus',
       'cancel' => 'Batal',
+      'replicate' => 'Replikasi'
     ],
     'index' => [
       'title' => 'Pengelolaan Kursus'

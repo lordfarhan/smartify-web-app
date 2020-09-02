@@ -307,6 +307,7 @@ return [
       'add' => 'Add',
       'remove' => 'Remove',
       'cancel' => 'Cancel',
+      'replicate' => 'Replicate'
     ],
     'index' => [
       'title' => 'Course Management'

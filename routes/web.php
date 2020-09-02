@@ -62,6 +62,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::get('courses/{course_id}/forum/{slug}/replies/{reply_id}/delete', 'ForumReplyController@delete');
 
   Route::get('courses/{id}/{chapter_id}/{sub_chapter_id}', 'CourseController@showMaterials');
+  Route::get('courses/{id}/chapters', 'CourseController@chapterList');
+  Route::get('chapters/{id}/subchapters', 'CourseController@subChapterList');
+  Route::post('materials/replicate', 'CourseController@replicateMaterials')->name('materials.replicate');
 
   Route::post('courses/storeMaterial', 'MaterialController@store')->name('materials.store');
   Route::post('courses/deleteMaterial', 'MaterialController@delete')->name('materials.delete');

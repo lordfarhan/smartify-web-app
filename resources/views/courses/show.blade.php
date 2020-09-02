@@ -5,6 +5,16 @@
 @endsection
 
 @section('content')
+@if ($message = Session::get('success'))
+	<div class="alert alert-success mt-2">
+		<p>{{ $message }}</p>
+	</div>
+@endif
+@if(!empty($errors->all()))
+  <div class="alert alert-danger">
+    {{ Html::ul($errors->all())}}
+  </div>
+@endif
   <div class="row">
     <div class="col-12">
       <div class="card card-primary card-outline">
@@ -131,6 +141,7 @@
                                     <div class="timeline-footer">
                                       <a href="/courses/{{$course->id}}/{{$chapter->id}}/{{$sub_chapter->id}}/" class="btn btn-sm btn-primary">{{__('common.courses.actions.open')}}</a>
                                       <a class="edit-sub-chapter-modal btn btn-warning btn-sm" data-id="{{$sub_chapter->id}}" data-chapter_id="{{$chapter->id}}" data-sub_chapter="{{$sub_chapter->sub_chapter}}" data-title="{{$sub_chapter->title}}">{{__('common.courses.actions.edit')}}</a>
+                                      <a class="replicate-materials-modal btn btn-info btn-sm" data-id="{{$sub_chapter->id}}">{{__('common.courses.actions.replicate')}}</a>
                                       <a class="delete-sub-chapter-modal btn btn-danger btn-sm" data-id="{{$sub_chapter->id}}">{{__('common.courses.actions.delete')}}</a>
                                     </div>
                                   </div>
@@ -776,6 +787,63 @@
       </form>
     </div>
   </div>
+
+  <div id="materials-replicate-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="sub-chapter-modal-form" action="{{action('CourseController@replicateMaterials')}}" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="source_id" id="source-id-replicate-materials">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Course:</label>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <select name="course_id" id="course-replicate-materials" class="custom-select custom-select">
+                      @foreach ($courses as $c)
+                        <option value="{{$c->id}}">{{$c->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Chapter:</label>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <select name="chapter_id" id="chapter-replicate-materials" class="custom-select custom-select">
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Sub Chapter:</label>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <select name="destination_id" id="sub-chapter-replicate-materials" class="custom-select custom-select">
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-normal" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">{{__('common.courses.actions.process')}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 @endsection
 
 @section('scripts')
@@ -850,6 +918,32 @@
     $(document).on('click', '.delete-sub-chapter-modal', function() {
       $('#id-delete-sub-chapter').val($(this).data('id'));
       $('#sub-chapter-delete-modal').modal('show');
+    });
+
+    // Replicate materials modal
+    $(document).on('click', '.replicate-materials-modal', function() {
+      $('#source-id-replicate-materials').val($(this).data('id'));
+      $('#materials-replicate-modal').modal('show');
+    });
+
+    $("#course-replicate-materials").change(function(){
+      $.ajax({
+        url: '/courses/' + $(this).val() + '/chapters',
+        method: 'GET',
+        success: function(data) {
+          $('#chapter-replicate-materials').html(data.html);
+        }
+      });
+    });
+
+    $("#chapter-replicate-materials").change(function(){
+      $.ajax({
+        url: '/chapters/' + $(this).val() + '/subchapters',
+        method: 'GET',
+        success: function(data) {
+          $('#sub-chapter-replicate-materials').html(data.html);
+        }
+      });
     });
   </script>
 
