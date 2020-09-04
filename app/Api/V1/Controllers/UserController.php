@@ -156,6 +156,26 @@ class UserController extends Controller
         }
 
         break;
+      case "avatar":
+        $rules = [
+          'image' => 'required|mimes:jpg,png,jpeg,JPG',
+        ];
+        $input = $request->only('image');
+    
+        $validator = Validator::make($input, $rules);
+    
+        if ($validator->fails()) {
+          return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null]);
+        }
+    
+        if (File::exists(storage_path('app/public/' . $user->image))) {
+          File::delete(storage_path('app/public/' . $user->image));
+        }
+        $image = $request->file('image');
+        $imageName = 'userImage' . Carbon::now()->format('YmdHis') . '_' . preg_replace('/\s+/', '', $user->name) . '.' . 'png';
+        Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
+        $input['image'] = 'users/' . $imageName;
+        break;
     }
 
     try {
