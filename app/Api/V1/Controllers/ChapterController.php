@@ -50,7 +50,20 @@ class ChapterController extends Controller
               $chapter['finished_count'] = 0;
             }
             if ($chapter->subChapters != null) {
-              $chapter['sub_chapters'] = $chapter->subChapters->sortBy('sub_chapter');
+              $subChapters = $chapter->subChapters;
+              foreach ($subChapters as $sub_chapter) {
+                if ($chapter_enrollment != null) {
+                  $sub_chapter_enrollment = SubChapterEnrollment::where('chapter_enrollment_id', $chapter_enrollment->id)->where('sub_chapter_id', $sub_chapter->id)->first();
+                  if ($sub_chapter_enrollment != null) {
+                    $sub_chapter['finished'] = 1;
+                  } else {
+                    $sub_chapter['finished'] = 0;
+                  }
+                } else {
+                  $sub_chapter['finished'] = 0;
+                }
+              }
+              $chapter['sub_chapters'] = $subChapters->sortBy('sub_chapter');
             } else {
               $chapter['sub_chapters'] = array();
             }
