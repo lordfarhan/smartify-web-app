@@ -88,8 +88,10 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::get('/questions.delete-file/{id}/{type}', 'QuestionController@deleteFile');
 
   Route::resource('schedules', 'ScheduleController');
-  Route::get('schedules.all', 'ScheduleController@getScheduleData');
-  Route::get('schedules/{id}/attendances/create', 'AttendanceController@create');
+  Route::get('schedulesData', 'ScheduleController@getScheduleData');
+  Route::get('courses/{course_id}/schedules/{id}/attendances/create', 'AttendanceController@create');
+  Route::get('courses/{course_id}/schedules/{id}/attendances/edit', 'AttendanceController@edit');
+  Route::post('courses/{course_id}/schedules/{id}/attendances/update', 'AttendanceController@update');
 
   Route::resource('attendances', 'AttendanceController');
 

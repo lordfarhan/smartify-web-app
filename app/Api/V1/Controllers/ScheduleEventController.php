@@ -49,7 +49,7 @@ class ScheduleEventController extends Controller
               $event['attended'] = '0';
             }
           } else {
-            $event['attended'] = '0';
+            $event['attended'] = null;
           }
           if ($course->image != null) {
             $course['image'] = url('storage/' . $course->image);

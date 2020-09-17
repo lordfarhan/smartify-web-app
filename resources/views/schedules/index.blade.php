@@ -37,7 +37,7 @@
 				defaultView: 'timeGridWeek',
 				themeSystem: 'bootstrap',
 				events: {
-					url: '/schedules.all',
+					url: '/schedulesData',
 					failure: function() {
 						alert('there was an error while fetching events!');
 					}
@@ -58,7 +58,7 @@
 					});     
 				},
 				eventClick: function(info) {
-					window.location.href = 'schedules/' + info.event.id + '/attendances/create/';
+					window.location.href = 'courses/' + info.event.id;
 					info.el.style.borderColor = 'red';
 				},
 				dayClick: function(date, jsEvent, view) { 

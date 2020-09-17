@@ -15,7 +15,7 @@
 @endsection
 
 @section('title')
-    Record Attendance - {{\Carbon\Carbon::parse($schedule->date)->format('d M Y')}}
+    Record Attendance - {{\Carbon\Carbon::parse($schedule->start)->format('d M Y')}}
 @endsection
 
 @section('content')
@@ -26,7 +26,7 @@
     </div>
     <div class="card">
       <div class="card-header">
-          <a href="{{route('schedules.index')}}" class="btn btn-outline-info">Back</a>
+          <a href="{{route('courses.show', $schedule->course_id)}}" class="btn btn-outline-info">Back</a>
       </div>
       <div class="card-body">
         @if(!empty($errors->all()))

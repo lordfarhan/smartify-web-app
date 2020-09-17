@@ -43,13 +43,14 @@ class ScheduleController extends Controller
     if (Auth::user()->hasRole('Master')) {
       $schedules = Schedule::all();
     } else {
-      $course_ids = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('id');
+      // $course_ids = Course::whereIn('institution_id', Auth::user()->institutions->pluck('institution_id'))->pluck('id');
+      $course_ids = Course::where('author_id', Auth::user()->id)->pluck('id');
       $schedules = Schedule::whereIn('course_id', $course_ids)->get();
     }
     $scheduleData = array();
     foreach ($schedules as $schedule) {
       $e = array();
-      $e['id'] = $schedule->id;
+      $e['id'] = $schedule->course->id;
       $e['title'] = $schedule->course->subject->subject . " - " . $schedule->course->grade->grade . ' ' . $schedule->course->grade->getEducationalStage();
       $e['start'] = Carbon::parse($schedule->start)->format('Y-m-d H:i:s');
       $e['end'] = Carbon::parse($schedule->end)->format('Y-m-d H:i:s');

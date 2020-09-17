@@ -15,7 +15,7 @@
 @endsection
 
 @section('title')
-    Attendance Report - {{\Carbon\Carbon::parse($schedule->date)->format('M, d Y')}}
+    Attendance Report - {{\Carbon\Carbon::parse($schedule->start)->format('M, d Y')}}
 @endsection
 
 @section('content')
@@ -27,6 +27,7 @@
     <div class="card">
       <div class="card-header">
         <a href="{{route('courses.show', $schedule->course->id)}}" class="btn btn-outline-info">Back</a>
+        <a href="/courses/{{$schedule->course_id}}/schedules/{{$schedule->id}}/attendances/edit" class="btn btn-outline-warning float-right">Edit</a>
       </div>
       <div class="card-body">
           @if(!empty($errors->all()))
@@ -50,13 +51,13 @@
                 <td>{{ $course_enrollment->user->name }}</td>
                 <td>
                   <div class="p-0 m-0 form-group">
-                    <input name="student[{{$key}}]" type="hidden" value="{{$course_enrollment->user->id}}">
+                    <input name="student[{{$key}}]" type="hidden" value="{{$course_enrollment->user_id}}">
                   </div>
                   <div class="mb-0 form-group clearfix">
                     <div class="icheck-success d-inline">
-                      <input name="status[{{$key}}]" type="checkbox" disabled {{$schedule->attendances->pluck('status')[$key] == '1' ? 'checked' : ''}} id="checkboxPresent-{{$key}}">
+                      <input name="status[{{$key}}]" type="checkbox" disabled {{\App\Attendance::where('schedule_id', $schedule->id)->where('user_id', $course_enrollment->user_id)->pluck('status')->first() == '1' ? 'checked' : ''}} id="checkboxPresent-{{$key}}">
                       <label for="checkboxPresent-{{$key}}" style="font-weight: 500">
-                        {{$schedule->attendances->pluck('status')[$key] == '1' ? 'Present' : 'Not Present'}}
+                        {{\App\Attendance::where('schedule_id', $schedule->id)->where('user_id', $course_enrollment->user_id)->pluck('status')->first() == '1' ? 'Present' : 'Not Present'}}
                       </label>
                     </div>
                   </div>
@@ -67,7 +68,7 @@
           </table>
           <div class="form-group mt-3">
             <label for="">Signer</label>
-            <p>{{$schedule->attendances[$schedule->attendances->count() - 1]->user->name}}</p>
+            <p>{{$schedule->course->author->name}}</p>
           </div>
         </div>
         {{-- <div class="card-footer text-right">
