@@ -2,6 +2,7 @@
 
 namespace App\Api\V1\Controllers;
 
+use App\Attendance;
 use App\ChapterEnrollment;
 use App\Course;
 use App\CourseEnrollment;
@@ -13,6 +14,7 @@ use App\SubChapter;
 use App\SubChapterEnrollment;
 use App\Subject;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +41,16 @@ class ScheduleEventController extends Controller
       foreach ($courses as $index => $course) {
         $events = Schedule::where('course_id', $course->id)->get();
         foreach ($events as $index => $event) {
+          $attendance = Attendance::where('user_id', Auth::user()->id)->where('schedule_id', $event->id)->first();
+          if ($attendance != null) {
+            if ($attendance->status == '1') {
+              $event['attended'] = '1';
+            } else {
+              $event['attended'] = '0';
+            }
+          } else {
+            $event['attended'] = '0';
+          }
           if ($course->image != null) {
             $course['image'] = url('storage/' . $course->image);
           }
@@ -84,6 +96,49 @@ class ScheduleEventController extends Controller
         'message' => $e->getMessage(),
         'result' => null
       ], 500);
+    }
+  }
+
+  public function attend(Request $request)
+  {
+    $input = $request->only('schedule_id');
+
+    $schedule = Schedule::find($input['schedule_id']);
+
+    if (Carbon::now() < $schedule->end && Carbon::now() > $schedule->start) {
+      try {
+        if (Attendance::where('user_id', Auth::user()->id)->where('schedule_id', $input['schedule_id'])->first() == null) {
+          $attendance = new Attendance();
+          $attendance->user_id = Auth::user()->id;
+          $attendance->schedule_id = $input['schedule_id'];
+          $attendance->status = "1";
+          $attendance->save();
+
+          return response()->json([
+            'success' => true,
+            'message' => 'Successfully attended the schedule.',
+            'result' => null
+          ], 200);
+        } else {
+          return response()->json([
+            'success' => false,
+            'message' => 'Your attendance had been recorded.',
+            'result' => null
+          ], 409);
+        }
+      } catch (Exception $e) {
+        return response()->json([
+          'success' => false,
+          'message' => $e->getMessage(),
+          'result' => null
+        ], 500);
+      }
+    } else {
+      return response()->json([
+        'success' => false,
+        'message' => 'Out of schedule time range.',
+        'result' => null
+      ], 404);
     }
   }
 }
