@@ -6,6 +6,7 @@ use App\CourseEnrollment;
 use App\Experience;
 use App\Http\Controllers\Controller;
 use App\Institution;
+use App\Rules\MatchOldPassword;
 use App\User;
 use App\UserInstitution;
 use Carbon\Carbon;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -161,13 +163,13 @@ class UserController extends Controller
           'image' => 'required|mimes:jpg,png,jpeg,JPG',
         ];
         $input = $request->only('image');
-    
+
         $validator = Validator::make($input, $rules);
-    
+
         if ($validator->fails()) {
           return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null]);
         }
-    
+
         if (File::exists(storage_path('app/public/' . $user->image))) {
           File::delete(storage_path('app/public/' . $user->image));
         }
@@ -176,10 +178,30 @@ class UserController extends Controller
         Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
         $input['image'] = 'users/' . $imageName;
         break;
+      case "password":
+        $rules = [
+          'current_password' => ['required', new MatchOldPassword],
+          'new_password' => ['required'],
+          'new_confirm_password' => ['same:new_password'],
+        ];
+
+        $input = $request->only('current_password', 'new_password', 'new_confirm_password');
+
+        $validator = Validator::make($input, $rules);
+
+        if ($validator->fails()) {
+          return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null]);
+        }
+
+        break;
     }
 
     try {
-      $user->update($input);
+      if ($field == "password") {
+        $user->update(['password' => Hash::make($request->new_password)]);
+      } else {
+        $user->update($input);
+      }
       $userArray = $user->toArray();
       $userArray['email_verified_at'] = Carbon::parse($user->email_verified_at)->format('d/m/Y');
       $userArray['date_of_birth'] = Carbon::parse($user->date_of_birth)->format('d/m/Y');

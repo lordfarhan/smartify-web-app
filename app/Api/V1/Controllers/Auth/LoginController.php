@@ -3,12 +3,14 @@
 namespace App\Api\V1\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-class LoginController extends Controller {
+class LoginController extends Controller
+{
   /**
    * API Login, on success return JWT Auth token
    *
@@ -18,34 +20,37 @@ class LoginController extends Controller {
   public function login(Request $request)
   {
     $credentials = $request->only('email', 'password');
-    
+
     $rules = [
-        'email' => 'required|email',
-        'password' => 'required',
+      'email' => 'required|email',
+      'password' => 'required',
     ];
 
     $validator = Validator::make($credentials, $rules);
-    if($validator->fails()) {
-      $errorString = implode(",",$validator->messages()->all());
-      return response()->json(['success'=> false, 'message'=> $errorString], 428);
+    if ($validator->fails()) {
+      $errorString = implode(",", $validator->messages()->all());
+      return response()->json(['success' => false, 'message' => $errorString], 428);
     }
-    
+
     try {
-        // attempt to verify the credentials and create a token for the user
-        if (! $token = JWTAuth::attempt($credentials)) {
-            return response()->json(['success' => false, 'message' => 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.'], 404);
-        }
-        //if you reached here then user has been authenticated
-        if (empty(auth()->user()->email_verified_at))
-        {
-            return response()->json(['success' => false, 'message' => 'Your have not verified your email.'], 428);
-        }
+      $user = User::where('email', '=', $request->email)->first();
+      if ($user === null) {
+        return response()->json(['success' => false, 'message' => 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.'], 404);
+      }
+      // attempt to verify the credentials and create a token for the user
+      if (!$token = JWTAuth::attempt($credentials)) {
+        return response()->json(['success' => false, 'message' => 'Your password is wrong.'], 401);
+      }
+      //if you reached here then user has been authenticated
+      if (empty(auth()->user()->email_verified_at)) {
+        return response()->json(['success' => false, 'message' => 'Your have not verified your email.'], 428);
+      }
     } catch (JWTException $e) {
-        // something went wrong whilst attempting to encode the token
-        return response()->json(['success' => false, 'message' => 'Failed to login, please try again.'], 500);
+      // something went wrong whilst attempting to encode the token
+      return response()->json(['success' => false, 'message' => 'Failed to login, please try again.'], 500);
     }
 
     // all good so return the token
-    return response()->json(['success' => true, 'message' => $token ], 200);
+    return response()->json(['success' => true, 'message' => $token], 200);
   }
 }
