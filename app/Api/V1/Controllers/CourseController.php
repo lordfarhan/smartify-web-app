@@ -9,9 +9,11 @@ use App\CourseReview;
 use App\Grade;
 use App\Http\Controllers\Controller;
 use App\Institution;
+use App\Mark;
 use App\SubChapter;
 use App\SubChapterEnrollment;
 use App\Subject;
+use App\Test;
 use App\User;
 use Carbon\Carbon;
 use Exception;
@@ -160,6 +162,21 @@ class CourseController extends Controller
           $course['lesson_count'] = 0;
           $course['finished_count'] = 0;
         }
+
+        $tests = Test::where('course_id', $course->id)->orderBy('order')->get();
+        foreach ($tests as $key => $test) {
+          $mark_average = Mark::where('test_id', $test->id)->pluck('score')->avg();
+          $mark = Mark::where('user_id', $user->id)->where('test_id', $test->id)->first();
+          if ($mark == null) {
+            $test['attempted'] = '0';
+            $test['mark'] = 0;
+          } else {
+            $test['attempted'] = '1';
+            $test['mark'] = $mark->score;
+          }
+          $test['average'] = round($mark_average, 0);
+        }
+        $course['tests'] = $tests;
       }
 
       return response()->json([
