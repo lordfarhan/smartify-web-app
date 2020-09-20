@@ -325,6 +325,7 @@
                         <div class="card-footer">
                           <a class="btn btn-primary" href="/courses/{{$course->id}}/tests/{{$test->id}}">{{__('common.courses.actions.open')}}</a>
                           <a class="btn btn-success" href="/courses/{{$course->id}}/tests/{{$test->id}}/submissions">{{__('common.courses.attributes.test_submissions')}}</a>
+                          <a class="replicate-test-modal btn btn-info text-white" data-test_id="{{$test->id}}">{{__('common.courses.actions.replicate')}}</a>
                         </div>
                       </div>
                     </div>
@@ -716,6 +717,45 @@
     </div>
   </div>
 
+  <div id="test-replicate-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <form id="test-modal-form" action="{{action('CourseController@replicateTest')}}" method="POST">
+        @csrf
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4>{{__('common.courses.show.be_careful')}}</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal" role="form">
+              <div class="form-group">
+                <div class="col-sm-10">
+                  <input value="" type="hidden" name="test_id" id="test-id-replicate-test">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-md-12" for="title">Course:</label>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <select name="course_id" id="course-id-replicate-test" class="custom-select custom-select">
+                      @foreach ($courses as $c)
+                        <option value="{{$c->id}}">{{$c->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-normal" data-dismiss="modal">{{__('common.courses.actions.cancel')}}</button>
+            <button type="submit" class="btn btn-primary btn-edit-chapter">{{__('common.courses.actions.process')}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="sub-chapter-edit-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
       <form id="sub-chapter-modal-form" action="/sub-chapters.edit" method="POST">
@@ -894,6 +934,12 @@
       $('#duration-edit-test').val($(this).data('duration'));
       $('#description-edit-test').val($(this).data('description'));
       $('#test-edit-modal').modal('show');
+    });
+
+    // Replicate test modal
+    $(document).on('click', '.replicate-test-modal', function() {
+      $('#test-id-replicate-test').val($(this).data('test_id'));
+      $('#test-replicate-modal').modal('show');
     });
 
     // Delete chapter modal

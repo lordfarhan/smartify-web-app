@@ -10,6 +10,7 @@ use App\Material;
 use App\Schedule;
 use App\SubChapter;
 use App\Subject;
+use App\Test;
 use App\User;
 use App\UserInstitution;
 use Carbon\Carbon;
@@ -471,6 +472,32 @@ class CourseController extends Controller
       $randomString .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomString;
+  }
+
+  public function replicateTest(Request $request)
+  {
+    $this->validate($request, [
+      'test_id' => 'required',
+      'course_id' => 'required'
+    ]);
+
+    // Duplicate test
+    $test = Test::find($request->test_id);
+    $newTest = $test->replicate()->fill([
+      'course_id' => $request->course_id
+    ]);
+    $newTest->save();
+
+    // Duplicate questions
+    $questions = $test->questions;
+    foreach ($questions as $question) {
+      $newQuestion = $question->replicate()->fill([
+        'test_id' => $newTest->id
+      ]);
+      $newQuestion->save();
+    }
+
+    return back()->with('success', 'Successfully replicated test');
   }
 
   public function replicateMaterials(Request $request)
