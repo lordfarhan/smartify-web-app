@@ -190,7 +190,7 @@ class UserController extends Controller
         $validator = Validator::make($input, $rules);
 
         if ($validator->fails()) {
-          return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null]);
+          return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null], 401);
         }
 
         break;
