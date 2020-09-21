@@ -36,7 +36,7 @@ class ScheduleEventController extends Controller
     try {
       $user = Auth::user();
       $course_ids = CourseEnrollment::where('user_id', $user->id)->pluck('course_id');
-      $courses = Course::whereIn('id', $course_ids)->get();
+      $courses = Course::whereIn('id', $course_ids)->where('status', '1')->get();
       $schedule_events = array();
       foreach ($courses as $index => $course) {
         $events = Schedule::where('course_id', $course->id)->get();
