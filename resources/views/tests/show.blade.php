@@ -58,7 +58,7 @@
 								<div>
 									<i class="fas bg-blue">{{ $question->order }}</i>
 									<div class="timeline-item">
-										<h3 class="timeline-header"><a href="">{!! $question->question !!}</a></h3>
+										<h3 class="timeline-header">{!! $question->question !!}</h3>
 	
 										<div class="timeline-body">
 											@if (!empty($question->question_image))
