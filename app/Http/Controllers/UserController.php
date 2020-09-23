@@ -171,8 +171,10 @@ class UserController extends Controller
 
     if (!empty($request->file('image'))) {
       // Deleting existing image
-      if (File::exists(storage_path('app/public/' . $user->image))) {
-        File::delete(storage_path('app/public/' . $user->image));
+      if ($user->image != "users/default.png") {
+        if (File::exists(storage_path('app/public/' . $user->image))) {
+          File::delete(storage_path('app/public/' . $user->image));
+        }
       }
       $image = $request->file('image');
       $imageName = 'userImage' . Carbon::now()->format('YmdHis') . '_' . preg_replace('/\s+/', '', request('name')) . '.' . 'png';
@@ -239,8 +241,11 @@ class UserController extends Controller
   public function destroy($id)
   {
     $user = User::find($id);
-    if (File::exists(storage_path('app/public/' . $user->image))) {
-      File::delete(storage_path('app/public/' . $user->image));
+
+    if ($user->image != "users/default.png") {
+      if (File::exists(storage_path('app/public/' . $user->image))) {
+        File::delete(storage_path('app/public/' . $user->image));
+      }
     }
     $user->delete();
     return redirect()->route('users.index')

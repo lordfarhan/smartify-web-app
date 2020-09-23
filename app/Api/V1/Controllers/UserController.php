@@ -109,8 +109,10 @@ class UserController extends Controller
         }
 
         // Deleting existing image
-        if (File::exists(storage_path('app/public/' . $user->image))) {
-          File::delete(storage_path('app/public/' . $user->image));
+        if ($user->image != "users/default.png") {
+          if (File::exists(storage_path('app/public/' . $user->image))) {
+            File::delete(storage_path('app/public/' . $user->image));
+          }
         }
         $image = $request->file('image');
         $imageName = 'userImage' . Carbon::now()->format('YmdHis') . '_' . preg_replace('/\s+/', '', $user->name) . '.' . 'png';
@@ -170,9 +172,12 @@ class UserController extends Controller
           return response()->json(['success' => false, 'message' => $validator->messages(), 'result' => null]);
         }
 
-        if (File::exists(storage_path('app/public/' . $user->image))) {
-          File::delete(storage_path('app/public/' . $user->image));
+        if ($user->image != "users/default.png") {
+          if (File::exists(storage_path('app/public/' . $user->image))) {
+            File::delete(storage_path('app/public/' . $user->image));
+          }
         }
+
         $image = $request->file('image');
         $imageName = 'userImage' . Carbon::now()->format('YmdHis') . '_' . preg_replace('/\s+/', '', $user->name) . '.' . 'png';
         Image::make($image->getRealPath())->encode('png')->fit(300, 300)->save(storage_path('app/public/users/') . $imageName);
