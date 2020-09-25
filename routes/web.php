@@ -32,6 +32,7 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
   Route::post('institutions/add-activation-code', 'InstitutionController@importKeys');
   Route::post('institutions/remove-activation-code', 'InstitutionController@deleteKey');
   Route::resource('users', 'UserController');
+  Route::get('users/{id}/verify', 'UserController@verify')->name('users.verify');
   Route::resource('roles', 'RoleController');
   Route::resource('teachers', 'TeacherController');
   Route::resource('students', 'StudentController');

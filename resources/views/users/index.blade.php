@@ -18,6 +18,11 @@
   <p>{{ $message }}</p>
 </div>
 @endif
+@if ($message = Session::get('error'))
+<div class="alert alert-danger mt-2">
+  <p>{{ $message }}</p>
+</div>
+@endif
 
 <div class="card">
   <div class="card-header">
@@ -38,7 +43,7 @@
           <th>{{__('common.users.attributes.phone')}}</th>
           {{-- <th>{{__('common.users.attributes.address')}}</th> --}}
           <th>{{__('common.users.attributes.roles')}}</th>
-          <th width="87px">{{__('common.users.attributes.action')}}</th>
+          <th width="120px">{{__('common.users.attributes.action')}}</th>
         </tr>
       </thead>
     
@@ -75,6 +80,7 @@
             <td>
               <a class="btn btn-sm btn-primary elevation-2" href="{{ route('users.show',$user->id) }}"><i class="fa fa-eye"></i></a>
               @can('user-edit')
+                <a class="btn btn-sm btn-primary elevation-2" href="/users/{{$user->id}}/verify"><i class="fa fa-check"></i></a>                
                 <a class="btn btn-sm btn-warning text-white elevation-2" href="{{ route('users.edit',$user->id) }}"><i class="fa fa-pen-alt"></i></a>                
               @endcan
               @can('user-delete')

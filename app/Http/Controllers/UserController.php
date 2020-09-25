@@ -22,7 +22,7 @@ class UserController extends Controller
   {
     $this->middleware('permission:user-list|user-create|user-edit|user-delete', ['only' => ['index', 'store']]);
     $this->middleware('permission:user-create', ['only' => ['create', 'store']]);
-    $this->middleware('permission:user-edit', ['only' => ['edit', 'update']]);
+    $this->middleware('permission:user-edit', ['only' => ['edit', 'update', 'verify']]);
     $this->middleware('permission:user-delete', ['only' => ['destroy']]);
   }
 
@@ -277,5 +277,24 @@ class UserController extends Controller
     $provinces = Province::all();
     $village = Village::find($user->village_id);
     return view('users.edit', compact('user', 'institutions', 'roles', 'userRole', 'provinces', 'village'));
+  }
+
+  public function verify(Request $request, $id)
+  {
+    $user = User::find($id);
+
+    if (!$user->email_verified_at == null) {
+      return back()->with('error', 'Account already verified.');
+    }
+
+    $user->update(['email_verified_at' => Carbon::now()]);
+
+    $token = DB::table('user_verifications')->where('user_id', $user->id)->first();
+
+    if ($token != null) {
+      DB::table('user_verifications')->where('user_id', $user->id)->delete();
+    }
+
+    return back()->with('success', 'Account successfully verified.');
   }
 }
