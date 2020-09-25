@@ -59,8 +59,11 @@
               <tr>
                 <th width="20px">{{__('common.users.attributes.no')}}</th>
                 <th>{{__('common.users.attributes.name')}}</th>
-                <th width="120px">{{__('common.courses.attributes.test_mark')}}</th>
-                <th width="87px">{{__('common.courses.attributes.action')}}</th>
+                <th>{{__('common.tests.attributes.number_of_attempts')}}</th>
+                <th>{{__('common.tests.attributes.attempt_at')}}</th>
+                <th>{{__('common.tests.attributes.submit_at')}}</th>
+                <th>{{__('common.courses.attributes.test_mark')}}</th>
+                <th>{{__('common.courses.attributes.action')}}</th>
               </tr>
             </thead>
             <tbody>
@@ -68,6 +71,13 @@
               <tr>
                 <td>{{ ++$key }}</td>
                 <td>{{ $mark->user->name }}</td>
+                <td>{{ $mark->number_of_attempts }}</td>
+                <td>{{ \Carbon\Carbon::parse($mark->created_at)->format("H:i - d M Y") }}</td>
+                @if ($mark->attempted == '1')
+                  <td>{{ \Carbon\Carbon::parse($mark->updated_at)->format("H:i - d M Y") }}</td>
+                @else
+                  <td>-</td>
+                @endif
                 <td>{{ floatval($mark->score/10) }}</td>
                 <td>
                   <a class="delete-mark-modal btn btn-danger btn-sm" href="/courses/{{$test->course_id}}/tests/{{$test->id}}/submissions/{{$mark->id}}/delete">{{__('common.tests.actions.delete')}}</a>

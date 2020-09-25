@@ -18,6 +18,7 @@ class CreateMarksTable extends Migration
       $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreignId('test_id')->references('id')->on('tests')->onDelete('cascade');
       $table->enum('attempted', ['0', '1']);
+      $table->tinyInteger('number_of_attempts')->default(1);
       $table->smallInteger('score');
       $table->text('information')->nullable();
       $table->timestamps();

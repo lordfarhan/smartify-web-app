@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mark extends Model
 {
   protected $fillable = [
-    'user_id', 'test_id', 'attempted', 'score', 'information'
+    'user_id', 'test_id', 'attempted', 'number_of_attempts', 'score', 'information'
   ];
 
   public function test()
