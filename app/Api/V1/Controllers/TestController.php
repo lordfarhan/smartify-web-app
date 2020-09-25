@@ -36,6 +36,9 @@ class TestController extends Controller
         if ($mark == null) {
           $test['attempted'] = '0';
           $test['mark'] = 0;
+        } else if ($mark->attempted == '0') {
+          $test['attempted'] = '0';
+          $test['mark'] = $mark->score;
         } else {
           $test['attempted'] = '1';
           $test['mark'] = $mark->score;
@@ -61,12 +64,13 @@ class TestController extends Controller
   public function attempt(Request $request, $course_id, $test_id)
   {
     try {
-      $existed = Mark::where('user_id', Auth::user()->id)->where('test_id', $test_id)->first();
-      if ($existed == null) {
+      $existed_mark = Mark::where('user_id', Auth::user()->id)->where('test_id', $test_id)->first();
+      if ($existed_mark == null) {
         $mark = Mark::create([
           'attempted' => '0',
           'user_id' => Auth::user()->id,
           'test_id' => $test_id,
+          'number_of_attempts' => 1,
           'score' => 0
         ]);
         return response()->json([
@@ -74,6 +78,16 @@ class TestController extends Controller
           'message' => 'Successfully attempted',
           'result' => [
             $mark
+          ]
+        ], 200);
+      } else if ($existed_mark->attempted == '0') {
+        $existed_mark->number_of_attempts += 1;
+        $existed_mark->update();
+        return response()->json([
+          'success' => true,
+          'message' => 'Successfully attempted',
+          'result' => [
+            $existed_mark
           ]
         ], 200);
       } else {
