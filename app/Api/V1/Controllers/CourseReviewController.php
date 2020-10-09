@@ -35,9 +35,23 @@ class CourseReviewController extends Controller
 
       if (count($reviews) > 0) {
         foreach ($reviews as $key => $review) {
-          $review['user'] = User::find($review->user_id)->name;
-          $review['email'] = User::find($review->user_id)->email;
-          $review['user_image'] = url('storage/' . User::find($review->user_id)->image);
+          $user = User::find($review->user_id);
+          $review['user']['id'] = $user->id;
+          $review['user']['name'] = $user->name;
+          $review['user']['email'] = $user->email;
+          $review['user']['phone'] = $user->phone;
+          $review['user']['image'] = url('storage/' . $user->image);
+          $review['user']['email_verified_at'] = $user->email_verified_at;
+          $review['user']['date_of_birth'] = $user->date_of_birth;
+          $review['user']['gender'] = $user->gender;
+          $review['user']['address'] = $user->address;
+          $review['user']['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+          $review['user']['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+          $review['user']['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+          $review['user']['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+          $review['user']['role'] = $user->getRoleNames()[0];
+          $review['user']['created_at'] = $user->created_at;
+          $review['user']['updated_at'] = $user->updated_at;
         }
       }
       return response()->json([
