@@ -20,7 +20,7 @@
 				</div>
 				<div class="card-body">
 					<h3>{{$forumPost->title}}</h3>
-					<p>{{$forumPost->content}}</p>
+					<p>{!!$forumPost->content!!}</p>
 					@if ($forumPost->attachment != null)
 						@if (File::extension($forumPost->attachment) == 'jpg' || File::extension($forumPost->attachment) == 'png' || File::extension($forumPost->attachment) == 'jpeg' || File::extension($forumPost->attachment) == 'JPG')
 							<img src="{{ asset("storage/". $forumPost->attachment) }}" class="img-fluid elevation-2 mb-3" alt="Forum Post Image">

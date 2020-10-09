@@ -70,6 +70,14 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters/{sub_chapter_id}/finish', '\\App\\Api\\V1\\Controllers\\SubChapterController@finish');
 
     Route::get('/{course_id}/chapters/{chapter_id}/sub-chapters/{sub_chapter_id}/materials', '\\App\\Api\\V1\\Controllers\\MaterialController@getBySubChapterId');
+
+    Route::get('/{course_id}/forum', '\\App\\Api\\V1\\Controllers\\ForumController@getByCourseId');
+    Route::post('/{course_id}/forum/create', '\\App\\Api\\V1\\Controllers\\ForumController@create');
+    Route::post('/{course_id}/forum/{id}/update', '\\App\\Api\\V1\\Controllers\\ForumController@update');
+    Route::post('/{course_id}/forum/{id}/delete', '\\App\\Api\\V1\\Controllers\\ForumController@delete');
+    Route::post('/{course_id}/forum/{forum_post_id}/reply', '\\App\\Api\\V1\\Controllers\\ForumController@reply');
+    Route::post('/{course_id}/forum/{forum_post_id}/replies/{id}/update', '\\App\\Api\\V1\\Controllers\\ForumController@updateReply');
+    Route::post('/{course_id}/forum/{forum_post_id}/replies/{id}/delete', '\\App\\Api\\V1\\Controllers\\ForumController@deleteReply');
   });
 
   Route::group(['prefix' => 'administrations'], function () {
