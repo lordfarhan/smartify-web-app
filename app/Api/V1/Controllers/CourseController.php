@@ -344,20 +344,23 @@ class CourseController extends Controller
       $enrollments = $course->enrollments;
 
       foreach ($enrollments as $enrollment) {
-        $enrollment['name'] = $enrollment->user->name;
-        $enrollment['email'] = $enrollment->user->email;
-        $enrollment['phone'] = $enrollment->user->phone;
-        $enrollment['image'] = url('storage/' . $enrollment->user->image);
-        $enrollment['email_verified_at'] = $enrollment->user->email_verified_at;
-        $enrollment['date_of_birth'] = $enrollment->user->date_of_birth;
-        $enrollment['village'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->name)) : null;
-        $enrollment['district'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->name)) : null;
-        $enrollment['regency'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->regency->name)) : null;
-        $enrollment['province'] = $enrollment->user->village != null ? ucwords(strtolower($enrollment->user->village->district->regency->province->name)) : null;
-        $enrollment['role'] = $enrollment->user->getRoleNames()[0];
-        $enrollment['created_at'] = $enrollment->user->created_at;
-        $enrollment['updated_at'] = $enrollment->user->updated_at;
-        array_except($enrollment, 'user');
+        $user = User::find($enrollment->user_id);
+        $enrollment['user']['id'] = $user->id;
+        $enrollment['user']['name'] = $user->name;
+        $enrollment['user']['email'] = $user->email;
+        $enrollment['user']['phone'] = $user->phone;
+        $enrollment['user']['image'] = url('storage/' . $user->image);
+        $enrollment['user']['email_verified_at'] = $user->email_verified_at;
+        $enrollment['user']['date_of_birth'] = $user->date_of_birth;
+        $enrollment['user']['gender'] = $user->gender;
+        $enrollment['user']['address'] = $user->address;
+        $enrollment['user']['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+        $enrollment['user']['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+        $enrollment['user']['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+        $enrollment['user']['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+        $enrollment['user']['role'] = $user->getRoleNames()[0];
+        $enrollment['user']['created_at'] = $user->created_at;
+        $enrollment['user']['updated_at'] = $user->updated_at;
       }
 
       return response()->json([

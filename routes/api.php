@@ -38,7 +38,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('institutions/enroll', '\\App\\Api\\V1\\Controllers\\InstitutionController@enroll');
     Route::get('profile', '\\App\\Api\\V1\\Controllers\\UserController@profile');
     Route::get('friends', '\\App\\Api\\V1\\Controllers\\FriendshipController@get');
-    Route::get('friends/{id}', '\\App\\Api\\V1\\Controllers\\FriendshipController@detail');
+    // Route::get('friends/{id}', '\\App\\Api\\V1\\Controllers\\FriendshipController@detail');
     Route::post('friends/add', '\\App\\Api\\V1\\Controllers\\FriendshipController@add');
     Route::post('friends/accept', '\\App\\Api\\V1\\Controllers\\FriendshipController@accept');
     Route::get('friends/requests', '\\App\\Api\\V1\\Controllers\\FriendshipController@requests');
@@ -75,6 +75,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/{course_id}/forum/create', '\\App\\Api\\V1\\Controllers\\ForumController@create');
     Route::post('/{course_id}/forum/{id}/update', '\\App\\Api\\V1\\Controllers\\ForumController@update');
     Route::post('/{course_id}/forum/{id}/delete', '\\App\\Api\\V1\\Controllers\\ForumController@delete');
+    Route::get('/{course_id}/forum/{forum_post_id}/replies', '\\App\\Api\\V1\\Controllers\\ForumController@getReplies');
     Route::post('/{course_id}/forum/{forum_post_id}/reply', '\\App\\Api\\V1\\Controllers\\ForumController@reply');
     Route::post('/{course_id}/forum/{forum_post_id}/replies/{id}/update', '\\App\\Api\\V1\\Controllers\\ForumController@updateReply');
     Route::post('/{course_id}/forum/{forum_post_id}/replies/{id}/delete', '\\App\\Api\\V1\\Controllers\\ForumController@deleteReply');

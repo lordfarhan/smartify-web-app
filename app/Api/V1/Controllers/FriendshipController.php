@@ -30,7 +30,7 @@ class FriendshipController extends Controller
     $user_id = Auth::user()->id;
 
     try {
-      $result = DB::table('friendships as f1')
+      $friends = DB::table('friendships as f1')
         ->select('users.id')
         ->where('f1.user_id', $user_id)
         ->join('friendships as f2', function ($join) {
@@ -40,23 +40,33 @@ class FriendshipController extends Controller
         ->join('users', 'users.id', '=', 'f2.user_id')
         ->get();
 
-      $friends = array();
-      foreach ($result as $friend_result) {
-        $friend = User::find($friend_result->id);
-        $friend['image'] = url('storage/' . $friend->image);
-        $friend['village'] = $friend->village != null ? ucwords(strtolower($friend->village->name)) : null;
-        $friend['district'] = $friend->village != null ? ucwords(strtolower($friend->village->district->name)) : null;
-        $friend['regency'] = $friend->village != null ? ucwords(strtolower($friend->village->district->regency->name)) : null;
-        $friend['province'] = $friend->village != null ? ucwords(strtolower($friend->village->district->regency->province->name)) : null;
-        $friend['role'] = $friend->getRoleNames()[0];
-        array_except($friend, 'roles');
-        array_push($friends, $friend);
+      $result = array();
+      foreach ($friends as $friend) {
+        $user = User::find($friend->id);
+        $friend_result = array();
+        $friend_result['id'] = $user->id;
+        $friend_result['name'] = $user->name;
+        $friend_result['email'] = $user->email;
+        $friend_result['phone'] = $user->phone;
+        $friend_result['image'] = url('storage/' . $user->image);
+        $friend_result['email_verified_at'] = $user->email_verified_at;
+        $friend_result['date_of_birth'] = $user->date_of_birth;
+        $friend_result['gender'] = $user->gender;
+        $friend_result['address'] = $user->address;
+        $friend_result['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+        $friend_result['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+        $friend_result['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+        $friend_result['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+        $friend_result['role'] = $user->getRoleNames()[0];
+        $friend_result['created_at'] = $user->created_at;
+        $friend_result['updated_at'] = $user->updated_at;
+        array_push($result, $friend_result);
       }
 
       return response()->json([
         'success' => true,
         'message' => 'Successfully fetched friends.',
-        'result' => $friends
+        'result' => $result
       ], 200);
     } catch (Exception $e) {
       return response()->json([
@@ -182,15 +192,33 @@ class FriendshipController extends Controller
     $user_id = Auth::user()->id;
 
     try {
-      $result = Friendship::select('users.id', 'users.name', 'users.email', 'users.image')
+      $requests = Friendship::select('users.id', 'users.name', 'users.email', 'users.image')
         ->where('friend_id', $user_id)
         ->leftJoin('users', 'users.id', '=', 'friendships.user_id')
         ->get();
 
-      foreach ($result as $res) {
-        $image = $res['image'];
-        $res['image'] = url('storage/' . $image);
-      }
+        $result = array();
+        foreach ($requests as $friend) {
+          $user = User::find($friend->id);
+          $friend_result = array();
+          $friend_result['id'] = $user->id;
+          $friend_result['name'] = $user->name;
+          $friend_result['email'] = $user->email;
+          $friend_result['phone'] = $user->phone;
+          $friend_result['image'] = url('storage/' . $user->image);
+          $friend_result['email_verified_at'] = $user->email_verified_at;
+          $friend_result['date_of_birth'] = $user->date_of_birth;
+          $friend_result['gender'] = $user->gender;
+          $friend_result['address'] = $user->address;
+          $friend_result['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+          $friend_result['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+          $friend_result['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+          $friend_result['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+          $friend_result['role'] = $user->getRoleNames()[0];
+          $friend_result['created_at'] = $user->created_at;
+          $friend_result['updated_at'] = $user->updated_at;
+          array_push($result, $friend_result);
+        }
 
       return response()->json([
         'success' => true,

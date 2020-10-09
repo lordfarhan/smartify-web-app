@@ -48,7 +48,7 @@ class UserController extends Controller
     $user['district'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->name)) : null;
     $user['regency'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->name)) : null;
     $user['province'] = Auth::user()->village != null ? ucwords(strtolower(Auth::user()->village->district->regency->province->name)) : null;
-    $user['roles'] = Auth::user()->getRoleNames();
+    $user['role'] = Auth::user()->getRoleNames()[0];
     $user['institutions'] = Institution::whereIn('id', Auth::user()->institutions->pluck('institution_id'))->pluck('name');
     $user['created_at'] = Carbon::parse(Auth::user()->created_at)->format('d/m/Y');
     $user['updated_at'] = Carbon::parse(Auth::user()->updated_at)->format('d/m/Y');

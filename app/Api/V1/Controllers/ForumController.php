@@ -289,6 +289,63 @@ class ForumController extends Controller
     }
   }
 
+  public function getReplies(Request $request, $course_id, $forum_post_id)
+  {
+    try {
+      $replies = ForumReply::where('forum_post_id', $forum_post_id)->get();
+      foreach ($replies as $reply) {
+        $user = User::find($reply->user_id);
+        $reply['user']['id'] = $user->id;
+        $reply['user']['name'] = $user->name;
+        $reply['user']['email'] = $user->email;
+        $reply['user']['phone'] = $user->phone;
+        $reply['user']['image'] = url('storage/' . $user->image);
+        $reply['user']['email_verified_at'] = $user->email_verified_at;
+        $reply['user']['date_of_birth'] = $user->date_of_birth;
+        $reply['user']['gender'] = $user->gender;
+        $reply['user']['address'] = $user->address;
+        $reply['user']['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+        $reply['user']['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+        $reply['user']['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+        $reply['user']['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+        $reply['user']['role'] = $user->getRoleNames()[0];
+        $reply['user']['created_at'] = $user->created_at;
+        $reply['user']['updated_at'] = $user->updated_at;
+        $reply['replies'] = ForumReply::where('forum_reply_id', $reply->id)->get();
+        foreach ($reply['replies'] as $childReply) {
+          $user = User::find($childReply->user_id);
+          $childReply['user']['id'] = $user->id;
+          $childReply['user']['name'] = $user->name;
+          $childReply['user']['email'] = $user->email;
+          $childReply['user']['phone'] = $user->phone;
+          $childReply['user']['image'] = url('storage/' . $user->image);
+          $childReply['user']['email_verified_at'] = $user->email_verified_at;
+          $childReply['user']['date_of_birth'] = $user->date_of_birth;
+          $childReply['user']['gender'] = $user->gender;
+          $childReply['user']['address'] = $user->address;
+          $childReply['user']['village'] = $user->village != null ? ucwords(strtolower($user->village->name)) : null;
+          $childReply['user']['district'] = $user->village != null ? ucwords(strtolower($user->village->district->name)) : null;
+          $childReply['user']['regency'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->name)) : null;
+          $childReply['user']['province'] = $user->village != null ? ucwords(strtolower($user->village->district->regency->province->name)) : null;
+          $childReply['user']['role'] = $user->getRoleNames()[0];
+          $childReply['user']['created_at'] = $user->created_at;
+          $childReply['user']['updated_at'] = $user->updated_at;
+        }
+      }
+      return response()->json([
+        'success' => true,
+        'message' => 'Successfully fetched.',
+        'result' => $replies
+      ], 200);
+    } catch (Exception $e) {
+      return response()->json([
+        'success' => false,
+        'message' => $e->getMessage(),
+        'result' => null
+      ], 500);
+    }
+  }
+
   public function reply(Request $request, $course_id, $forum_post_id)
   {
     $this->validate($request, [
